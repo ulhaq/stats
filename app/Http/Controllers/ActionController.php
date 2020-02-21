@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActionResource;
+use App\Http\Resources\VariableResource;
 use App\Action;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,7 @@ class ActionController extends Controller
      */
     public function index()
     {
-        //
+        return ActionResource::collection(Action::with("session")->paginate(10))->response()->setStatusCode(200);
     }
 
     /**
@@ -25,7 +27,9 @@ class ActionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $action = Action::create($request->all());
+
+        return response(new ActionResource($action), 201);
     }
 
     /**
@@ -36,20 +40,20 @@ class ActionController extends Controller
      */
     public function show(Action $action)
     {
-        //
+        return response(new ActionResource($action->load("session")), 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Action  $action
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Action $action)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -59,6 +63,21 @@ class ActionController extends Controller
      */
     public function destroy(Action $action)
     {
-        //
+        $action->delete();
+
+        return response(new ActionResource($action), 200);
+    }
+
+    /**
+     * Display a listing of the resource's relation.
+     *
+     * @param  \App\Action  $action
+     * @return \Illuminate\Http\Response
+     */
+    public function variables(Action $action)
+    {
+        $variables = $action->variables()->paginate(10);
+
+        return VariableResource::collection($variables)->response()->setStatusCode(200);
     }
 }

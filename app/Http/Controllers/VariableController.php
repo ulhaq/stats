@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\VariableResource;
 use App\Variable;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class VariableController extends Controller
      */
     public function index()
     {
-        //
+        return VariableResource::collection(Variable::with("action")->paginate(10))->response()->setStatusCode(200);
     }
 
     /**
@@ -25,7 +26,9 @@ class VariableController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $variable = Variable::create($request->all());
+
+        return response(new VariableResource($variable), 201);
     }
 
     /**
@@ -36,20 +39,20 @@ class VariableController extends Controller
      */
     public function show(Variable $variable)
     {
-        //
+        return response(new VariableResource($variable->load("action")), 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Variable  $variable
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Variable $variable)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -59,6 +62,8 @@ class VariableController extends Controller
      */
     public function destroy(Variable $variable)
     {
-        //
+        $variable->delete();
+
+        return response(new VariableResource($variable), 200);
     }
 }

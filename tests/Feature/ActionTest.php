@@ -128,7 +128,6 @@ class ActionTest extends TestCase
                     [
                         'variable' => $variable->variable,
                         'value' => $variable->value,
-                        'action' => [],
                     ],
                 ],
                 "links" => [],

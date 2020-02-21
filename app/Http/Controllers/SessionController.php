@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ActionResource;
+use App\Http\Resources\SessionResource;
+use App\Http\Resources\VariableResource;
+use App\Session;
 use Illuminate\Http\Request;
 
 class SessionController extends Controller
@@ -13,7 +17,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        //
+        return SessionResource::collection(Session::paginate(10))->response()->setStatusCode(200);
     }
 
     /**
@@ -24,18 +28,20 @@ class SessionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $session = Session::create($request->all());
+
+        return response(new SessionResource($session), 201);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Session  $session
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Session $session)
     {
-        //
+        return response(new SessionResource($session), 200);
     }
 
     /**
@@ -45,19 +51,47 @@ class SessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    // public function update(Request $request, $id)
+    // {
+    //     //
+    // }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Session  $session
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Session $session)
     {
-        //
+        $session->delete();
+
+        return response(new SessionResource($session), 200);
+    }
+
+    /**
+     * Display a listing of the resource's relation.
+     *
+     * @param  \App\Session  $session
+     * @return \Illuminate\Http\Response
+     */
+    public function actions(Session $session)
+    {
+        $actions = $session->actions()->paginate(10);
+
+        return ActionResource::collection($actions)->response()->setStatusCode(200);
+    }
+
+    /**
+     * Display a listing of the resource's relation's relation.
+     *
+     * @param  \App\Session  $session
+     * @return \Illuminate\Http\Response
+     */
+    public function variables(Session $session)
+    {
+        $variables = $session->variables()->paginate(10);
+
+        return VariableResource::collection($variables)->response()->setStatusCode(200);
     }
 }

@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Action extends Model
 {
     /**
-     * Get the session that owns the comment.
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['location', 'action', 'target', 'session_id'];
+
+    /**
+     * Get the session that owns the action.
      */
     public function session()
     {
@@ -15,7 +22,7 @@ class Action extends Model
     }
 
     /**
-     * Get the variables for the blog post.
+     * Get the variables for the action.
      */
     public function variables()
     {

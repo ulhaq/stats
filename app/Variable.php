@@ -7,7 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Variable extends Model
 {
     /**
-     * Get the action that owns the comment.
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['variable', 'value', 'action_id'];
+
+    /**
+     * Get the action that owns the variable.
      */
     public function action()
     {
