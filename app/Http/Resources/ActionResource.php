@@ -19,8 +19,9 @@ class ActionResource extends JsonResource
             'location' => $this->location,
             'action' => $this->action,
             'target' => $this->target,
-            'created_at' => $this->created_at->diffForHumans(),
+            'created_at' => $this->created_at->toDateTimeString(),
             'session' => new SessionResource($this->whenLoaded('session')),
+            'variables' => VariableResource::collection($this->whenLoaded('variables')),
         ];
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SessionResource extends JsonResource
-{    
+{
     /**
      * Transform the resource into an array.
      *
@@ -19,7 +19,7 @@ class SessionResource extends JsonResource
             'user' => $this->user,
             'client' => $this->client,
             'platform' => $this->platform,
-            'created_at' => $this->created_at->diffForHumans(),
+            'created_at' => $this->created_at->toDateTimeString(),
         ];
     }
 }

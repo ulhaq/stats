@@ -18,7 +18,6 @@ class VariableResource extends JsonResource
             'id' => $this->id,
             'variable' => $this->variable,
             'value' => $this->value,
-            'created_at' => $this->created_at->diffForHumans(),
             'action' => new ActionResource($this->whenLoaded('action')),
         ];
     }
