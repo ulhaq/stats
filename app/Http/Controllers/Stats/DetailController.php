@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Stats;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DetailResource;
+use App\Http\Resources\Stats\DetailResource;
 use App\Session;
 
 class DetailController extends Controller
