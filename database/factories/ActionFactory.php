@@ -18,7 +18,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Action::class, function (Faker $faker) {
     return [
-        'location' => $faker->randomElement(["Testwordlist", "Shared", "Myprogress", "Login"]),
+        'location' => $faker->randomElement(["journey", "Testwordlist", "Shared", "Myprogress", "Login"]),
         'action' => $faker->randomElement(["Button press", "Inactivity"]),
         'target' => $faker->name,
         'session_id' => factory(App\Session::class),

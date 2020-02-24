@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\StatsTest;
 
 use App\Action;
 use App\Session;
@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class StatsTest extends TestCase
+class DetailTest extends TestCase
 {
     use DatabaseMigrations, WithFaker;
 
