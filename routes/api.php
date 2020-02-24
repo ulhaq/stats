@@ -26,3 +26,5 @@ Route::apiResources([
 Route::get('sessions/{session}/actions', 'SessionController@actions')->name('sessions.actions');
 Route::get('sessions/{session}/variables', 'SessionController@variables')->name('sessions.variables');
 Route::get('actions/{action}/variables', 'ActionController@variables')->name('actions.variables');
+
+Route::get('stats/details/{session}', 'StatsController@index')->name('stats.index');
