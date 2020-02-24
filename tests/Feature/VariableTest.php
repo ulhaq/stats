@@ -29,10 +29,18 @@ class VariableTest extends TestCase
                     [
                         "variable" => $variable[0]->variable,
                         "value" => $variable[0]->value,
+                        "action" => [
+                            "id" => $variable[0]->action->id,
+                            "created_at" => $variable[0]->action->created_at,
+                        ],
                     ],
                     [
                         "variable" => $variable[1]->variable,
                         "value" => $variable[1]->value,
+                        "action" => [
+                            "id" => $variable[1]->action->id,
+                            "created_at" => $variable[1]->action->created_at,
+                        ],
                     ],
                 ],
                 "links" => [],
@@ -54,6 +62,10 @@ class VariableTest extends TestCase
             ->assertJson([
                 "variable" => $variable->variable,
                 "value" => $variable->value,
+                "action" => [
+                    "id" => $variable->action->id,
+                    "created_at" => $variable->action->created_at,
+                ],
             ]);
     }
 

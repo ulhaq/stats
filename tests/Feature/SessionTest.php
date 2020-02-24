@@ -30,11 +30,13 @@ class SessionTest extends TestCase
                         "user" => $session[0]->user,
                         "client" => $session[0]->client,
                         "platform" => $session[0]->platform,
+                        "created_at" => $session[0]->created_at,
                     ],
                     [
                         "user" => $session[1]->user,
                         "client" => $session[1]->client,
                         "platform" => $session[1]->platform,
+                        "created_at" => $session[1]->created_at,
                     ],
                 ],
                 "links" => [],
@@ -57,6 +59,7 @@ class SessionTest extends TestCase
                 "user" => $session->user,
                 "client" => $session->client,
                 "platform" => $session->platform,
+                "created_at" => $session->created_at,
             ]);
     }
 
@@ -93,6 +96,7 @@ class SessionTest extends TestCase
             "user" => $session->user,
             "client" => $session->client,
             "platform" => $session->platform,
+            "created_at" => $session->created_at,
         ]);
 
         $response
@@ -101,6 +105,7 @@ class SessionTest extends TestCase
                 "user" => $session->user,
                 "client" => $session->client,
                 "platform" => $session->platform,
+                "created_at" => $session->created_at,
             ]);
     }
 
@@ -110,7 +115,7 @@ class SessionTest extends TestCase
         $this->withoutExceptionHandling();
 
         $session = factory(Session::class)->create();
-        $action = factory(Action::class)->create(["session_id" => $session->id]);
+        $action = factory(Action::class, 2)->create(["session_id" => $session->id]);
 
         $response = $this->json("GET", "api/sessions/$session->id/actions");
 
@@ -119,8 +124,14 @@ class SessionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "location" => $action->location,
-                        "target" => $action->target,
+                        "location" => $action[0]->location,
+                        "target" => $action[0]->target,
+                        "created_at" => $action[0]->created_at,
+                    ],
+                    [
+                        "location" => $action[1]->location,
+                        "target" => $action[1]->target,
+                        "created_at" => $action[1]->created_at,
                     ],
                 ],
                 "links" => [],

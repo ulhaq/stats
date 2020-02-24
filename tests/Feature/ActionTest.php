@@ -31,11 +31,19 @@ class ActionTest extends TestCase
                         "location" => $action[0]->location,
                         "action" => $action[0]->action,
                         "target" => $action[0]->target,
+                        "created_at" => $action[0]->created_at,
+                        "session" => [
+                            "id" => $action[0]->session->id,
+                        ],
                     ],
                     [
                         "location" => $action[1]->location,
                         "action" => $action[1]->action,
                         "target" => $action[1]->target,
+                        "created_at" => $action[1]->created_at,
+                        "session" => [
+                            "id" => $action[1]->session->id,
+                        ],
                     ],
                 ],
                 "links" => [],
@@ -58,6 +66,10 @@ class ActionTest extends TestCase
                 "location" => $action->location,
                 "action" => $action->action,
                 "target" => $action->target,
+                "created_at" => $action->created_at,
+                "session" => [
+                    "id" => $action->session->id,
+                ],
             ]);
     }
 
@@ -69,9 +81,9 @@ class ActionTest extends TestCase
         $session = factory(Session::class)->create();
 
         $data = [
-            "location" =>  $this->faker->randomElement(["Testwordlist", "Shared", "Myprogress", "Login"]),
-            "action" =>  $this->faker->randomElement(["Button press", "Inactivity"]),
-            "target" =>  $this->faker->name,
+            "location" => $this->faker->randomElement(["Testwordlist", "Shared", "Myprogress", "Login"]),
+            "action" => $this->faker->randomElement(["Button press", "Inactivity"]),
+            "target" => $this->faker->name,
             "session_id" => $session->id,
         ];
 
@@ -99,6 +111,7 @@ class ActionTest extends TestCase
             "location" => $action->location,
             "action" => $action->action,
             "target" => $action->target,
+            "created_at" => $action->created_at,
         ]);
 
         $response
@@ -107,6 +120,7 @@ class ActionTest extends TestCase
                 "location" => $action->location,
                 "action" => $action->action,
                 "target" => $action->target,
+                "created_at" => $action->created_at,
             ]);
     }
 
@@ -117,7 +131,7 @@ class ActionTest extends TestCase
         $this->withoutExceptionHandling();
 
         $action = factory(Action::class)->create();
-        $variable = factory(Variable::class)->create(["action_id" => $action->id]);
+        $variable = factory(Variable::class, 2)->create(["action_id" => $action->id]);
 
         $response = $this->json("GET", "api/actions/$action->id/variables");
 
@@ -126,8 +140,12 @@ class ActionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        'variable' => $variable->variable,
-                        'value' => $variable->value,
+                        'variable' => $variable[0]->variable,
+                        'value' => $variable[0]->value,
+                    ],
+                    [
+                        'variable' => $variable[1]->variable,
+                        'value' => $variable[1]->value,
                     ],
                 ],
                 "links" => [],
