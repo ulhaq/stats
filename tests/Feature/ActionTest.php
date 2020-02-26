@@ -7,6 +7,7 @@ use App\Session;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Arr;
 use Tests\TestCase;
 
 class ActionTest extends TestCase
@@ -74,7 +75,7 @@ class ActionTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_a_new_action()
+    public function a_user_can_create_a_new_action_with_variables()
     {
         $this->withoutExceptionHandling();
 
@@ -85,11 +86,21 @@ class ActionTest extends TestCase
             "action" => $this->faker->randomElement(["Button press", "Inactivity"]),
             "target" => $this->faker->name,
             "session_id" => $session->id,
+            "variables" => [
+                [
+                    "variable" => "user_id",
+                    "value" => 5,
+                ],
+                [
+                    "variable" => "journey_id",
+                    "value" => 2,
+                ],
+            ],
         ];
 
         $response = $this->json("POST", "api/actions", $data);
 
-        $this->assertDatabaseHas("actions", $data);
+        $this->assertDatabaseHas("actions", Arr::except($data, ["variables"]));
 
         unset($data["session_id"]);
 
