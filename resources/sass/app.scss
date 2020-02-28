@@ -1,1 +1,105 @@
-//
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+body {
+  background-color: $body-bg;
+  font-family: Nunito;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.container {
+  margin-bottom: 50px;
+}
+
+a {
+  color: #2a5164;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.header {
+  border-bottom: 1px solid #d5dfe9;
+  font-weight: bold;
+  font-size: 35px;
+  background-color: #4040c8;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: rgba(255, 255, 255, 0.5) 0px 3px 3px;
+  svg {
+    width: 3rem;
+    height: 3rem;
+    margin-right: 0.8em;
+    fill: #4040c8;
+  }
+}
+
+.content {
+  margin-top: 25px;
+}
+
+.nav {
+  display: block;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+  .nav-item {
+    .nav-link {
+      display: block;
+      padding: 10px 0;
+    }
+    .router-link-exact-active {
+      color: #4040c8;
+      svg {
+        fill: #4040c8;
+      }
+    }
+  }
+}
+
+.card {
+  box-shadow: 0 2px 3px #cdd8df;
+  border: none;
+  .card-header {
+    background-color: #ffffff;
+    padding: 20px;
+    border-width: 0;
+  }
+  .card-body {
+    padding: 0;
+    .table {
+      margin: 0;
+      thead th {
+        background-color: #f3f4f6;
+        border-bottom: 0;
+      }
+      th,
+      td {
+        padding: 15px 20px;
+      }
+    }
+  }
+}
+
+.svg-hover:hover {
+  fill: #4040c8;
+}
+
+.light-bg {
+  background-color: #f1f7fa;
+}
+
+.pointer {
+  * {
+    cursor: pointer;
+  }
+}
