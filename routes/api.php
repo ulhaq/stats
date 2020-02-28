@@ -26,5 +26,7 @@ Route::get('sessions/{session}/variables', 'SessionController@variables')->name(
 Route::get('actions/{action}/variables', 'ActionController@variables')->name('actions.variables');
 
 Route::prefix('stats')->namespace('Stats')->group(function () {
-    Route::get('details/{session}', 'DetailController@index')->name('stats.details');
+    Route::get('details/{session}', 'DetailController@index')->name('stats.detail');
+    Route::get('counts/{location}/{id}/{action}', 'CountController@index')->name('stats.count');
+    Route::get('users/login', 'UserController@login')->name('stats.user.login');
 });

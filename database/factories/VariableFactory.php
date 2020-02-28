@@ -19,8 +19,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Variable::class, function (Faker $faker) {
     return [
-        'variable' => $faker->word,
-        'value' => $faker->word,
+        'variable' => $faker->randomElement(["journey_id",]),
+        'value' => $faker->randomNumber(),
         'action_id' => factory(App\Action::class),
     ];
 });
