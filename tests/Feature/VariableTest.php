@@ -29,18 +29,43 @@ class VariableTest extends TestCase
                     [
                         "variable" => $variable[0]->variable,
                         "value" => $variable[0]->value,
-                        "action" => [
-                            "id" => $variable[0]->action->id,
-                            "created_at" => $variable[0]->action->created_at,
-                        ],
+                        "created_at" => $variable[0]->created_at,
                     ],
                     [
                         "variable" => $variable[1]->variable,
                         "value" => $variable[1]->value,
-                        "action" => [
-                            "id" => $variable[1]->action->id,
-                            "created_at" => $variable[1]->action->created_at,
-                        ],
+                        "created_at" => $variable[1]->created_at,
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_all_variables_with_relation()
+    {
+        $this->withoutExceptionHandling();
+
+        $variables = factory(Variable::class, 2)->create();
+
+        $response = $this->json("GET", "api/variables?include=action");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "variable" => $variables[0]->variable,
+                        "value" => $variables[0]->value,
+                        "created_at" => $variables[0]->created_at,
+                        "action" => [],
+                    ],
+                    [
+                        "variable" => $variables[1]->variable,
+                        "value" => $variables[1]->value,
+                        "created_at" => $variables[1]->created_at,
+                        "action" => [],
                     ],
                 ],
                 "links" => [],
@@ -62,10 +87,25 @@ class VariableTest extends TestCase
             ->assertJson([
                 "variable" => $variable->variable,
                 "value" => $variable->value,
-                "action" => [
-                    "id" => $variable->action->id,
-                    "created_at" => $variable->action->created_at,
-                ],
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_variable_with_its_relation()
+    {
+        $this->withoutExceptionHandling();
+
+        $variable = factory(variable::class)->create();
+
+        $response = $this->json("GET", "api/variables/{$variable->id}?include=action");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "variable" => $variable->variable,
+                "value" => $variable->value,
+                "created_at" => $variable->created_at,
+                "action" => [],
             ]);
     }
 

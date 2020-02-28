@@ -33,18 +33,47 @@ class ActionTest extends TestCase
                         "action" => $action[0]->action,
                         "target" => $action[0]->target,
                         "created_at" => $action[0]->created_at,
-                        "session" => [
-                            "id" => $action[0]->session->id,
-                        ],
                     ],
                     [
                         "location" => $action[1]->location,
                         "action" => $action[1]->action,
                         "target" => $action[1]->target,
                         "created_at" => $action[1]->created_at,
-                        "session" => [
-                            "id" => $action[1]->session->id,
-                        ],
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ]);
+    }
+    
+    /** @test */
+    public function a_user_can_view_all_sessions_with_relations()
+    {
+        $this->withoutExceptionHandling();
+
+        $actions = factory(Action::class, 2)->create();
+
+        $response = $this->json("GET", "api/actions?include=session,variables");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "location" => $actions[0]->location,
+                        "action" => $actions[0]->action,
+                        "target" => $actions[0]->target,
+                        "created_at" => $actions[0]->created_at,
+                        "session" => [],
+                        "variables" => [],
+                    ],
+                    [
+                        "location" => $actions[1]->location,
+                        "action" => $actions[1]->action,
+                        "target" => $actions[1]->target,
+                        "created_at" => $actions[1]->created_at,
+                        "session" => [],
+                        "variables" => [],
                     ],
                 ],
                 "links" => [],
@@ -68,9 +97,27 @@ class ActionTest extends TestCase
                 "action" => $action->action,
                 "target" => $action->target,
                 "created_at" => $action->created_at,
-                "session" => [
-                    "id" => $action->session->id,
-                ],
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_action_with_its_relations()
+    {
+        $this->withoutExceptionHandling();
+
+        $action = factory(Action::class)->create();
+
+        $response = $this->json("GET", "api/actions/{$action->id}?include=session,variables");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "location" => $action->location,
+                "action" => $action->action,
+                "target" => $action->target,
+                "created_at" => $action->created_at,
+                "session" => [],
+                "variables" => [],
             ]);
     }
 
@@ -142,7 +189,7 @@ class ActionTest extends TestCase
         $this->withoutExceptionHandling();
 
         $action = factory(Action::class)->create();
-        $variable = factory(Variable::class, 2)->create(["action_id" => $action->id]);
+        $variables = factory(Variable::class, 2)->create(["action_id" => $action->id]);
 
         $response = $this->json("GET", "api/actions/$action->id/variables");
 
@@ -151,12 +198,12 @@ class ActionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        'variable' => $variable[0]->variable,
-                        'value' => $variable[0]->value,
+                        'variable' => $variables[0]->variable,
+                        'value' => $variables[0]->value,
                     ],
                     [
-                        'variable' => $variable[1]->variable,
-                        'value' => $variable[1]->value,
+                        'variable' => $variables[1]->variable,
+                        'value' => $variables[1]->value,
                     ],
                 ],
                 "links" => [],

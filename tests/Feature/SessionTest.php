@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Action;
 use App\Session;
+use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -12,13 +13,12 @@ class SessionTest extends TestCase
 {
     use DatabaseMigrations, WithFaker;
 
-
     /** @test */
     public function a_user_can_view_all_sessions()
     {
         $this->withoutExceptionHandling();
 
-        $session = factory(Session::class, 2)->create();
+        $sessions = factory(Session::class, 2)->create();
 
         $response = $this->json("GET", "api/sessions");
 
@@ -27,16 +27,51 @@ class SessionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "user" => $session[0]->user,
-                        "client" => $session[0]->client,
-                        "platform" => $session[0]->platform,
-                        "created_at" => $session[0]->created_at,
+                        "user" => $sessions[0]->user,
+                        "client" => $sessions[0]->client,
+                        "platform" => $sessions[0]->platform,
+                        "created_at" => $sessions[0]->created_at,
                     ],
                     [
-                        "user" => $session[1]->user,
-                        "client" => $session[1]->client,
-                        "platform" => $session[1]->platform,
-                        "created_at" => $session[1]->created_at,
+                        "user" => $sessions[1]->user,
+                        "client" => $sessions[1]->client,
+                        "platform" => $sessions[1]->platform,
+                        "created_at" => $sessions[1]->created_at,
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_all_sessions_with_relations()
+    {
+        $this->withoutExceptionHandling();
+
+        $sessions = factory(Session::class, 2)->create();
+
+        $response = $this->json("GET", "api/sessions?include=actions,variables");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "user" => $sessions[0]->user,
+                        "client" => $sessions[0]->client,
+                        "platform" => $sessions[0]->platform,
+                        "created_at" => $sessions[0]->created_at,
+                        "actions" => [],
+                        "variables" => [],
+                    ],
+                    [
+                        "user" => $sessions[1]->user,
+                        "client" => $sessions[1]->client,
+                        "platform" => $sessions[1]->platform,
+                        "created_at" => $sessions[1]->created_at,
+                        "actions" => [],
+                        "variables" => [],
                     ],
                 ],
                 "links" => [],
@@ -60,6 +95,27 @@ class SessionTest extends TestCase
                 "client" => $session->client,
                 "platform" => $session->platform,
                 "created_at" => $session->created_at,
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_session_with_its_relations()
+    {
+        $this->withoutExceptionHandling();
+
+        $session = factory(Session::class)->create();
+
+        $response = $this->json("GET", "api/sessions/{$session->id}?include=actions,variables");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "user" => $session->user,
+                "client" => $session->client,
+                "platform" => $session->platform,
+                "created_at" => $session->created_at,
+                "actions" => [],
+                "variables" => [],
             ]);
     }
 
@@ -115,7 +171,7 @@ class SessionTest extends TestCase
         $this->withoutExceptionHandling();
 
         $session = factory(Session::class)->create();
-        $action = factory(Action::class, 2)->create(["session_id" => $session->id]);
+        $actions = factory(Action::class, 2)->create(["session_id" => $session->id]);
 
         $response = $this->json("GET", "api/sessions/$session->id/actions");
 
@@ -124,14 +180,43 @@ class SessionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "location" => $action[0]->location,
-                        "target" => $action[0]->target,
-                        "created_at" => $action[0]->created_at,
+                        "location" => $actions[0]->location,
+                        "target" => $actions[0]->target,
+                        "created_at" => $actions[0]->created_at,
                     ],
                     [
-                        "location" => $action[1]->location,
-                        "target" => $action[1]->target,
-                        "created_at" => $action[1]->created_at,
+                        "location" => $actions[1]->location,
+                        "target" => $actions[1]->target,
+                        "created_at" => $actions[1]->created_at,
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_sessions_actions_variables()
+    {
+        $this->withoutExceptionHandling();
+
+        $session = factory(Session::class)->create();
+        $action = factory(Action::class)->create(["session_id" => $session->id]);
+        $variables = factory(Variable::class, 2)->create(["action_id" => $action->id]);
+
+        $response = $this->json("GET", "api/sessions/$session->id/variables");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "variable" => $variables[0]->variable,
+                        "value" => $variables[0]->value,
+                    ],
+                    [
+                        "variable" => $variables[1]->variable,
+                        "value" => $variables[1]->value,
                     ],
                 ],
                 "links" => [],
