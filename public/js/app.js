@@ -55352,7 +55352,7 @@ var render = function() {
                     _c(
                       "router-link",
                       {
-                        staticClass: "nav-link",
+                        staticClass: "nav-link control-action",
                         attrs: {
                           to: {
                             name: "session-preview",
@@ -55364,7 +55364,6 @@ var render = function() {
                         _c(
                           "svg",
                           {
-                            staticClass: "svg-hover",
                             attrs: {
                               xmlns: "http://www.w3.org/2000/svg",
                               width: "1.2em",

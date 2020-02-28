@@ -90,8 +90,17 @@ a {
   }
 }
 
-.svg-hover:hover {
-  fill: #4040c8;
+.control-action {
+  svg {
+    fill: #ccd2df;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  svg:hover {
+    fill: #4040c8;
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }
 
 .light-bg {
