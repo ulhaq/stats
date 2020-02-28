@@ -16,7 +16,7 @@ class ActionController extends Controller
      */
     public function index()
     {
-        return ActionResource::collection(Action::with("session")->paginate(10))->response()->setStatusCode(200);
+        return ActionResource::collection(filter(Action::paginate(10)))->response()->setStatusCode(200);
     }
 
     /**
@@ -41,7 +41,7 @@ class ActionController extends Controller
      */
     public function show(Action $action)
     {
-        return response(new ActionResource($action->load("session")), 200);
+        return response(new ActionResource(filter($action)), 200);
     }
 
     /**
@@ -79,6 +79,6 @@ class ActionController extends Controller
     {
         $variables = $action->variables()->paginate(10);
 
-        return VariableResource::collection($variables)->response()->setStatusCode(200);
+        return VariableResource::collection(filter($variables))->response()->setStatusCode(200);
     }
 }

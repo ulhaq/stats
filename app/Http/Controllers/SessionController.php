@@ -17,7 +17,7 @@ class SessionController extends Controller
      */
     public function index()
     {
-        return SessionResource::collection(Session::paginate(10))->response()->setStatusCode(200);
+        return SessionResource::collection(filter(Session::paginate(10)))->response()->setStatusCode(200);
     }
 
     /**
@@ -41,7 +41,7 @@ class SessionController extends Controller
      */
     public function show(Session $session)
     {
-        return response(new SessionResource($session), 200);
+        return response(new SessionResource(filter($session)), 200);
     }
 
     /**
@@ -79,7 +79,7 @@ class SessionController extends Controller
     {
         $actions = $session->actions()->paginate(10);
 
-        return ActionResource::collection($actions)->response()->setStatusCode(200);
+        return ActionResource::collection(filter($actions))->response()->setStatusCode(200);
     }
 
     /**
@@ -92,6 +92,6 @@ class SessionController extends Controller
     {
         $variables = $session->variables()->paginate(10);
 
-        return VariableResource::collection($variables)->response()->setStatusCode(200);
+        return VariableResource::collection(filter($variables))->response()->setStatusCode(200);
     }
 }

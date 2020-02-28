@@ -15,7 +15,7 @@ class VariableController extends Controller
      */
     public function index()
     {
-        return VariableResource::collection(Variable::with("action")->paginate(10))->response()->setStatusCode(200);
+        return VariableResource::collection(filter(Variable::paginate(10)))->response()->setStatusCode(200);
     }
 
     /**
@@ -39,7 +39,7 @@ class VariableController extends Controller
      */
     public function show(Variable $variable)
     {
-        return response(new VariableResource($variable->load("action")), 200);
+        return response(new VariableResource(filter($variable)), 200);
     }
 
     /**
