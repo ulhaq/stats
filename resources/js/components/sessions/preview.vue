@@ -31,7 +31,7 @@
         </tbody>
       </table>
       <div class="collapse" id="actionDetails">
-        <div class="card card-body">
+        <div class="card card-body table-responsive">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -94,7 +94,7 @@ export default {
         };
     },
     created() {
-        this.axios.get(`${this.BaseUrl}sessions/${this.$route.params.id}?include=actions.variables`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/sessions/${this.$route.params.id}?include=actions.variables`).then((response) => {
             this.entry = response.data;
         });
     },
