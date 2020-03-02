@@ -41,14 +41,14 @@ export default {
         };
     },
     created() {
-        this.axios.get(`${this.URL}sessions`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/sessions`).then((response) => {
             this.sessions = response.data.data;
             this.totalPages = response.data.meta.last_page;
         });
     },
     methods: {
       loadMore() {
-        this.axios.get(this.URL + "sessions?page=" + (this.currentPage + 1))
+        this.axios.get(`${this.BaseUrl}/sessions?page=${this.currentPage + 1}`)
           .then(response => {
             this.sessions = this.sessions.concat(response.data.data);
             this.currentPage = response.data.meta.current_page;

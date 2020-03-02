@@ -94,7 +94,7 @@ export default {
         };
     },
     created() {
-        this.axios.get(`${this.URL}sessions/${this.$route.params.id}?include=actions.variables`).then((response) => {
+        this.axios.get(`${this.BaseUrl}sessions/${this.$route.params.id}?include=actions.variables`).then((response) => {
             this.entry = response.data;
         });
     },

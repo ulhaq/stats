@@ -2021,7 +2021,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    this.axios.get("".concat(this.URL, "sessions")).then(function (response) {
+    this.axios.get("".concat(this.BaseUrl, "/sessions")).then(function (response) {
       _this.sessions = response.data.data;
       _this.totalPages = response.data.meta.last_page;
     });
@@ -2030,7 +2030,7 @@ __webpack_require__.r(__webpack_exports__);
     loadMore: function loadMore() {
       var _this2 = this;
 
-      this.axios.get(this.URL + "sessions?page=" + (this.currentPage + 1)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/sessions?page=").concat(this.currentPage + 1)).then(function (response) {
         _this2.sessions = _this2.sessions.concat(response.data.data);
         _this2.currentPage = response.data.meta.current_page;
       });
@@ -2146,7 +2146,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     var _this = this;
 
-    this.axios.get("".concat(this.URL, "sessions/").concat(this.$route.params.id, "?include=actions.variables")).then(function (response) {
+    this.axios.get("".concat(this.BaseUrl, "sessions/").concat(this.$route.params.id, "?include=actions.variables")).then(function (response) {
       _this.entry = response.data;
     });
   }
@@ -70848,15 +70848,18 @@ Vue.mixin({
         return moment__WEBPACK_IMPORTED_MODULE_3___default.a;
       },
 
-      URL: "http://localhost:8000/api/"
+      BaseUrl: "http://localhost:8000/api"
     };
   }
 }); // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 var routes = [{
-  name: 'sessions',
   path: '/',
+  redirect: '/sessions'
+}, {
+  name: 'sessions',
+  path: '/sessions',
   component: __webpack_require__(/*! ./components/sessions/index */ "./resources/js/components/sessions/index.vue")["default"]
 }, {
   name: 'session-preview',

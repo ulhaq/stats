@@ -16,7 +16,7 @@ Vue.mixin({
             get moment() {
                 return moment;
             },
-            URL: "http://localhost:8000/api/",
+            BaseUrl: "http://localhost:8000/api",
         }
     }
 })
@@ -25,7 +25,9 @@ Vue.mixin({
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 const routes = [
-    { name: 'sessions', path: '/', component: require('./components/sessions/index').default, },
+    { path: '/', redirect: '/sessions' },
+
+    { name: 'sessions', path: '/sessions', component: require('./components/sessions/index').default, },
     { name: 'session-preview', path: '/sessions/:id', component: require('./components/sessions/preview').default, },
     { name: '404', path: '*', component: require('./components/404').default, },
 ]
