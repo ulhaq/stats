@@ -2010,12 +2010,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       sessions: [],
       currentPage: 1,
-      totalPages: 0
+      totalPages: 0,
+      ready: false
     };
   },
   created: function created() {
@@ -2024,6 +2027,7 @@ __webpack_require__.r(__webpack_exports__);
     this.axios.get("".concat(this.BaseUrl, "/sessions")).then(function (response) {
       _this.sessions = response.data.data;
       _this.totalPages = response.data.meta.last_page;
+      _this.ready = true;
     });
   },
   methods: {
@@ -2140,7 +2144,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       entry: {
         actions: []
-      }
+      },
+      ready: false
     };
   },
   created: function created() {
@@ -2148,6 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
 
     this.axios.get("".concat(this.BaseUrl, "/sessions/").concat(this.$route.params.id, "?include=actions.variables")).then(function (response) {
       _this.entry = response.data;
+      _this.ready = true;
     });
   }
 });
@@ -55307,6 +55313,67 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loading.vue?vue&type=template&id=664164c1&":
+/*!**********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/loading.vue?vue&type=template&id=664164c1& ***!
+  \**********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("table", { staticClass: "table light-bg text-center" }, [
+    _c("tr", [
+      _c("td", [
+        _c(
+          "svg",
+          {
+            staticClass: "bi bi-search",
+            attrs: {
+              width: "1em",
+              height: "1em",
+              viewBox: "0 0 20 20",
+              fill: "currentColor",
+              xmlns: "http://www.w3.org/2000/svg"
+            }
+          },
+          [
+            _c("path", {
+              attrs: {
+                "fill-rule": "evenodd",
+                d:
+                  "M12.442 12.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z",
+                "clip-rule": "evenodd"
+              }
+            }),
+            _c("path", {
+              attrs: {
+                "fill-rule": "evenodd",
+                d:
+                  "M8.5 14a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM15 8.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z",
+                "clip-rule": "evenodd"
+              }
+            })
+          ]
+        ),
+        _vm._v(" Fetching...")
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/sessions/index.vue?vue&type=template&id=74b453eb&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/sessions/index.vue?vue&type=template&id=74b453eb& ***!
@@ -55325,106 +55392,115 @@ var render = function() {
   return _c("div", { staticClass: "card" }, [
     _c("div", { staticClass: "card-header" }, [_vm._v("Sessions")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body table-responsive" }, [
-      _c("table", { staticClass: "table table-hover" }, [
-        _vm._m(0),
+    _c(
+      "div",
+      { staticClass: "card-body table-responsive" },
+      [
+        !_vm.ready ? _c("loading") : _vm._e(),
         _vm._v(" "),
-        _c(
-          "tbody",
-          [
-            _vm._l(_vm.sessions, function(session) {
-              return _c("tr", { key: session.id }, [
-                _c("td", [
-                  _c("span", { staticClass: "badge badge-secondary" }, [
-                    _vm._v(_vm._s(session.id))
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(session.user))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(session.client))]),
-                _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(session.platform))]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(_vm._s(_vm.moment(session.created_at).fromNow()))
-                ]),
-                _vm._v(" "),
-                _c(
-                  "td",
-                  [
+        _vm.ready
+          ? _c("table", { staticClass: "table table-hover" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                [
+                  _vm._l(_vm.sessions, function(session) {
+                    return _c("tr", { key: session.id }, [
+                      _c("td", [
+                        _c("span", { staticClass: "badge badge-secondary" }, [
+                          _vm._v(_vm._s(session.id))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(session.user))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(session.client))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(session.platform))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.moment(session.created_at).fromNow()))
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link control-action",
+                              attrs: {
+                                to: {
+                                  name: "session-preview",
+                                  params: { id: session.id }
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "svg",
+                                {
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    width: "1.2em",
+                                    height: "1.2em",
+                                    viewBox: "0 0 22 16"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("tr", { staticClass: "dontanimate" }, [
                     _c(
-                      "router-link",
+                      "td",
                       {
-                        staticClass: "nav-link control-action",
-                        attrs: {
-                          to: {
-                            name: "session-preview",
-                            params: { id: session.id }
-                          }
-                        }
+                        staticClass: "text-center card-bg-secondary py-1",
+                        attrs: { colspan: "100" }
                       },
                       [
                         _c(
-                          "svg",
+                          "button",
                           {
+                            staticClass: "btn btn-link",
                             attrs: {
-                              xmlns: "http://www.w3.org/2000/svg",
-                              width: "1.2em",
-                              height: "1.2em",
-                              viewBox: "0 0 22 16"
+                              type: "button",
+                              disabled: _vm.currentPage >= _vm.totalPages
+                            },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.loadMore()
+                              }
                             }
                           },
-                          [
-                            _c("path", {
-                              attrs: {
-                                d:
-                                  "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-                              }
-                            })
-                          ]
+                          [_vm._v("Load Older Entries")]
                         )
                       ]
                     )
-                  ],
-                  1
-                )
-              ])
-            }),
-            _vm._v(" "),
-            _c("tr", { staticClass: "dontanimate" }, [
-              _c(
-                "td",
-                {
-                  staticClass: "text-center card-bg-secondary py-1",
-                  attrs: { colspan: "100" }
-                },
-                [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-link",
-                      attrs: {
-                        type: "button",
-                        disabled: _vm.currentPage >= _vm.totalPages
-                      },
-                      on: {
-                        click: function($event) {
-                          $event.preventDefault()
-                          return _vm.loadMore()
-                        }
-                      }
-                    },
-                    [_vm._v("Load Older Entries")]
-                  )
-                ]
+                  ])
+                ],
+                2
               )
             ])
-          ],
-          2
-        )
-      ])
-    ])
+          : _vm._e()
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -55473,112 +55549,120 @@ var render = function() {
   return _c("div", { staticClass: "card" }, [
     _c("div", { staticClass: "card-header" }, [_vm._v("Session Details")]),
     _vm._v(" "),
-    _c("div", { staticClass: "card-body" }, [
-      _c("table", { staticClass: "table table-borderless light-bg" }, [
-        _c("tbody", [
-          _c("tr", [
-            _c("th", [_vm._v("Started")]),
-            _vm._v(" "),
-            _c("td", [
-              _vm._v(_vm._s(_vm.moment(_vm.entry.created_at).fromNow()))
-            ])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", [_vm._v("ID")]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.entry.id))])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", [_vm._v("User")]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.entry.user))])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", [_vm._v("Client")]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.entry.client))])
-          ]),
-          _vm._v(" "),
-          _c("tr", [
-            _c("th", [_vm._v("Platform")]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.entry.platform))])
-          ]),
-          _vm._v(" "),
-          _c(
-            "tr",
-            {
-              staticClass: "pointer",
-              attrs: {
-                "data-toggle": "collapse",
-                "data-target": "#actionDetails",
-                "aria-expanded": "false",
-                "aria-controls": "actionDetails"
-              }
-            },
-            [
-              _c("th", [_vm._v("Total Actions")]),
-              _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(_vm.entry.actions.length))])
-            ]
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "collapse", attrs: { id: "actionDetails" } }, [
-        _c("div", { staticClass: "card card-body table-responsive" }, [
-          _c(
-            "table",
-            { staticClass: "table table-hover" },
-            [
-              _vm._m(0),
-              _vm._v(" "),
-              _vm._l(_vm.entry.actions, function(action) {
-                return _c("tbody", { key: action.id }, [
-                  _c(
-                    "tr",
-                    {
-                      staticClass: "pointer",
-                      attrs: {
-                        "data-toggle": "collapse",
-                        "data-target": "#variableDetails" + action.id,
-                        "aria-expanded": "false",
-                        "aria-controls": "#variableDetails" + action.id
-                      }
-                    },
-                    [
-                      _c("td", [
-                        _c("span", { staticClass: "badge badge-secondary" }, [
-                          _vm._v(_vm._s(action.id))
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(action.location))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(action.action))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(action.target))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(action.variables.length))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(_vm._s(_vm.moment(action.created_at).fromNow()))
-                      ])
-                    ]
-                  ),
+    _c(
+      "div",
+      { staticClass: "card-body" },
+      [
+        !_vm.ready ? _c("loading") : _vm._e(),
+        _vm._v(" "),
+        _vm.ready
+          ? _c("table", { staticClass: "table table-borderless light-bg" }, [
+              _c("tbody", [
+                _c("tr", [
+                  _c("th", [_vm._v("Started")]),
                   _vm._v(" "),
-                  _c(
-                    "tr",
-                    {
-                      staticClass: "collapse",
-                      attrs: { id: "variableDetails" + action.id }
-                    },
-                    [
-                      _c("td", { attrs: { colspan: "6" } }, [
-                        _c("div", [
+                  _c("td", [
+                    _vm._v(_vm._s(_vm.moment(_vm.entry.created_at).fromNow()))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("ID")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.entry.id))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("User")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.entry.user))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Client")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.entry.client))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [_vm._v("Platform")]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.entry.platform))])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tr",
+                  {
+                    staticClass: "pointer",
+                    attrs: {
+                      "data-toggle": "collapse",
+                      "data-target": "#actionDetails",
+                      "aria-expanded": "false",
+                      "aria-controls": "actionDetails"
+                    }
+                  },
+                  [
+                    _c("th", [_vm._v("Total Actions")]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(_vm.entry.actions.length))])
+                  ]
+                )
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("div", { staticClass: "collapse", attrs: { id: "actionDetails" } }, [
+          _c("div", { staticClass: "card card-body table-responsive" }, [
+            _c(
+              "table",
+              { staticClass: "table table-hover" },
+              [
+                _vm._m(0),
+                _vm._v(" "),
+                _vm._l(_vm.entry.actions, function(action) {
+                  return _c("tbody", { key: action.id }, [
+                    _c(
+                      "tr",
+                      {
+                        staticClass: "pointer",
+                        attrs: {
+                          "data-toggle": "collapse",
+                          "data-target": "#variableDetails" + action.id,
+                          "aria-expanded": "false",
+                          "aria-controls": "#variableDetails" + action.id
+                        }
+                      },
+                      [
+                        _c("td", [
+                          _c("span", { staticClass: "badge badge-secondary" }, [
+                            _vm._v(_vm._s(action.id))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(action.location))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(action.action))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(action.target))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(action.variables.length))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v(
+                            _vm._s(_vm.moment(action.created_at).fromNow())
+                          )
+                        ])
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "tr",
+                      {
+                        staticClass: "collapse",
+                        attrs: { id: "variableDetails" + action.id }
+                      },
+                      [
+                        _c("td", { attrs: { colspan: "6" } }, [
                           _c("div", { staticClass: "card card-body" }, [
                             _c(
                               "table",
@@ -55612,17 +55696,18 @@ var render = function() {
                             )
                           ])
                         ])
-                      ])
-                    ]
-                  )
-                ])
-              })
-            ],
-            2
-          )
+                      ]
+                    )
+                  ])
+                })
+              ],
+              2
+            )
+          ])
         ])
-      ])
-    ])
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -70855,7 +70940,8 @@ Vue.mixin({
       BaseUrl: "http://localhost:8000/api"
     };
   }
-}); // const files = require.context('./', true, /\.vue$/i)
+});
+Vue.component('loading', __webpack_require__(/*! ./components/loading.vue */ "./resources/js/components/loading.vue")["default"]); // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 var routes = [{
@@ -70997,6 +71083,59 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_73992586___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_404_vue_vue_type_template_id_73992586___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/loading.vue":
+/*!*********************************************!*\
+  !*** ./resources/js/components/loading.vue ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./loading.vue?vue&type=template&id=664164c1& */ "./resources/js/components/loading.vue?vue&type=template&id=664164c1&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/loading.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/loading.vue?vue&type=template&id=664164c1&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/loading.vue?vue&type=template&id=664164c1& ***!
+  \****************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./loading.vue?vue&type=template&id=664164c1& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/loading.vue?vue&type=template&id=664164c1&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_loading_vue_vue_type_template_id_664164c1___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

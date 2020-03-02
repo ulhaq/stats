@@ -1,8 +1,10 @@
 <template>
   <div class="card">
     <div class="card-header">Sessions</div>
-    <div class="card-body table-responsive">
-      <table class="table table-hover">
+    <div class="card-body table-responsive">      
+      <loading v-if="!ready" />
+
+      <table class="table table-hover" v-if="ready">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -38,12 +40,15 @@ export default {
             sessions: [],
             currentPage: 1,
             totalPages: 0,
+            ready: false,
         };
     },
     created() {
         this.axios.get(`${this.BaseUrl}/sessions`).then((response) => {
             this.sessions = response.data.data;
             this.totalPages = response.data.meta.last_page;
+            
+            this.ready = true;
         });
     },
     methods: {

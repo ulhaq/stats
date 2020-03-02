@@ -2,7 +2,9 @@
   <div class="card">
     <div class="card-header">Session Details</div>
     <div class="card-body">
-      <table class="table table-borderless light-bg">
+      <loading v-if="!ready" />
+
+      <table class="table table-borderless light-bg" v-if="ready">
         <tbody>
           <tr>
             <th>Started</th>
@@ -89,11 +91,14 @@ export default {
             entry: {
               actions: [],
             },
+            ready: false,
         };
     },
     created() {
         this.axios.get(`${this.BaseUrl}/sessions/${this.$route.params.id}?include=actions.variables`).then((response) => {
             this.entry = response.data;
+            
+            this.ready = true;
         });
     },
 };
