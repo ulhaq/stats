@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        $session = DB::table('sessions')->select('user', DB::raw('count(*) as total'))->groupBy('user')->get();
+        $session = DB::table('sessions')->select('user', DB::raw('count(*) as total'))->orderBy('total', 'desc')->groupBy('user')->get();
 
         return response()->json(["counts" => $session], 200);
     }

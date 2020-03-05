@@ -14,9 +14,9 @@ class ActionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return ActionResource::collection(filter(Action::paginate(10)))->response()->setStatusCode(200);
+        return ActionResource::collection(withRelations(Action::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**
@@ -41,7 +41,7 @@ class ActionController extends Controller
      */
     public function show(Action $action)
     {
-        return response(new ActionResource(filter($action)), 200);
+        return response(new ActionResource(withRelations($action)), 200);
     }
 
     /**
@@ -75,10 +75,10 @@ class ActionController extends Controller
      * @param  \App\Action  $action
      * @return \Illuminate\Http\Response
      */
-    public function variables(Action $action)
+    public function variables(Action $action, Request $request)
     {
-        $variables = $action->variables()->paginate(10);
+        $variables = $action->variables()->filter($request)->paginate(10)->appends($request->except("page"));
 
-        return VariableResource::collection(filter($variables))->response()->setStatusCode(200);
+        return VariableResource::collection(withRelations($variables))->response()->setStatusCode(200);
     }
 }

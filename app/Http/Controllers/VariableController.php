@@ -13,9 +13,9 @@ class VariableController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return VariableResource::collection(filter(Variable::paginate(10)))->response()->setStatusCode(200);
+        return VariableResource::collection(withRelations(Variable::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**
@@ -39,7 +39,7 @@ class VariableController extends Controller
      */
     public function show(Variable $variable)
     {
-        return response(new VariableResource(filter($variable)), 200);
+        return response(new VariableResource(withRelations($variable)), 200);
     }
 
     /**

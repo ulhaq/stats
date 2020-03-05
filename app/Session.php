@@ -2,10 +2,12 @@
 
 namespace App;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
+    use Filterable;
 
     /**
      * The attributes that are mass assignable.

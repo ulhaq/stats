@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
 class Action extends Model
 {
+    use Filterable;
+    
     /**
      * The attributes that are mass assignable.
      *

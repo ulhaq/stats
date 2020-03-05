@@ -15,9 +15,9 @@ class SessionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return SessionResource::collection(filter(Session::paginate(10)))->response()->setStatusCode(200);
+        return SessionResource::collection(withRelations(Session::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**
@@ -41,7 +41,7 @@ class SessionController extends Controller
      */
     public function show(Session $session)
     {
-        return response(new SessionResource(filter($session)), 200);
+        return response(new SessionResource(withRelations($session)), 200);
     }
 
     /**
@@ -75,11 +75,11 @@ class SessionController extends Controller
      * @param  \App\Session  $session
      * @return \Illuminate\Http\Response
      */
-    public function actions(Session $session)
+    public function actions(Session $session, Request $request)
     {
-        $actions = $session->actions()->paginate(10);
+        $actions = $session->actions()->filter($request)->paginate(10)->appends($request->except("page"));
 
-        return ActionResource::collection(filter($actions))->response()->setStatusCode(200);
+        return ActionResource::collection(withRelations($actions))->response()->setStatusCode(200);
     }
 
     /**
@@ -88,10 +88,10 @@ class SessionController extends Controller
      * @param  \App\Session  $session
      * @return \Illuminate\Http\Response
      */
-    public function variables(Session $session)
+    public function variables(Session $session, Request $request)
     {
-        $variables = $session->variables()->paginate(10);
+        $variables = $session->variables()->filter($request)->paginate(10)->appends($request->except("page"));
 
-        return VariableResource::collection(filter($variables))->response()->setStatusCode(200);
+        return VariableResource::collection(withRelations($variables))->response()->setStatusCode(200);
     }
 }

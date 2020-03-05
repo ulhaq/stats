@@ -1,5 +1,5 @@
 <?php
-function filter($attach)
+function withRelations($attach)
 {
-    return app('filter')->attach($attach);
+    return app('withRelations')->attach($attach);
 }

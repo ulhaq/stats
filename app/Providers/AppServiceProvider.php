@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Requests\RequestQueryFilter;
+use App\Http\Requests\RequestQueryWithRelations;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,8 +18,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(TelescopeServiceProvider::class);
         }
 
-        $this->app->singleton('filter', function () {
-            return new RequestQueryFilter;
+        $this->app->singleton('withRelations', function () {
+            return new RequestQueryWithRelations;
         });
     }
 
