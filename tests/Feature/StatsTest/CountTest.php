@@ -3,7 +3,6 @@
 namespace Tests\Feature\StatsTest;
 
 use App\Action;
-use App\Session;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -14,138 +13,101 @@ class CountTest extends TestCase
     use DatabaseMigrations, WithFaker;
 
     /** @test */
-    public function a_user_can_get_view_counts_of_a_journey()
+    public function a_user_can_get_a_list_of_locations()
     {
         $this->withoutExceptionHandling();
 
-        $id = 1;
+        $actions = factory(Action::class, 10)->create();
 
-        $session = factory(Session::class)->create();
-        for ($i = 0; $i < 10; $i++) {
-            $action = Action::create([
-                'location' => "journey",
-                'action' => "view",
-                'target' => $this->faker->name,
-                'session_id' => $session->id,
-            ]);
-            Variable::create([
-                'variable' => "user_id",
-                'value' => rand(),
-                'action_id' => $action->id,
-            ]);
-            Variable::create([
-                'variable' => "journey_id",
-                'value' => $id,
-                'action_id' => $action->id,
-            ]);
-        }
-
-        $response = $this->json("GET", "api/stats/counts/journey/$id/view");
+        $response = $this->json("GET", "api/stats/counts");
 
         $response
             ->assertStatus(200)
-            ->assertJson(['counts' => 10]);
+            ->assertJson($actions->unique("location")->pluck("location")->toArray());
     }
 
     /** @test */
-    public function a_user_can_get_counts_of_a_journeys_addreview()
+    public function a_user_can_get_a_list_of_a_locations_actions()
     {
         $this->withoutExceptionHandling();
 
-        $id = 1;
+        $actions = factory(Action::class, 10)->create();
 
-        $session = factory(Session::class)->create();
-        for ($i = 0; $i < 10; $i++) {
-            $action = Action::create([
-                'location' => "journey",
-                'action' => "addreview",
-                'target' => $this->faker->name,
-                'session_id' => $session->id,
-            ]);
-            Variable::create([
-                'variable' => "user_id",
-                'value' => rand(),
-                'action_id' => $action->id,
-            ]);
-            Variable::create([
-                'variable' => "journey_id",
-                'value' => $id,
-                'action_id' => $action->id,
-            ]);
-        }
-
-        $response = $this->json("GET", "api/stats/counts/journey/$id/addreview");
+        $response = $this->json("GET", "api/stats/counts?location={$actions[0]->location}");
 
         $response
             ->assertStatus(200)
-            ->assertJson(['counts' => 10]);
+            ->assertJson($actions->unique("action")->where("location", $actions[0]->location)->pluck("action")->toArray());
     }
 
     /** @test */
-    public function a_user_can_get_counts_of_a_journeys_share()
+    public function a_user_can_get_a_list_of_variables_of_an_action_with_specific_location_and_action()
     {
         $this->withoutExceptionHandling();
 
-        $id = 1;
+        $action = factory(Action::class)->create();
 
-        $session = factory(Session::class)->create();
-        for ($i = 0; $i < 10; $i++) {
-            $action = Action::create([
-                'location' => "journey",
-                'action' => "share",
-                'target' => $this->faker->name,
-                'session_id' => $session->id,
-            ]);
-            Variable::create([
-                'variable' => "user_id",
-                'value' => rand(),
-                'action_id' => $action->id,
-            ]);
-            Variable::create([
-                'variable' => "journey_id",
-                'value' => $id,
-                'action_id' => $action->id,
-            ]);
-        }
+        $variables = factory(Variable::class, 10)->create(["action_id" => $action->id]);
 
-        $response = $this->json("GET", "api/stats/counts/journey/$id/share");
+        $response = $this->json("GET", "api/stats/counts?location={$action->location}&action={$action->action}");
 
         $response
             ->assertStatus(200)
-            ->assertJson(['counts' => 10]);
+            ->assertJson($variables->unique("variable")->pluck("variable")->toArray());
     }
 
     /** @test */
-    public function a_user_can_get_counts_of_a_journeys_save()
+    public function a_user_can_get_counts_filtered_by_location_and_action()
     {
         $this->withoutExceptionHandling();
 
-        $id = 1;
+        $action = factory(Action::class)->create();
 
-        $session = factory(Session::class)->create();
-        for ($i = 0; $i < 10; $i++) {
-            $action = Action::create([
-                'location' => "journey",
-                'action' => "save",
-                'target' => $this->faker->name,
-                'session_id' => $session->id,
-            ]);
-            Variable::create([
-                'variable' => "user_id",
-                'value' => rand(),
-                'action_id' => $action->id,
-            ]);
-            Variable::create([
-                'variable' => "journey_id",
-                'value' => $id,
-                'action_id' => $action->id,
-            ]);
-        }
+        factory(Variable::class, 2)->create(["action_id" => $action->id]);
 
-        $response = $this->json("GET", "api/stats/counts/journey/$id/save");
+        $response = $this->json("POST", "api/stats/counts", [
+            "location" => $action->location,
+            "action" => $action->action,
+        ]);
 
         $response
             ->assertStatus(200)
-            ->assertJson(['counts' => 10]);
+            ->assertJson(["counts" => 2]);
+    }
+
+    /** @test */
+    public function a_user_can_get_counts_filtered_by_location_action_and_variables()
+    {
+        $this->withoutExceptionHandling();
+
+        $action = factory(Action::class)->create();
+
+        $tmp = [
+            [
+                "variable" => "journey_id",
+                "value" => 2,
+                "action_id" => $action->id
+            ],
+            [
+                "variable" => "start-learning_id",
+                "value" => 498,
+                "action_id" => $action->id
+            ],
+        ];
+
+        $variables[] = factory(Variable::class)->create($tmp[0]);
+        $variables[] = factory(Variable::class)->create($tmp[1]);
+
+        $response = $this->json("POST", "api/stats/counts", [
+            "location" => $action->location,
+            "action" => $action->action,
+            "variables" => [
+                $tmp[0]["variable"] => $tmp[0]["value"],
+            ],
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(["counts" => 1]);
     }
 }
