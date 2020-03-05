@@ -29,7 +29,7 @@ a {
   border-bottom: 1px solid #d5dfe9;
   font-weight: bold;
   font-size: 35px;
-  background-color: #4040c8;
+  background-color: $indigo;
   -webkit-background-clip: text;
   -moz-background-clip: text;
   background-clip: text;
@@ -39,7 +39,7 @@ a {
     width: 3rem;
     height: 3rem;
     margin-right: 0.8em;
-    fill: #4040c8;
+    fill: $indigo;
   }
 }
 
@@ -58,9 +58,9 @@ a {
       padding: 10px 0;
     }
     .router-link-exact-active {
-      color: #4040c8;
+      color: $indigo;
       svg {
-        fill: #4040c8;
+        fill: $indigo;
       }
     }
   }
@@ -97,7 +97,7 @@ a {
     height: 1.2rem;
   }
   svg:hover {
-    fill: #4040c8;
+    fill: $indigo;
     width: 1.2rem;
     height: 1.2rem;
   }
@@ -105,6 +105,10 @@ a {
 
 .light-bg {
   background-color: #f1f7fa;
+}
+
+.indigo {
+  color: $indigo;
 }
 
 .pointer {

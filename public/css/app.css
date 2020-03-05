@@ -9,7 +9,7 @@
 
 :root {
   --blue: #3490dc;
-  --indigo: #6574cd;
+  --indigo: #4040c8;
   --purple: #9561e2;
   --pink: #f66d9b;
   --red: #e3342f;
@@ -10988,6 +10988,10 @@ a {
 
 .light-bg {
   background-color: #f1f7fa;
+}
+
+.indigo {
+  color: #4040c8;
 }
 
 .pointer * {

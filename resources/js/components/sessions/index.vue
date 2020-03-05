@@ -4,7 +4,13 @@
     <div class="card-body table-responsive">      
       <loading v-if="!ready" />
 
-      <table class="table table-hover" v-if="ready">
+      <table class="table light-bg text-center" v-if="ready && !sessions.length">
+          <tr>
+            <td>We didn't find anything - just empty space.</td>
+          </tr>
+      </table>
+      
+      <table class="table table-hover" v-if="ready && sessions.length">
         <thead>
           <tr>
             <th scope="col">#</th>
