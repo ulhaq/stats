@@ -45,6 +45,45 @@ class SessionTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_view_all_filtered_sessions()
+    {
+        $this->withoutExceptionHandling();
+
+        $tmp = [
+            [
+                "user" => "965",
+                "client" => "OSX",
+                "platform" => "Unity",
+            ],
+            [
+                "user" => "377",
+                "client" => "Windows",
+                "platform" => "Browser",
+            ],
+        ];
+
+        $sessions[] = factory(Session::class)->create($tmp[0]);
+        $sessions[] = factory(Session::class)->create($tmp[1]);
+
+        $response = $this->json("GET", "api/sessions?filter[user]={$sessions[0]->user}");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "user" => $sessions[0]->user,
+                        "client" => $sessions[0]->client,
+                        "platform" => $sessions[0]->platform,
+                        "created_at" => $sessions[0]->created_at,
+                    ]
+                ],
+                "links" => [],
+                "meta" => [],
+            ])->assertDontSee($sessions[1]->user);
+    }
+
+    /** @test */
     public function a_user_can_view_all_sessions_with_relations()
     {
         $this->withoutExceptionHandling();
@@ -222,5 +261,85 @@ class SessionTest extends TestCase
                 "links" => [],
                 "meta" => [],
             ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_sessions_filtered_actions()
+    {
+        $this->withoutExceptionHandling();
+
+        $session = factory(Session::class)->create();
+
+        $tmp = [
+            [
+                "location" => "journey",
+                "target" => "save",
+                "session_id" => $session->id,
+            ],
+            [
+                "location" => "start-learning",
+                "target" => "click",
+                "session_id" => $session->id,
+            ],
+        ];
+
+        $actions[] = factory(Action::class)->create($tmp[0]);
+        $actions[] = factory(Action::class)->create($tmp[1]);
+
+        $response = $this->json("GET", "api/sessions/$session->id/actions?filter[target]={$actions[0]->target}");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "location" => $actions[0]->location,
+                        "target" => $actions[0]->target,
+                        "created_at" => $actions[0]->created_at,
+                    ]
+                ],
+                "links" => [],
+                "meta" => [],
+            ])->assertDontSee($actions[1]->target);
+    }
+
+    /** @test */
+    public function a_user_can_view_a_specific_sessions_actions_filtered_variables()
+    {
+        $this->withoutExceptionHandling();
+
+        $session = factory(Session::class)->create();
+        $action = factory(Action::class)->create(["session_id" => $session->id]);
+
+        $tmp = [
+            [
+                "variable" => "journey_id",
+                "value" => 2,
+                "action_id" => $action->id,
+            ],
+            [
+                "variable" => "start-learning_id",
+                "value" => 498,
+                "action_id" => $action->id,
+            ],
+        ];
+
+        $variables[] = factory(Variable::class)->create($tmp[0]);
+        $variables[] = factory(Variable::class)->create($tmp[1]);
+
+        $response = $this->json("GET", "api/sessions/$session->id/variables?filter[value]={$variables[0]->value}");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "variable" => $variables[0]->variable,
+                        "value" => $variables[0]->value,
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ])->assertDontSee($variables[1]->value);
     }
 }

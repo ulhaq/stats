@@ -12,13 +12,12 @@ class VariableTest extends TestCase
 {
     use DatabaseMigrations, WithFaker;
 
-
     /** @test */
     public function a_user_can_view_all_variables()
     {
         $this->withoutExceptionHandling();
 
-        $variable = factory(Variable::class, 2)->create();
+        $variables = factory(Variable::class, 2)->create();
 
         $response = $this->json("GET", "api/variables");
 
@@ -27,19 +26,54 @@ class VariableTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "variable" => $variable[0]->variable,
-                        "value" => $variable[0]->value,
-                        "created_at" => $variable[0]->created_at,
+                        "variable" => $variables[0]->variable,
+                        "value" => $variables[0]->value,
+                        "created_at" => $variables[0]->created_at,
                     ],
                     [
-                        "variable" => $variable[1]->variable,
-                        "value" => $variable[1]->value,
-                        "created_at" => $variable[1]->created_at,
+                        "variable" => $variables[1]->variable,
+                        "value" => $variables[1]->value,
+                        "created_at" => $variables[1]->created_at,
                     ],
                 ],
                 "links" => [],
                 "meta" => [],
             ]);
+    }
+
+    /** @test */
+    public function a_user_can_view_all_filtered_variables()
+    {
+        $this->withoutExceptionHandling();
+        
+        $tmp = [
+            [
+                "variable" => "journey_id",
+                "value" => 2,
+            ],
+            [
+                "variable" => "start-learning_id",
+                "value" => 498,
+            ],
+        ];
+
+        $variables[] = factory(Variable::class)->create($tmp[0]);
+        $variables[] = factory(Variable::class)->create($tmp[1]);
+
+        $response = $this->json("GET", "api/variables?filter[value]={$variables[0]->value}");
+
+        $response
+            ->assertStatus(200)
+            ->assertJson([
+                "data" => [
+                    [
+                        "variable" => $variables[0]->variable,
+                        "value" => $variables[0]->value,
+                    ],
+                ],
+                "links" => [],
+                "meta" => [],
+            ])->assertDontSee($variables[1]->value);
     }
 
     /** @test */
@@ -117,8 +151,8 @@ class VariableTest extends TestCase
         $action = factory(Action::class)->create();
 
         $data = [
-            'variable' => $this->faker->word,
-            'value' => $this->faker->word,
+            "variable" => $this->faker->word,
+            "value" => $this->faker->word,
             "action_id" => $action->id,
         ];
 
