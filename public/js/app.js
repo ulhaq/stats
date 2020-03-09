@@ -2349,6 +2349,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -56259,9 +56265,15 @@ var render = function() {
       [
         !_vm.ready ? _c("loading") : _vm._e(),
         _vm._v(" "),
-        _vm.ready
+        _vm.ready && !_vm.users.length
+          ? _c("table", { staticClass: "table light-bg text-center" }, [
+              _vm._m(0)
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.ready && _vm.users.length
           ? _c("table", { staticClass: "table table-hover" }, [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -56286,6 +56298,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [_vm._v("We didn't find anything - just empty space.")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -71490,7 +71510,7 @@ Vue.mixin({
         return moment__WEBPACK_IMPORTED_MODULE_3___default.a;
       },
 
-      BaseUrl: "http://localhost:8000/api"
+      BaseUrl: "/api"
     };
   }
 });

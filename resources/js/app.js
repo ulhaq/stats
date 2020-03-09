@@ -16,7 +16,7 @@ Vue.mixin({
             get moment() {
                 return moment;
             },
-            BaseUrl: "http://localhost:8000/api",
+            BaseUrl: "/api",
         }
     }
 })
