@@ -28,7 +28,10 @@ class ActionController extends Controller
     public function store(Request $request)
     {
         $action = Action::create($request->except("variables"));
-        $action->variables()->createMany($request->get("variables"));
+
+        if ($request->get("variables")) {
+            $action->variables()->createMany($request->get("variables"));
+        }
 
         return response(new ActionResource($action->load("variables")), 201);
     }

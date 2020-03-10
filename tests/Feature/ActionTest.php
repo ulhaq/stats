@@ -157,6 +157,31 @@ class ActionTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_create_a_new_action()
+    {
+        $this->withoutExceptionHandling();
+
+        $session = factory(Session::class)->create();
+
+        $data = [
+            "location" => $this->faker->randomElement(["Testwordlist", "Shared", "Myprogress", "Login"]),
+            "action" => $this->faker->randomElement(["Button press", "Inactivity"]),
+            "target" => $this->faker->name,
+            "session_id" => $session->id,
+        ];
+
+        $response = $this->json("POST", "api/actions", $data);
+
+        $this->assertDatabaseHas("actions", $data);
+
+        unset($data["session_id"]);
+
+        $response
+            ->assertStatus(201)
+            ->assertJson($data);
+    }
+
+    /** @test */
     public function a_user_can_create_a_new_action_with_variables()
     {
         $this->withoutExceptionHandling();
