@@ -12,11 +12,11 @@ class UserTest extends TestCase
     use DatabaseMigrations, WithFaker;
 
     /** @test */
-    public function a_user_can_get_a_list_of_how_many_times_users_have_logged_in()
+    public function a_user_can_get_a_list_of_the_amount_of_sessions_of_users()
     {
         $this->withoutExceptionHandling();
 
-        $session = factory(Session::class, 10)->create(["user" => 15]);
+        $sessions = factory(Session::class, 10)->create(["user" => 15]);
 
         $response = $this->json("GET", "api/stats/users/login");
 
@@ -25,10 +25,30 @@ class UserTest extends TestCase
             ->assertJson([
                 "counts" => [
                     [
-                        "user" => $session[0]->user,
+                        "user" => $sessions[0]->user,
                         "total" => 10,
                     ],
                 ]
             ]);
+    }
+
+    /** @test */
+    public function a_user_can_get_a_list_of_all_sessions_belonging_to_a_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $sessions = factory(Session::class, 2)->create(["user" => 15]);
+
+        $response = $this->json("GET", "api/stats/users/15");
+
+        $sessions = $sessions->map(function ($item, $key) {
+            unset($item->user);
+            unset($item->updated_at);
+            return $item;
+        })->toArray();
+
+        $response
+            ->assertStatus(200)
+            ->assertJson($sessions);
     }
 }
