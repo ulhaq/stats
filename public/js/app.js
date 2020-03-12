@@ -56432,7 +56432,14 @@ var render = function() {
                         }
                       }
                     }),
-                    _vm._v(" times")
+                    _vm._v(
+                      " " +
+                        _vm._s(
+                          _vm.returning_times > 1 || _vm.returning_times == 0
+                            ? "times"
+                            : "time"
+                        )
+                    )
                   ])
                 ])
               ])

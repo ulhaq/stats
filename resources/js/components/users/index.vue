@@ -13,7 +13,7 @@
       <table class="table" v-if="ready && users.length">
         <thead>
           <tr>
-            <th>{{returning_percentage}}% of the users return back at least <input type="number" class="form-control" style="display: inline-block; width: 7%;" v-model="returning_times" @change="getPercentage" min="0"> times</th>
+            <th>{{returning_percentage}}% of the users return back at least <input type="number" class="form-control" style="display: inline-block; width: 7%;" v-model="returning_times" @change="getPercentage" min="0"> {{returning_times > 1 || returning_times == 0 ? "times" : "time"}}</th>
           </tr>
         </thead>
       </table>
