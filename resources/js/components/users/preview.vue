@@ -14,11 +14,11 @@
             <th>
               <div class="form-row">
                 <div class="col">Sessions from
-                  <input type="datetime-local" class="form-control" v-model="start_date" @change="asdjkfhasdk">
+                  <input type="datetime-local" class="form-control" v-model="start_time" @change="getSessionsBetween">
                 </div>
                 <div class="col">
                   to
-                  <input type="datetime-local" class="form-control" v-model="end_date" @change="asdjkfhasdk">
+                  <input type="datetime-local" class="form-control" v-model="end_time" @change="getSessionsBetween">
                 </div>
               </div>
             </th>
@@ -64,8 +64,8 @@ export default {
         return {
             entry: {
             },
-            start_date: null,
-            end_date: null,
+            start_time: null,
+            end_time: null,
             sessionsBetween: 0,
             ready: false,
         };
@@ -73,16 +73,17 @@ export default {
     created() {
         this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}`).then((response) => {
             this.entry = response.data;
-            this.start_date = this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm")
-            this.end_date = this.moment(response.data[response.data.length-1].created_at).format("YYYY-MM-DD\THH:mm")
+
+            this.start_time = this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm")
+            this.end_time = this.moment(response.data[response.data.length-1].created_at).format("YYYY-MM-DD\THH:mm")
             this.sessionsBetween = response.data.length;
             
             this.ready = true;
         });
     },
     methods: {
-      asdjkfhasdk(){
-        this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}?from=${this.start_date}&to=${this.end_date}`).then((response) => {
+      getSessionsBetween(){
+        this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}?from=${this.start_time}&to=${this.end_time}`).then((response) => {
             this.sessionsBetween = response.data.length;
         });
       }
