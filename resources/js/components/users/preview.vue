@@ -10,6 +10,20 @@
             <th>User</th>
             <td>{{this.$route.params.user}}</td>
           </tr>
+          <tr>
+            <th>
+              <div class="form-row">
+                <div class="col">Sessions from
+                  <input type="datetime-local" class="form-control" v-model="start_date" @change="asdjkfhasdk">
+                </div>
+                <div class="col">
+                  to
+                  <input type="datetime-local" class="form-control" v-model="end_date" @change="asdjkfhasdk">
+                </div>
+              </div>
+            </th>
+            <td>{{sessionsBetween}}</td>
+          </tr>
           <tr class="pointer" data-toggle="collapse" data-target="#sessionDetails" aria-expanded="false" aria-controls="sessionDetails">
             <th>Total Sessions</th>
             <td>{{entry.length}}</td>
@@ -50,15 +64,28 @@ export default {
         return {
             entry: {
             },
+            start_date: null,
+            end_date: null,
+            sessionsBetween: 0,
             ready: false,
         };
     },
     created() {
         this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}`).then((response) => {
             this.entry = response.data;
+            this.start_date = this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm")
+            this.end_date = this.moment(response.data[response.data.length-1].created_at).format("YYYY-MM-DD\THH:mm")
+            this.sessionsBetween = response.data.length;
             
             this.ready = true;
         });
     },
+    methods: {
+      asdjkfhasdk(){
+        this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}?from=${this.start_date}&to=${this.end_date}`).then((response) => {
+            this.sessionsBetween = response.data.length;
+        });
+      }
+    }
 };
 </script>

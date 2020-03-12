@@ -2431,10 +2431,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       entry: {},
+      start_date: null,
+      end_date: null,
+      sessionsBetween: 0,
       ready: false
     };
   },
@@ -2443,8 +2460,20 @@ __webpack_require__.r(__webpack_exports__);
 
     this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user)).then(function (response) {
       _this.entry = response.data;
+      _this.start_date = _this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.end_date = _this.moment(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.sessionsBetween = response.data.length;
       _this.ready = true;
     });
+  },
+  methods: {
+    asdjkfhasdk: function asdjkfhasdk() {
+      var _this2 = this;
+
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user, "?from=").concat(this.start_date, "&to=").concat(this.end_date)).then(function (response) {
+        _this2.sessionsBetween = response.data.length;
+      });
+    }
   }
 });
 
@@ -56474,6 +56503,66 @@ var render = function() {
                   _c("th", [_vm._v("User")]),
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(this.$route.params.user))])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("th", [
+                    _c("div", { staticClass: "form-row" }, [
+                      _c("div", { staticClass: "col" }, [
+                        _vm._v("Sessions from\n                "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.start_date,
+                              expression: "start_date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "datetime-local" },
+                          domProps: { value: _vm.start_date },
+                          on: {
+                            change: _vm.asdjkfhasdk,
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.start_date = $event.target.value
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "col" }, [
+                        _vm._v("\n                to\n                "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.end_date,
+                              expression: "end_date"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          attrs: { type: "datetime-local" },
+                          domProps: { value: _vm.end_date },
+                          on: {
+                            change: _vm.asdjkfhasdk,
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.end_date = $event.target.value
+                            }
+                          }
+                        })
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(_vm.sessionsBetween))])
                 ]),
                 _vm._v(" "),
                 _c(
