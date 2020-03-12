@@ -2357,10 +2357,20 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       users: [],
+      returning_percentage: 0,
+      returning_times: 1,
       ready: false
     };
   },
@@ -2371,6 +2381,20 @@ __webpack_require__.r(__webpack_exports__);
       _this.users = response.data.counts;
       _this.ready = true;
     });
+    this.getPercentage();
+  },
+  methods: {
+    getPercentage: function getPercentage() {
+      var _this2 = this;
+
+      if (!this.returning_times) {
+        return;
+      }
+
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/returning?times=").concat(this.returning_times)).then(function (response) {
+        _this2.returning_percentage = response.data.percentage;
+      });
+    }
   }
 });
 
@@ -56373,6 +56397,45 @@ var render = function() {
         _vm.ready && !_vm.users.length
           ? _c("table", { staticClass: "table light-bg text-center" }, [
               _vm._m(0)
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.ready && _vm.users.length
+          ? _c("table", { staticClass: "table" }, [
+              _c("thead", [
+                _c("tr", [
+                  _c("th", [
+                    _vm._v(
+                      _vm._s(_vm.returning_percentage) +
+                        "% of the users return back at least "
+                    ),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.returning_times,
+                          expression: "returning_times"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      staticStyle: { display: "inline-block", width: "7%" },
+                      attrs: { type: "number", min: "0" },
+                      domProps: { value: _vm.returning_times },
+                      on: {
+                        change: _vm.getPercentage,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.returning_times = $event.target.value
+                        }
+                      }
+                    }),
+                    _vm._v(" times")
+                  ])
+                ])
+              ])
             ])
           : _vm._e(),
         _vm._v(" "),

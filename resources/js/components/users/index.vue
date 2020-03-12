@@ -10,6 +10,14 @@
           </tr>
       </table>
 
+      <table class="table" v-if="ready && users.length">
+        <thead>
+          <tr>
+            <th>{{returning_percentage}}% of the users return back at least <input type="number" class="form-control" style="display: inline-block; width: 7%;" v-model="returning_times" @change="getPercentage" min="0"> times</th>
+          </tr>
+        </thead>
+      </table>
+
       <table class="table table-hover" v-if="ready && users.length">
         <thead>
           <tr>
@@ -36,6 +44,8 @@ export default {
     data() {
         return {
             users: [],
+            returning_percentage: 0,
+            returning_times: 1,
             ready: false,
         };
     },
@@ -45,6 +55,19 @@ export default {
             
             this.ready = true;
         });
+
+        this.getPercentage();
+    },
+    methods: {
+      getPercentage() {
+        if (!this.returning_times) {
+          return;
+        }
+
+        this.axios.get(`${this.BaseUrl}/stats/users/returning?times=${this.returning_times}`).then((response) => {
+            this.returning_percentage = response.data.percentage;
+        });
+      }
     }
 };
 </script>

@@ -29,5 +29,6 @@ Route::prefix('stats')->namespace('Stats')->group(function () {
     Route::get('counts', 'CountController@index')->name('stats.count');
     Route::post('counts', 'CountController@counts')->name('stats.count.counts');
     Route::get('users/login', 'UserController@login')->name('stats.user.login');
+    Route::get('users/returning', 'UserController@returning')->name('stats.user.returning');
     Route::get('users/{user}', 'UserController@sessions')->name('stats.user.sessions');
 });

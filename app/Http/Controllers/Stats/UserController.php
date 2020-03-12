@@ -23,6 +23,25 @@ class UserController extends Controller
     }
 
     /**
+     * Display percentage of returning users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function returning(Request $request)
+    {
+        $times = $request->get("times") ?? 1;
+
+        $totalUsers = Session::distinct("user")->count();
+
+        $totalReturningUsers = DB::table("sessions")->select("user")->groupBy("user")->havingRaw("count(*) > {$times}")->get()->count();
+
+        $percentage = $totalReturningUsers / $totalUsers * 100;
+
+        return response()->json(["percentage" => $percentage], 200);
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,8 +49,8 @@ class UserController extends Controller
     public function sessions(Request $request, $user)
     {
         $sessions = Session::whereUser($user);
-        
-        if($request->get("from") && $request->get("to")){
+
+        if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
             $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("to"));
 
