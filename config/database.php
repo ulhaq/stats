@@ -1,7 +1,11 @@
 <?php
 
 use Illuminate\Support\Str;
-
+define("RDS_HOSTNAME",array_key_exists("RDS_HOSTNAME",$_SERVER)?$_SERVER["RDS_HOSTNAME"]:"127.0.0.1");
+define("RDS_DB_NAME",array_key_exists("RDS_DB_NAME",$_SERVER)?$_SERVER["RDS_DB_NAME"]:"stats");
+define("RDS_PASSWORD",array_key_exists("RDS_PASSWORD",$_SERVER)?$_SERVER["RDS_PASSWORD"]:"");
+define("RDS_USERNAME",array_key_exists("RDS_USERNAME",$_SERVER)?$_SERVER["RDS_USERNAME"]:"root");
+define("RDS_PORT",array_key_exists("RDS_PORT",$_SERVER)?$_SERVER["RDS_PORT"]:"3306");
 return [
 
     /*
@@ -46,11 +50,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('RDS_HOSTNAME', env('DB_HOST', '127.0.0.1')),
-            'port' => env('RDS_PORT', env('DB_PORT', '3306')),
-            'database' => env('RDS_DB_NAME', env('DB_DATABASE', 'forge')),
-            'username' => env('RDS_USERNAME', env('DB_USERNAME', 'forge')),
-            'password' => env('RDS_PASSWORD', env('DB_PASSWORD', '')),
+            'host' => RDS_HOSTNAME,
+            'port' => RDS_PORT,
+            'database' => RDS_DB_NAME,
+            'username' => RDS_USERNAME,
+            'password' => RDS_PASSWORD,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

@@ -1,4 +1,5 @@
 <?php
+define("APPKEY",array_key_exists("APP_KEY",$_SERVER)?$_SERVER["APP_KEY"]:env("APP_KEY"));
 
 return [
 
@@ -119,7 +120,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => APPKEY,
 
     'cipher' => 'AES-256-CBC',
 
