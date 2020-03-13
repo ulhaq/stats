@@ -10896,6 +10896,10 @@ body {
   margin-bottom: 50px;
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 a {
   color: #2a5164;
   text-decoration: none;

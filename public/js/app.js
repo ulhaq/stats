@@ -2172,6 +2172,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       sessions: [],
       currentPage: 1,
+      nextPageUrl: null,
       totalPages: 0,
       ready: false
     };
@@ -2182,6 +2183,7 @@ __webpack_require__.r(__webpack_exports__);
     this.axios.get("".concat(this.BaseUrl, "/sessions")).then(function (response) {
       _this.sessions = response.data.data;
       _this.totalPages = response.data.meta.last_page;
+      _this.nextPageUrl = response.data.links.next;
       _this.ready = true;
     });
   },
@@ -2189,9 +2191,10 @@ __webpack_require__.r(__webpack_exports__);
     loadMore: function loadMore() {
       var _this2 = this;
 
-      this.axios.get("".concat(this.BaseUrl, "/sessions?page=").concat(this.currentPage + 1)).then(function (response) {
+      this.axios.get(this.nextPageUrl).then(function (response) {
         _this2.sessions = _this2.sessions.concat(response.data.data);
         _this2.currentPage = response.data.meta.current_page;
+        _this2.nextPageUrl = response.data.links.next;
       });
     }
   }
@@ -2365,34 +2368,92 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       users: [],
       returning_percentage: 0,
       returning_times: 1,
+      start_time: null,
+      end_time: null,
+      currentPage: 1,
+      nextPageUrl: null,
+      totalPages: 0,
       ready: false
     };
   },
   created: function created() {
     var _this = this;
 
+    this.start_time = this.moment().subtract(2, "week").format("YYYY-MM-DD\THH:mm");
+    this.end_time = this.moment().format("YYYY-MM-DD\THH:mm");
     this.axios.get("".concat(this.BaseUrl, "/stats/users/login")).then(function (response) {
-      _this.users = response.data.counts;
+      _this.users = response.data.data;
+      _this.totalPages = response.data.last_page;
+      _this.nextPageUrl = response.data.next_page_url;
+
+      _this.getPercentage();
+
       _this.ready = true;
     });
-    this.getPercentage();
   },
   methods: {
     getPercentage: function getPercentage() {
       var _this2 = this;
 
-      if (!this.returning_times) {
+      if (!this.returning_times || !this.start_time || !this.end_time) {
         return;
       }
 
-      this.axios.get("".concat(this.BaseUrl, "/stats/users/returning?times=").concat(this.returning_times)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/returning?times=").concat(this.returning_times, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
         _this2.returning_percentage = response.data.percentage;
+      });
+    },
+    getDetails: function getDetails() {
+      var _this3 = this;
+
+      this.ready = false;
+      this.getPercentage();
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/login?times=").concat(this.returning_times, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
+        _this3.users = response.data.data;
+        _this3.totalPages = response.data.last_page;
+        _this3.currentPage = response.data.current_page;
+        _this3.nextPageUrl = response.data.next_page_url;
+        _this3.ready = true;
+      });
+    },
+    loadMore: function loadMore() {
+      var _this4 = this;
+
+      this.axios.get(this.nextPageUrl).then(function (response) {
+        _this4.users = _this4.users.concat(response.data.data);
+        _this4.currentPage = response.data.current_page;
+        _this4.nextPageUrl = response.data.next_page_url;
       });
     }
   }
@@ -2473,8 +2534,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       entry: {},
-      start_date: null,
-      end_date: null,
+      start_time: null,
+      end_time: null,
       sessionsBetween: 0,
       ready: false
     };
@@ -2484,17 +2545,17 @@ __webpack_require__.r(__webpack_exports__);
 
     this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user)).then(function (response) {
       _this.entry = response.data;
-      _this.start_date = _this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
-      _this.end_date = _this.moment(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.start_time = _this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.end_time = _this.moment(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
       _this.sessionsBetween = response.data.length;
       _this.ready = true;
     });
   },
   methods: {
-    asdjkfhasdk: function asdjkfhasdk() {
+    getSessionsBetween: function getSessionsBetween() {
       var _this2 = this;
 
-      this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user, "?from=").concat(this.start_date, "&to=").concat(this.end_date)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user, "?from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
         _this2.sessionsBetween = response.data.length;
       });
     }
@@ -56386,124 +56447,233 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Users")]),
+    _vm._m(0),
     _vm._v(" "),
     _c(
       "div",
       { staticClass: "card-body table-responsive" },
       [
+        _c(
+          "table",
+          {
+            staticClass: "table collapse",
+            attrs: { id: "collapsePercentage" }
+          },
+          [
+            _c("thead", [
+              _c("tr", [
+                _c("th", [
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col" }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.returning_percentage) +
+                          "% of the users returned back at least\n                "
+                      ),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.returning_times,
+                            expression: "returning_times"
+                          }
+                        ],
+                        staticClass: "form-control inline-block",
+                        staticStyle: { width: "10%" },
+                        attrs: { type: "number", min: "0" },
+                        domProps: { value: _vm.returning_times },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.returning_times = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(
+                            _vm.returning_times > 1 || _vm.returning_times == 0
+                              ? "times"
+                              : "time"
+                          ) +
+                          "\n              "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col" }, [
+                      _vm._v("\n                between\n                "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.start_time,
+                            expression: "start_time"
+                          }
+                        ],
+                        staticClass: "form-control inline-block",
+                        staticStyle: { width: "75%" },
+                        attrs: { type: "datetime-local" },
+                        domProps: { value: _vm.start_time },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.start_time = $event.target.value
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col" }, [
+                      _vm._v("\n                and\n                "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.end_time,
+                            expression: "end_time"
+                          }
+                        ],
+                        staticClass: "form-control inline-block",
+                        staticStyle: { width: "75%" },
+                        attrs: { type: "datetime-local" },
+                        domProps: { value: _vm.end_time },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.end_time = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "row" }, [
+                    _c("div", { staticClass: "col" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button" },
+                          on: { click: _vm.getDetails }
+                        },
+                        [_vm._v("Calculate")]
+                      )
+                    ])
+                  ])
+                ])
+              ])
+            ])
+          ]
+        ),
+        _vm._v(" "),
         !_vm.ready ? _c("loading") : _vm._e(),
         _vm._v(" "),
         _vm.ready && !_vm.users.length
           ? _c("table", { staticClass: "table light-bg text-center" }, [
-              _vm._m(0)
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.ready && _vm.users.length
-          ? _c("table", { staticClass: "table" }, [
-              _c("thead", [
-                _c("tr", [
-                  _c("th", [
-                    _vm._v(
-                      _vm._s(_vm.returning_percentage) +
-                        "% of the users return back at least "
-                    ),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.returning_times,
-                          expression: "returning_times"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      staticStyle: { display: "inline-block", width: "7%" },
-                      attrs: { type: "number", min: "0" },
-                      domProps: { value: _vm.returning_times },
-                      on: {
-                        change: _vm.getPercentage,
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.returning_times = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(
-                      " " +
-                        _vm._s(
-                          _vm.returning_times > 1 || _vm.returning_times == 0
-                            ? "times"
-                            : "time"
-                        )
-                    )
-                  ])
-                ])
-              ])
+              _vm._m(1)
             ])
           : _vm._e(),
         _vm._v(" "),
         _vm.ready && _vm.users.length
           ? _c("table", { staticClass: "table table-hover" }, [
-              _vm._m(1),
+              _vm._m(2),
               _vm._v(" "),
               _c(
                 "tbody",
-                _vm._l(_vm.users, function(user) {
-                  return _c("tr", { key: user.user }, [
-                    _c("td", [
-                      _c("span", { staticClass: "badge badge-secondary" }, [
-                        _vm._v(_vm._s(user.user))
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(user.total))]),
-                    _vm._v(" "),
+                [
+                  _vm._l(_vm.users, function(user) {
+                    return _c("tr", { key: user.user }, [
+                      _c("td", [
+                        _c("span", { staticClass: "badge badge-secondary" }, [
+                          _vm._v(_vm._s(user.user))
+                        ])
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(user.total))]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "nav-link control-action",
+                              attrs: {
+                                to: {
+                                  name: "user-preview",
+                                  params: { user: user.user }
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "svg",
+                                {
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    width: "1.2em",
+                                    height: "1.2em",
+                                    viewBox: "0 0 22 16"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                                    }
+                                  })
+                                ]
+                              )
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c("tr", { staticClass: "dontanimate" }, [
                     _c(
                       "td",
+                      {
+                        staticClass: "text-center card-bg-secondary py-1",
+                        attrs: { colspan: "100" }
+                      },
                       [
                         _c(
-                          "router-link",
+                          "button",
                           {
-                            staticClass: "nav-link control-action",
+                            staticClass: "btn btn-link",
                             attrs: {
-                              to: {
-                                name: "user-preview",
-                                params: { user: user.user }
+                              type: "button",
+                              disabled: _vm.currentPage >= _vm.totalPages
+                            },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.loadMore()
                               }
                             }
                           },
-                          [
-                            _c(
-                              "svg",
-                              {
-                                attrs: {
-                                  xmlns: "http://www.w3.org/2000/svg",
-                                  width: "1.2em",
-                                  height: "1.2em",
-                                  viewBox: "0 0 22 16"
-                                }
-                              },
-                              [
-                                _c("path", {
-                                  attrs: {
-                                    d:
-                                      "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-                                  }
-                                })
-                              ]
-                            )
-                          ]
+                          [_vm._v("Load Older Entries")]
                         )
-                      ],
-                      1
+                      ]
                     )
                   ])
-                }),
-                0
+                ],
+                2
               )
             ])
           : _vm._e()
@@ -56513,6 +56683,28 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _vm._v("Users "),
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-primary float-right",
+          attrs: {
+            type: "button",
+            "data-toggle": "collapse",
+            "data-target": "#collapsePercentage",
+            "aria-expanded": "false",
+            "aria-controls": "collapsePercentage"
+          }
+        },
+        [_vm._v("Returning Users")]
+      )
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -56585,20 +56777,20 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.start_date,
-                              expression: "start_date"
+                              value: _vm.start_time,
+                              expression: "start_time"
                             }
                           ],
                           staticClass: "form-control",
                           attrs: { type: "datetime-local" },
-                          domProps: { value: _vm.start_date },
+                          domProps: { value: _vm.start_time },
                           on: {
-                            change: _vm.asdjkfhasdk,
+                            change: _vm.getSessionsBetween,
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.start_date = $event.target.value
+                              _vm.start_time = $event.target.value
                             }
                           }
                         })
@@ -56611,20 +56803,20 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.end_date,
-                              expression: "end_date"
+                              value: _vm.end_time,
+                              expression: "end_time"
                             }
                           ],
                           staticClass: "form-control",
                           attrs: { type: "datetime-local" },
-                          domProps: { value: _vm.end_date },
+                          domProps: { value: _vm.end_time },
                           on: {
-                            change: _vm.asdjkfhasdk,
+                            change: _vm.getSessionsBetween,
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
-                              _vm.end_date = $event.target.value
+                              _vm.end_time = $event.target.value
                             }
                           }
                         })

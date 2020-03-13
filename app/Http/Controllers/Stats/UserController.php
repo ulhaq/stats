@@ -15,11 +15,22 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login()
+    public function login(Request $request)
     {
-        $session = DB::table("sessions")->select("user", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("user")->get();
+        $times = $request->get("times") ?? 1;
 
-        return response()->json(["counts" => $session], 200);
+        $session = DB::table("sessions")->select("user", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("user");
+
+        if ($request->get("from") && $request->get("to")) {
+            $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
+            $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("to"));
+
+            $session->havingRaw("count(*) > {$times}")->whereBetween("created_at", [$start_time, $end_time]);
+        }
+
+        $session = $session->paginate(10)->appends($request->except("page"));
+
+        return response()->json($session, 200);
     }
 
     /**
@@ -33,13 +44,21 @@ class UserController extends Controller
 
         $totalUsers = Session::distinct("user")->count();
 
-        $totalReturningUsers = DB::table("sessions")->select("user")->groupBy("user")->havingRaw("count(*) > {$times}")->get()->count();
+        $totalReturningUsers = DB::table("sessions")->select("user")->groupBy("user")->havingRaw("count(*) > {$times}");
+
+        if ($request->get("from") && $request->get("to")) {
+            $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
+            $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("to"));
+
+            $totalReturningUsers->whereBetween("created_at", [$start_time, $end_time]);
+        }
+
+        $totalReturningUsers = $totalReturningUsers->get()->count();
 
         $percentage = $totalReturningUsers / $totalUsers * 100;
 
         return response()->json(["percentage" => $percentage], 200);
     }
-
 
     /**
      * Display a listing of the resource.

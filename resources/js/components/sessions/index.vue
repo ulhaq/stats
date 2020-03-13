@@ -45,6 +45,7 @@ export default {
         return {
             sessions: [],
             currentPage: 1,
+            nextPageUrl: null,
             totalPages: 0,
             ready: false,
         };
@@ -53,16 +54,18 @@ export default {
         this.axios.get(`${this.BaseUrl}/sessions`).then((response) => {
             this.sessions = response.data.data;
             this.totalPages = response.data.meta.last_page;
+            this.nextPageUrl = response.data.links.next;
             
             this.ready = true;
         });
     },
     methods: {
       loadMore() {
-        this.axios.get(`${this.BaseUrl}/sessions?page=${this.currentPage + 1}`)
+        this.axios.get(this.nextPageUrl)
           .then(response => {
             this.sessions = this.sessions.concat(response.data.data);
             this.currentPage = response.data.meta.current_page;
+            this.nextPageUrl = response.data.links.next;
           });
       }
     }
