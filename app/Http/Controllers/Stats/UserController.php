@@ -42,7 +42,7 @@ class UserController extends Controller
     {
         $times = $request->get("times") ?? 1;
 
-        $totalUsers = Session::distinct("user")->count();
+        $totalUsers = Session::distinct("user")->count() > 0 ? Session::distinct("user")->count() : 1;
 
         $totalReturningUsers = DB::table("sessions")->select("user")->groupBy("user")->havingRaw("count(*) > {$times}");
 
