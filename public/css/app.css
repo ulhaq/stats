@@ -10941,10 +10941,12 @@ a {
   padding: 10px 0;
 }
 
+.nav .nav-item .router-link-active,
 .nav .nav-item .router-link-exact-active {
   color: #4040c8;
 }
 
+.nav .nav-item .router-link-active svg,
 .nav .nav-item .router-link-exact-active svg {
   fill: #4040c8;
 }
