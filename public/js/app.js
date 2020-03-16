@@ -2178,16 +2178,20 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this = this;
-
-    this.axios.get("".concat(this.BaseUrl, "/sessions")).then(function (response) {
-      _this.sessions = response.data.data;
-      _this.totalPages = response.data.meta.last_page;
-      _this.nextPageUrl = response.data.links.next;
-      _this.ready = true;
-    });
+    this.loadData();
   },
   methods: {
+    loadData: function loadData() {
+      var _this = this;
+
+      this.ready = false;
+      this.axios.get("".concat(this.BaseUrl, "/sessions")).then(function (response) {
+        _this.sessions = response.data.data;
+        _this.totalPages = response.data.meta.last_page;
+        _this.nextPageUrl = response.data.links.next;
+        _this.ready = true;
+      });
+    },
     loadMore: function loadMore() {
       var _this2 = this;
 
@@ -2408,21 +2412,23 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this = this;
-
     this.start_time = this.moment().subtract(2, "week").format("YYYY-MM-DD\THH:mm");
     this.end_time = this.moment().format("YYYY-MM-DD\THH:mm");
-    this.axios.get("".concat(this.BaseUrl, "/stats/users/login")).then(function (response) {
-      _this.users = response.data.data;
-      _this.totalPages = response.data.last_page;
-      _this.nextPageUrl = response.data.next_page_url;
-
-      _this.getPercentage();
-
-      _this.ready = true;
-    });
+    this.loadData();
+    this.getPercentage();
   },
   methods: {
+    loadData: function loadData() {
+      var _this = this;
+
+      this.ready = false;
+      this.axios.get("".concat(this.BaseUrl, "/stats/users/login")).then(function (response) {
+        _this.users = response.data.data;
+        _this.totalPages = response.data.last_page;
+        _this.nextPageUrl = response.data.next_page_url;
+        _this.ready = true;
+      });
+    },
     getPercentage: function getPercentage() {
       var _this2 = this;
 
@@ -56055,7 +56061,62 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Sessions")]),
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("Sessions "),
+      _c(
+        "button",
+        {
+          staticClass: "float-right btn btn-primary",
+          attrs: { type: "button", title: "Refreh" },
+          on: {
+            click: function($event) {
+              return _vm.loadData()
+            }
+          }
+        },
+        [
+          _c(
+            "svg",
+            {
+              staticClass: "bi bi-arrow-repeat",
+              attrs: {
+                width: "1.5em",
+                height: "1.5em",
+                viewBox: "0 0 20 20",
+                fill: "currentColor",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  "fill-rule": "evenodd",
+                  d:
+                    "M4 9.5a.5.5 0 00-.5.5 6.5 6.5 0 0012.13 3.25.5.5 0 00-.866-.5A5.5 5.5 0 014.5 10a.5.5 0 00-.5-.5z",
+                  "clip-rule": "evenodd"
+                }
+              }),
+              _c("path", {
+                attrs: {
+                  "fill-rule": "evenodd",
+                  d:
+                    "M4.354 9.146a.5.5 0 00-.708 0l-2 2a.5.5 0 00.708.708L4 10.207l1.646 1.647a.5.5 0 00.708-.708l-2-2zM15.947 10.5a.5.5 0 00.5-.5 6.5 6.5 0 00-12.13-3.25.5.5 0 10.866.5A5.5 5.5 0 0115.448 10a.5.5 0 00.5.5z",
+                  "clip-rule": "evenodd"
+                }
+              }),
+              _c("path", {
+                attrs: {
+                  "fill-rule": "evenodd",
+                  d:
+                    "M18.354 8.146a.5.5 0 00-.708 0L16 9.793l-1.646-1.647a.5.5 0 00-.708.708l2 2a.5.5 0 00.708 0l2-2a.5.5 0 000-.708z",
+                  "clip-rule": "evenodd"
+                }
+              })
+            ]
+          )
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -56451,7 +56512,79 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("Users "),
+      _c("div", { staticClass: "float-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: {
+              type: "button",
+              "data-toggle": "collapse",
+              "data-target": "#collapsePercentage",
+              "aria-expanded": "false",
+              "aria-controls": "collapsePercentage"
+            }
+          },
+          [_vm._v("Returning Users")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "button", title: "Refreh" },
+            on: {
+              click: function($event) {
+                return _vm.loadData()
+              }
+            }
+          },
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-arrow-repeat",
+                attrs: {
+                  width: "1.5em",
+                  height: "1.5em",
+                  viewBox: "0 0 20 20",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M4 9.5a.5.5 0 00-.5.5 6.5 6.5 0 0012.13 3.25.5.5 0 00-.866-.5A5.5 5.5 0 014.5 10a.5.5 0 00-.5-.5z",
+                    "clip-rule": "evenodd"
+                  }
+                }),
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M4.354 9.146a.5.5 0 00-.708 0l-2 2a.5.5 0 00.708.708L4 10.207l1.646 1.647a.5.5 0 00.708-.708l-2-2zM15.947 10.5a.5.5 0 00.5-.5 6.5 6.5 0 00-12.13-3.25.5.5 0 10.866.5A5.5 5.5 0 0115.448 10a.5.5 0 00.5.5z",
+                    "clip-rule": "evenodd"
+                  }
+                }),
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M18.354 8.146a.5.5 0 00-.708 0L16 9.793l-1.646-1.647a.5.5 0 00-.708.708l2 2a.5.5 0 00.708 0l2-2a.5.5 0 000-.708z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
+        )
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -56585,13 +56718,13 @@ var render = function() {
         _vm._v(" "),
         _vm.ready && !_vm.users.length
           ? _c("table", { staticClass: "table light-bg text-center" }, [
-              _vm._m(1)
+              _vm._m(0)
             ])
           : _vm._e(),
         _vm._v(" "),
         _vm.ready && _vm.users.length
           ? _c("table", { staticClass: "table table-hover" }, [
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "tbody",
@@ -56687,28 +56820,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _vm._v("Users "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary float-right",
-          attrs: {
-            type: "button",
-            "data-toggle": "collapse",
-            "data-target": "#collapsePercentage",
-            "aria-expanded": "false",
-            "aria-controls": "collapsePercentage"
-          }
-        },
-        [_vm._v("Returning Users")]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

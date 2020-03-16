@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-header">Users <button type="button" class="btn btn-primary float-right" data-toggle="collapse" data-target="#collapsePercentage" aria-expanded="false" aria-controls="collapsePercentage">Returning Users</button></div>
+    <div class="card-header">Users <div class="float-right"><button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapsePercentage" aria-expanded="false" aria-controls="collapsePercentage">Returning Users</button> <button type="button" title="Refreh" @click="loadData()" class="btn btn-primary"><svg class="bi bi-arrow-repeat" width="1.5em" height="1.5em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 9.5a.5.5 0 00-.5.5 6.5 6.5 0 0012.13 3.25.5.5 0 00-.866-.5A5.5 5.5 0 014.5 10a.5.5 0 00-.5-.5z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M4.354 9.146a.5.5 0 00-.708 0l-2 2a.5.5 0 00.708.708L4 10.207l1.646 1.647a.5.5 0 00.708-.708l-2-2zM15.947 10.5a.5.5 0 00.5-.5 6.5 6.5 0 00-12.13-3.25.5.5 0 10.866.5A5.5 5.5 0 0115.448 10a.5.5 0 00.5.5z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M18.354 8.146a.5.5 0 00-.708 0L16 9.793l-1.646-1.647a.5.5 0 00-.708.708l2 2a.5.5 0 00.708 0l2-2a.5.5 0 000-.708z" clip-rule="evenodd"></path></svg></button></div></div>
     <div class="card-body table-responsive">  
       <table class="table collapse" id="collapsePercentage">
         <thead>
@@ -83,18 +83,23 @@ export default {
         this.start_time = this.moment().subtract(2, "week").format("YYYY-MM-DD\THH:mm")
         this.end_time = this.moment().format("YYYY-MM-DD\THH:mm")
 
-        this.axios.get(`${this.BaseUrl}/stats/users/login`).then((response) => {
-            this.users = response.data.data;
+        this.loadData();
 
-            this.totalPages = response.data.last_page;
-            this.nextPageUrl = response.data.next_page_url;
-            
-            this.getPercentage();
-
-            this.ready = true;
-        });
+        this.getPercentage();
     },
     methods: {
+      loadData() {
+        this.ready = false;
+
+        this.axios.get(`${this.BaseUrl}/stats/users/login`).then((response) => {
+          this.users = response.data.data;
+
+          this.totalPages = response.data.last_page;
+          this.nextPageUrl = response.data.next_page_url;
+          
+          this.ready = true;
+        });
+      },
       getPercentage() {
         if (!this.returning_times || !this.start_time || !this.end_time) {
           return;
