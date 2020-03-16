@@ -76,7 +76,7 @@ class UserController extends Controller
             $sessions->whereBetween("created_at", [$start_time, $end_time]);
         }
 
-        $sessions = $sessions->orderBy("created_at", "asc")->get(["id", "client", "platform", "created_at"]);
+        $sessions = $sessions->orderBy("created_at", "desc")->get(["id", "client", "platform", "created_at"]);
 
         return response()->json($sessions, 200);
     }
