@@ -17,7 +17,7 @@ class SessionController extends Controller
      */
     public function index(Request $request)
     {
-        return SessionResource::collection(withRelations(Session::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
+        return SessionResource::collection(withRelations(Session::filter($request)->orderBy("created_at", "desc")->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**
@@ -90,7 +90,7 @@ class SessionController extends Controller
      */
     public function variables(Session $session, Request $request)
     {
-        $variables = $session->variables()->filter($request)->paginate(10)->appends($request->except("page"));
+        $variables = $session->variables()->filter($request)->orderBy("created_at", "desc")->paginate(10)->appends($request->except("page"));
 
         return VariableResource::collection(withRelations($variables))->response()->setStatusCode(200);
     }

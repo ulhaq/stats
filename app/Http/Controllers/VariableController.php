@@ -15,7 +15,7 @@ class VariableController extends Controller
      */
     public function index(Request $request)
     {
-        return VariableResource::collection(withRelations(Variable::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
+        return VariableResource::collection(withRelations(Variable::filter($request)->orderBy("created_at", "desc")->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**

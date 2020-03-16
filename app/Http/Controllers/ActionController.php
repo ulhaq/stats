@@ -16,7 +16,7 @@ class ActionController extends Controller
      */
     public function index(Request $request)
     {
-        return ActionResource::collection(withRelations(Action::filter($request)->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
+        return ActionResource::collection(withRelations(Action::filter($request)->orderBy("created_at", "desc")->paginate(10)->appends($request->except("page"))))->response()->setStatusCode(200);
     }
 
     /**
