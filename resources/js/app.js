@@ -18,6 +18,11 @@ Vue.mixin({
             },
             BaseUrl: "/api",
         }
+    },
+    methods: {
+        utcToLocal: function (time) {
+            return this.moment.utc(time).local();
+        },
     }
 })
 
@@ -31,12 +36,12 @@ const routes = [
 
     { name: 'sessions', path: '/sessions', component: require('./components/sessions/index').default, },
     { name: 'session-preview', path: '/sessions/:id', component: require('./components/sessions/preview').default, },
-    
+
     { name: 'counts', path: '/counts', component: require('./components/counts/index').default, },
-    
+
     { name: 'users', path: '/users', component: require('./components/users/index').default, },
     { name: 'user-preview', path: '/users/:user', component: require('./components/users/preview').default, },
-    
+
     { name: '404', path: '*', component: require('./components/404').default, },
 ]
 

@@ -2545,8 +2545,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.axios.get("".concat(this.BaseUrl, "/stats/users/").concat(this.$route.params.user)).then(function (response) {
       _this.entry = response.data;
-      _this.start_time = _this.moment(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
-      _this.end_time = _this.moment(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.start_time = _this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.end_time = _this.utcToLocal(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
       _this.sessionsBetween = response.data.length;
       _this.ready = true;
     });
@@ -56091,7 +56091,9 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(session.platform))]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._v(_vm._s(_vm.moment(session.created_at).fromNow()))
+                        _vm._v(
+                          _vm._s(_vm.utcToLocal(session.created_at).fromNow())
+                        )
                       ]),
                       _vm._v(" "),
                       _c(
@@ -56241,7 +56243,9 @@ var render = function() {
                   _c("th", [_vm._v("Started")]),
                   _vm._v(" "),
                   _c("td", [
-                    _vm._v(_vm._s(_vm.moment(_vm.entry.created_at).fromNow()))
+                    _vm._v(
+                      _vm._s(_vm.utcToLocal(_vm.entry.created_at).fromNow())
+                    )
                   ])
                 ]),
                 _vm._v(" "),
@@ -56328,7 +56332,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           _vm._v(
-                            _vm._s(_vm.moment(action.created_at).fromNow())
+                            _vm._s(_vm.utcToLocal(action.created_at).fromNow())
                           )
                         ])
                       ]
@@ -56874,7 +56878,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [
                           _vm._v(
-                            _vm._s(_vm.moment(session.created_at).fromNow())
+                            _vm._s(_vm.utcToLocal(session.created_at).fromNow())
                           )
                         ]),
                         _vm._v(" "),
@@ -72144,6 +72148,11 @@ Vue.mixin({
 
       BaseUrl: "/api"
     };
+  },
+  methods: {
+    utcToLocal: function utcToLocal(time) {
+      return this.moment.utc(time).local();
+    }
   }
 });
 Vue.component('loading', __webpack_require__(/*! ./components/loading.vue */ "./resources/js/components/loading.vue")["default"]); // const files = require.context('./', true, /\.vue$/i)
