@@ -91,7 +91,7 @@ export default {
       loadData() {
         this.ready = false;
 
-        this.axios.get(`${this.BaseUrl}/stats/visitors/login`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/stats/visitors/visits`).then((response) => {
           this.visitors = response.data.data;
 
           this.totalPages = response.data.last_page;
@@ -114,7 +114,7 @@ export default {
 
         this.getPercentage();
 
-        this.axios.get(`${this.BaseUrl}/stats/visitors/login?times=${this.returning_times}&from=${this.start_time}&to=${this.end_time}`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/stats/visitors/visits?times=${this.returning_times}&from=${this.start_time}&to=${this.end_time}`).then((response) => {
           this.visitors = response.data.data;
 
           this.totalPages = response.data.last_page;

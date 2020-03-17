@@ -2422,7 +2422,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.ready = false;
-      this.axios.get("".concat(this.BaseUrl, "/stats/visitors/login")).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/visitors/visits")).then(function (response) {
         _this.visitors = response.data.data;
         _this.totalPages = response.data.last_page;
         _this.nextPageUrl = response.data.next_page_url;
@@ -2445,7 +2445,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.ready = false;
       this.getPercentage();
-      this.axios.get("".concat(this.BaseUrl, "/stats/visitors/login?times=").concat(this.returning_times, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/visitors/visits?times=").concat(this.returning_times, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
         _this3.visitors = response.data.data;
         _this3.totalPages = response.data.last_page;
         _this3.currentPage = response.data.current_page;
