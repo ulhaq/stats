@@ -8,7 +8,7 @@
         <tbody>
           <tr>
             <th>Started</th>
-            <td><span :title="entry.created_at">{{utcToLocal(entry.created_at).fromNow()}}</span></td>
+            <td><span :title="utcToLocal(entry.created_at)">{{utcToLocal(entry.created_at).fromNow()}}</span></td>
           </tr>
           <tr>
             <th>ID</th>
@@ -52,7 +52,7 @@
                 <td>{{action.action}}</td>
                 <td>{{action.target}}</td>
                 <td>{{action.variables.length}}</td>
-                <td><span :title="action.created_at">{{utcToLocal(action.created_at).fromNow()}}</span></td>
+                <td><span :title="utcToLocal(action.created_at)">{{utcToLocal(action.created_at).fromNow()}}</span></td>
               </tr>
               <tr class="collapse" :id="`variableDetails${action.id}`">
                 <td colspan="6">
