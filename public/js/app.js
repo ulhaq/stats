@@ -56287,9 +56287,11 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(session.platform))]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._v(
-                          _vm._s(_vm.utcToLocal(session.created_at).fromNow())
-                        )
+                        _c("span", { attrs: { title: session.created_at } }, [
+                          _vm._v(
+                            _vm._s(_vm.utcToLocal(session.created_at).fromNow())
+                          )
+                        ])
                       ]),
                       _vm._v(" "),
                       _c(
@@ -56439,9 +56441,11 @@ var render = function() {
                   _c("th", [_vm._v("Started")]),
                   _vm._v(" "),
                   _c("td", [
-                    _vm._v(
-                      _vm._s(_vm.utcToLocal(_vm.entry.created_at).fromNow())
-                    )
+                    _c("span", { attrs: { title: _vm.entry.created_at } }, [
+                      _vm._v(
+                        _vm._s(_vm.utcToLocal(_vm.entry.created_at).fromNow())
+                      )
+                    ])
                   ])
                 ]),
                 _vm._v(" "),
@@ -56527,9 +56531,13 @@ var render = function() {
                         _c("td", [_vm._v(_vm._s(action.variables.length))]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(
-                            _vm._s(_vm.utcToLocal(action.created_at).fromNow())
-                          )
+                          _c("span", { attrs: { title: action.created_at } }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.utcToLocal(action.created_at).fromNow()
+                              )
+                            )
+                          ])
                         ])
                       ]
                     ),
@@ -57123,9 +57131,13 @@ var render = function() {
                         _c("td", [_vm._v(_vm._s(session.platform))]),
                         _vm._v(" "),
                         _c("td", [
-                          _vm._v(
-                            _vm._s(_vm.utcToLocal(session.created_at).fromNow())
-                          )
+                          _c("span", { attrs: { title: session.created_at } }, [
+                            _vm._v(
+                              _vm._s(
+                                _vm.utcToLocal(session.created_at).fromNow()
+                              )
+                            )
+                          ])
                         ]),
                         _vm._v(" "),
                         _c(
