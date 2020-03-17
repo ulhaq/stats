@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\DB;
 class VisitorController extends Controller
 {
     /**
-     * Display loggins per visitor.
+     * Display visits per visitor.
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function visits(Request $request)
     {
         $times = $request->get("times") ?? 1;
 

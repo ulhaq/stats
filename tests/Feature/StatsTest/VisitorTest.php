@@ -18,7 +18,7 @@ class VisitorTest extends TestCase
 
         $sessions = factory(Session::class, 10)->create(["visitor" => 15]);
 
-        $response = $this->json("GET", "api/stats/visitors/login");
+        $response = $this->json("GET", "api/stats/visitors/visits");
 
         $response
             ->assertStatus(200)
@@ -46,7 +46,7 @@ class VisitorTest extends TestCase
             factory(Session::class, 7)->create(["visitor" => 6, "created_at" => "2020-03-11 12:00:00"]),
         ];
         
-        $response = $this->json("GET", "api/stats/visitors/login?times=3&from=2020-03-08T08:00&to=2020-03-11T11:59");
+        $response = $this->json("GET", "api/stats/visitors/visits?times=3&from=2020-03-08T08:00&to=2020-03-11T11:59");
 
         $response
             ->assertStatus(200)
