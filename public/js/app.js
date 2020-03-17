@@ -2564,8 +2564,8 @@ __webpack_require__.r(__webpack_exports__);
 
     this.axios.get("".concat(this.BaseUrl, "/stats/visitors/").concat(this.$route.params.visitor)).then(function (response) {
       _this.entry = response.data;
-      _this.start_time = _this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
-      _this.end_time = _this.utcToLocal(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.start_time = _this.utcToLocal(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+      _this.end_time = _this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
       _this.sessionsBetween = response.data.length;
       _this.ready = true;
     });
