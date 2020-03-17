@@ -38,16 +38,26 @@ class CountController extends Controller
      */
     public function counts(Request $request)
     {
-        if (!$request->get("variables")) {
-            $counts = Variable::whereHas("action", function ($q) use ($request) {
-                $q->whereLocation($request->get("location"))->whereAction($request->get("action"));
-            })->count();
-        } else {
-            $counts = Variable::whereIn("variable", array_keys($request->get("variables")))->whereIn("value", array_values($request->get("variables")))->whereHas("action", function ($q) use ($request) {
-                $q->whereLocation($request->get("location"))->whereAction($request->get("action"));
-            })->count();
+        $counts = new Action;
+        
+        if ($request->get("location")) {
+            $counts = $counts->whereLocation($request->get("location"));
         }
 
-        return response()->json(["counts" => $counts], 200);
+        if ($request->get("action")) {
+            $counts = $counts->whereAction($request->get("action"));
+        }
+
+        if ($request->get("variables")) {
+            $counts = $counts->whereHas("variables", function ($q) use ($request) {
+                $q->where(function ($q) use ($request) {
+                    foreach ($request->get("variables") as $key => $value) {
+                        $q->orWhere("variable", $key)->whereValue($value);
+                    }
+                });
+            });
+        }
+
+        return response()->json(["counts" => $counts->count()], 200);
     }
 }

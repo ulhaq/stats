@@ -57,6 +57,24 @@ class CountTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_get_counts_filtered_by_location()
+    {
+        $this->withoutExceptionHandling();
+
+        $action = factory(Action::class)->create();
+
+        factory(Variable::class, 2)->create(["action_id" => $action->id]);
+
+        $response = $this->json("POST", "api/stats/counts", [
+            "location" => $action->location,
+        ]);
+
+        $response
+            ->assertStatus(200)
+            ->assertJson(["counts" => 1]);
+    }
+
+    /** @test */
     public function a_user_can_get_counts_filtered_by_location_and_action()
     {
         $this->withoutExceptionHandling();
@@ -72,7 +90,7 @@ class CountTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson(["counts" => 2]);
+            ->assertJson(["counts" => 1]);
     }
 
     /** @test */

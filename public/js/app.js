@@ -2029,6 +2029,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2062,35 +2073,33 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    clearContentVariables: function clearContentVariables() {
-      this.content.variables = {};
-    },
     getActions: function getActions() {
       var _this2 = this;
 
       this.ready = false;
-      this.clearContentVariables();
-      this.content.location = this.$refs.form.location.value;
+      this.options.variables = [];
+      this.content.action = '';
+      this.content.variables = {};
       this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location)).then(function (response) {
         _this2.options.actions = response.data;
+
+        _this2.getVariables();
+
         _this2.ready = true;
       });
-
-      if (this.options.actions.length) {
-        this.getVariables();
-        this.getCalculations();
-      }
     },
     getVariables: function getVariables() {
       var _this3 = this;
 
       this.ready = false;
-      this.clearContentVariables();
-      this.content.action = this.$refs.form.action.value;
-      this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location, "&action=").concat(this.content.action)).then(function (response) {
-        _this3.options.variables = response.data;
-        _this3.ready = true;
-      });
+
+      if (this.content.action != '') {
+        this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location, "&action=").concat(this.content.action)).then(function (response) {
+          _this3.options.variables = response.data;
+          _this3.ready = true;
+        });
+      }
+
       this.getCalculations();
     },
     getCalculations: function getCalculations() {
@@ -2098,9 +2107,13 @@ __webpack_require__.r(__webpack_exports__);
 
       this.ready = false;
       var data = {
-        location: this.content.location,
-        action: this.content.action
+        location: this.content.location
       };
+
+      if (this.content.action != '') {
+        data.action = this.content.action;
+      }
+
       this.clean(this.content.variables);
 
       if (Object.entries(this.content.variables).length !== 0) {
@@ -55645,45 +55658,6 @@ var render = function() {
             [
               _c(
                 "router-link",
-                { staticClass: "nav-link", attrs: { to: { name: "counts" } } },
-                [
-                  _c(
-                    "svg",
-                    {
-                      staticClass: "bi bi-people",
-                      attrs: {
-                        width: "1.2em",
-                        height: "1.2em",
-                        viewBox: "0 0 20 20",
-                        fill: "currentColor",
-                        xmlns: "http://www.w3.org/2000/svg"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          "fill-rule": "evenodd",
-                          d:
-                            "M17 16s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.995-.944v-.002zM9.022 15h7.956a.274.274 0 00.014-.002l.008-.002c-.002-.264-.167-1.03-.76-1.72C15.688 12.629 14.718 12 13 12c-1.717 0-2.687.63-3.24 1.276-.593.69-.759 1.457-.76 1.72a1.05 1.05 0 00.022.004zm7.973.056v-.002zM13 9a2 2 0 100-4 2 2 0 000 4zm3-2a3 3 0 11-6 0 3 3 0 016 0zm-7.064 4.28a5.873 5.873 0 00-1.23-.247A7.334 7.334 0 007 11c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 017 15c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM6.92 12c-1.668.02-2.615.64-3.16 1.276C3.163 13.97 3 14.739 3 15h3c0-1.045.323-2.086.92-3zM3.5 7.5a3 3 0 116 0 3 3 0 01-6 0zm3-2a2 2 0 100 4 2 2 0 000-4z",
-                          "clip-rule": "evenodd"
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("span", [_vm._v("Counts")])
-                ]
-              )
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            { staticClass: "nav-item" },
-            [
-              _c(
-                "router-link",
                 {
                   staticClass: "nav-link",
                   attrs: { to: { name: "visitors" } }
@@ -55714,6 +55688,56 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("span", [_vm._v("Visitors")])
+                ]
+              )
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "nav-item" },
+            [
+              _c(
+                "router-link",
+                { staticClass: "nav-link", attrs: { to: { name: "counts" } } },
+                [
+                  _c(
+                    "svg",
+                    {
+                      staticClass: "bi bi-graph-up",
+                      attrs: {
+                        width: "1.2em",
+                        height: "1.2em",
+                        viewBox: "0 0 20 20",
+                        fill: "currentColor",
+                        xmlns: "http://www.w3.org/2000/svg"
+                      }
+                    },
+                    [
+                      _c("path", {
+                        attrs: { d: "M2 2h1v16H2V2zm1 15h15v1H3v-1z" }
+                      }),
+                      _c("path", {
+                        attrs: {
+                          "fill-rule": "evenodd",
+                          d:
+                            "M16.39 6.312l-4.349 5.437L9 8.707l-3.646 3.647-.708-.708L9 7.293l2.959 2.958 3.65-4.563.781.624z",
+                          "clip-rule": "evenodd"
+                        }
+                      }),
+                      _c("path", {
+                        attrs: {
+                          "fill-rule": "evenodd",
+                          d:
+                            "M12 5.5a.5.5 0 01.5-.5h4a.5.5 0 01.5.5v4a.5.5 0 01-1 0V6h-3.5a.5.5 0 01-.5-.5z",
+                          "clip-rule": "evenodd"
+                        }
+                      })
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("span", [_vm._v("Counts")])
                 ]
               )
             ],
@@ -55824,7 +55848,6 @@ var render = function() {
       _c(
         "form",
         {
-          ref: "form",
           on: {
             submit: function($event) {
               $event.preventDefault()
@@ -55838,9 +55861,38 @@ var render = function() {
               _c(
                 "select",
                 {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.content.location,
+                      expression: "content.location"
+                    }
+                  ],
                   staticClass: "form-control",
-                  attrs: { name: "location", required: "" },
-                  on: { change: _vm.getActions }
+                  attrs: { required: "" },
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.content,
+                          "location",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      _vm.getActions
+                    ]
+                  }
                 },
                 [
                   _c(
@@ -55865,20 +55917,46 @@ var render = function() {
               _c(
                 "select",
                 {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.content.action,
+                      expression: "content.action"
+                    }
+                  ],
                   staticClass: "form-control",
                   attrs: {
-                    name: "action",
                     required: "",
                     disabled: !_vm.options.actions.length
                   },
-                  on: { change: _vm.getVariables }
+                  on: {
+                    change: [
+                      function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.$set(
+                          _vm.content,
+                          "action",
+                          $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
+                        )
+                      },
+                      _vm.getVariables
+                    ]
+                  }
                 },
                 [
-                  _c(
-                    "option",
-                    { attrs: { value: "", disabled: "", selected: "" } },
-                    [_vm._v("Select an action")]
-                  ),
+                  _c("option", { attrs: { value: "", selected: "" } }, [
+                    _vm._v("Select an action")
+                  ]),
                   _vm._v(" "),
                   _vm._l(_vm.options.actions, function(optAct) {
                     return _c(
@@ -55892,7 +55970,7 @@ var render = function() {
               )
             ]),
             _vm._v(" "),
-            _vm.options.variables.length
+            _vm.options.variables.length && _vm.content.action != ""
               ? _c("div", { staticClass: "col" }, [
                   _c(
                     "button",
@@ -55919,54 +55997,83 @@ var render = function() {
       "div",
       { staticClass: "card-body text-center table-responsive" },
       [
-        _c(
-          "table",
-          { staticClass: "table collapse", attrs: { id: "collapseFilter" } },
-          [
-            _c("tr", [
-              _c("td", [
-                _c(
-                  "div",
-                  { staticClass: "row" },
-                  _vm._l(_vm.options.variables, function(variable) {
-                    return _c("div", { key: variable, staticClass: "col" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.content.variables[variable],
-                            expression: "content.variables[variable]"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "text",
-                          placeholder: "Enter " + variable
-                        },
-                        domProps: { value: _vm.content.variables[variable] },
-                        on: {
-                          keyup: _vm.getCalculations,
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.content.variables,
-                              variable,
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ])
-                  }),
-                  0
-                )
-              ])
-            ])
-          ]
-        ),
+        _vm.options.variables.length && _vm.content.action != ""
+          ? _c(
+              "table",
+              {
+                staticClass: "table collapse",
+                attrs: { id: "collapseFilter" }
+              },
+              [
+                _c("tr", [
+                  _c("td", [
+                    _c(
+                      "div",
+                      { staticClass: "row" },
+                      _vm._l(_vm.options.variables, function(variable) {
+                        return _c(
+                          "div",
+                          { key: variable, staticClass: "col" },
+                          [
+                            _c("div", { staticClass: "input-group" }, [
+                              _c("input", {
+                                directives: [
+                                  {
+                                    name: "model",
+                                    rawName: "v-model",
+                                    value: _vm.content.variables[variable],
+                                    expression: "content.variables[variable]"
+                                  }
+                                ],
+                                staticClass: "form-control",
+                                attrs: {
+                                  type: "text",
+                                  placeholder: "Enter " + variable
+                                },
+                                domProps: {
+                                  value: _vm.content.variables[variable]
+                                },
+                                on: {
+                                  keyup: _vm.getCalculations,
+                                  input: function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.content.variables,
+                                      variable,
+                                      $event.target.value
+                                    )
+                                  }
+                                }
+                              }),
+                              _vm._v(" "),
+                              _vm.options.variables[
+                                _vm.options.variables.length - 1
+                              ] != variable
+                                ? _c(
+                                    "div",
+                                    { staticClass: "input-group-prepend" },
+                                    [
+                                      _c(
+                                        "span",
+                                        { staticClass: "input-group-text" },
+                                        [_vm._v("OR")]
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
+                            ])
+                          ]
+                        )
+                      }),
+                      0
+                    )
+                  ])
+                ])
+              ]
+            )
+          : _vm._e(),
         _vm._v(" "),
         !_vm.ready ? _c("loading") : _vm._e(),
         _vm._v(" "),
@@ -55974,16 +56081,41 @@ var render = function() {
           ? _c("table", { staticClass: "table light-bg" }, [_vm._m(0)])
           : _vm._e(),
         _vm._v(" "),
-        _vm.counts !== null && _vm.ready
+        _vm.counts !== null && _vm.content.action == "" && _vm.ready
           ? _c("table", { staticClass: "table light-bg" }, [
               _c("tr", [
                 _c("td", [
-                  _c("strong", [_vm._v(_vm._s(_vm.content.location) + " ")]),
-                  _vm._v(" has been "),
-                  _c("strong", [_vm._v(_vm._s(_vm.content.action))]),
-                  _vm._v(" total "),
                   _c("strong", [_vm._v(_vm._s(_vm.counts))]),
-                  _vm._v(" times")
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        _vm.counts > 1 || _vm.counts == 0
+                          ? "interactions"
+                          : "interaction"
+                      ) +
+                      " with "
+                  ),
+                  _c("strong", [_vm._v(_vm._s(_vm.content.location))])
+                ])
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.counts !== null && _vm.content.action != "" && _vm.ready
+          ? _c("table", { staticClass: "table light-bg" }, [
+              _c("tr", [
+                _c("td", [
+                  _c("strong", [_vm._v(_vm._s(_vm.counts))]),
+                  _vm._v(
+                    " " +
+                      _vm._s(
+                        _vm.counts > 1 || _vm.counts == 0 ? "times" : "time"
+                      ) +
+                      " "
+                  ),
+                  _c("strong", [_vm._v(_vm._s(_vm.content.location))]),
+                  _vm._v(" has been "),
+                  _c("strong", [_vm._v(_vm._s(_vm.content.action))])
                 ])
               ])
             ])
