@@ -15,8 +15,8 @@
             <td>{{entry.id}}</td>
           </tr>
           <tr>
-            <th>User</th>
-            <td>{{entry.user}}</td>
+            <th>Visitor</th>
+            <td>{{entry.visitor}}</td>
           </tr>
           <tr>
             <th>Client</th>

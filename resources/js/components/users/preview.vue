@@ -1,14 +1,14 @@
 <template>
   <div class="card">
-    <div class="card-header">User Details</div>
+    <div class="card-header">Visitor Details</div>
     <div class="card-body">
       <loading v-if="!ready" />
 
       <table class="table table-borderless light-bg" v-if="ready">
         <tbody>
           <tr>
-            <th>User</th>
-            <td>{{this.$route.params.user}}</td>
+            <th>Visitor</th>
+            <td>{{this.$route.params.visitor}}</td>
           </tr>
           <tr>
             <th>
@@ -71,7 +71,7 @@ export default {
         };
     },
     created() {
-        this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/stats/visitors/${this.$route.params.visitor}`).then((response) => {
             this.entry = response.data;
 
             this.start_time = this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm")
@@ -83,7 +83,7 @@ export default {
     },
     methods: {
       getSessionsBetween(){
-        this.axios.get(`${this.BaseUrl}/stats/users/${this.$route.params.user}?from=${this.start_time}&to=${this.end_time}`).then((response) => {
+        this.axios.get(`${this.BaseUrl}/stats/visitors/${this.$route.params.visitor}?from=${this.start_time}&to=${this.end_time}`).then((response) => {
             this.sessionsBetween = response.data.length;
         });
       }

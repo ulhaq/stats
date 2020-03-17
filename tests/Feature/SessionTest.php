@@ -27,13 +27,13 @@ class SessionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "user" => $sessions[0]->user,
+                        "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
                         "created_at" => $sessions[0]->created_at,
                     ],
                     [
-                        "user" => $sessions[1]->user,
+                        "visitor" => $sessions[1]->visitor,
                         "client" => $sessions[1]->client,
                         "platform" => $sessions[1]->platform,
                         "created_at" => $sessions[1]->created_at,
@@ -51,12 +51,12 @@ class SessionTest extends TestCase
 
         $tmp = [
             [
-                "user" => "965",
+                "visitor" => "965",
                 "client" => "OSX",
                 "platform" => "Unity",
             ],
             [
-                "user" => "377",
+                "visitor" => "377",
                 "client" => "Windows",
                 "platform" => "Browser",
             ],
@@ -65,14 +65,14 @@ class SessionTest extends TestCase
         $sessions[] = factory(Session::class)->create($tmp[0]);
         $sessions[] = factory(Session::class)->create($tmp[1]);
 
-        $response = $this->json("GET", "api/sessions?filter[user]={$sessions[0]->user}");
+        $response = $this->json("GET", "api/sessions?filter[visitor]={$sessions[0]->visitor}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "user" => $sessions[0]->user,
+                        "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
                         "created_at" => $sessions[0]->created_at,
@@ -80,7 +80,7 @@ class SessionTest extends TestCase
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($sessions[1]->user);
+            ])->assertDontSee($sessions[1]->visitor);
     }
 
     /** @test */
@@ -97,7 +97,7 @@ class SessionTest extends TestCase
             ->assertJson([
                 "data" => [
                     [
-                        "user" => $sessions[0]->user,
+                        "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
                         "created_at" => $sessions[0]->created_at,
@@ -105,7 +105,7 @@ class SessionTest extends TestCase
                         "variables" => [],
                     ],
                     [
-                        "user" => $sessions[1]->user,
+                        "visitor" => $sessions[1]->visitor,
                         "client" => $sessions[1]->client,
                         "platform" => $sessions[1]->platform,
                         "created_at" => $sessions[1]->created_at,
@@ -130,7 +130,7 @@ class SessionTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                "user" => $session->user,
+                "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
                 "created_at" => $session->created_at,
@@ -149,7 +149,7 @@ class SessionTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                "user" => $session->user,
+                "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
                 "created_at" => $session->created_at,
@@ -164,7 +164,7 @@ class SessionTest extends TestCase
         $this->withoutExceptionHandling();
 
         $data = [
-            "user" => $this->faker->randomNumber(),
+            "visitor" => $this->faker->randomNumber(),
             "client" => $this->faker->randomElement(["Browser", "Unity"]),
             "platform" => $this->faker->randomElement(["OSX", "Windows", "Android", "iPhone"]),
         ];
@@ -188,7 +188,7 @@ class SessionTest extends TestCase
         $response = $this->json("DELETE", "api/sessions/$session->id");
 
         $this->assertDatabaseMissing("sessions", [
-            "user" => $session->user,
+            "visitor" => $session->visitor,
             "client" => $session->client,
             "platform" => $session->platform,
             "created_at" => $session->created_at,
@@ -197,7 +197,7 @@ class SessionTest extends TestCase
         $response
             ->assertStatus(200)
             ->assertJson([
-                "user" => $session->user,
+                "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
                 "created_at" => $session->created_at,

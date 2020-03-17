@@ -39,8 +39,8 @@ const routes = [
 
     { name: 'counts', path: '/counts', component: require('./components/counts/index').default, },
 
-    { name: 'users', path: '/users', component: require('./components/users/index').default, },
-    { name: 'user-preview', path: '/users/:user', component: require('./components/users/preview').default, },
+    { name: 'visitors', path: '/visitors', component: require('./components/visitors/index').default, },
+    { name: 'visitor-preview', path: '/visitors/:visitor', component: require('./components/visitors/preview').default, },
 
     { name: '404', path: '*', component: require('./components/404').default, },
 ]

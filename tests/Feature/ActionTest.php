@@ -195,7 +195,7 @@ class ActionTest extends TestCase
             "session_id" => $session->id,
             "variables" => [
                 [
-                    "variable" => "user_id",
+                    "variable" => "visitor_id",
                     "value" => 5,
                 ],
                 [

@@ -8,10 +8,10 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class UserController extends Controller
+class VisitorController extends Controller
 {
     /**
-     * Display loggins per user.
+     * Display loggins per visitor.
      *
      * @return \Illuminate\Http\Response
      */
@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $times = $request->get("times") ?? 1;
 
-        $session = DB::table("sessions")->select("user", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("user");
+        $session = DB::table("sessions")->select("visitor", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("visitor");
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
@@ -34,7 +34,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display percentage of returning users.
+     * Display percentage of returning visitors.
      *
      * @return \Illuminate\Http\Response
      */
@@ -42,20 +42,20 @@ class UserController extends Controller
     {
         $times = $request->get("times") ?? 1;
 
-        $totalUsers = Session::distinct("user")->count() > 0 ? Session::distinct("user")->count() : 1;
+        $totalVisitors = Session::distinct("visitor")->count() > 0 ? Session::distinct("visitor")->count() : 1;
 
-        $totalReturningUsers = DB::table("sessions")->select("user")->groupBy("user")->havingRaw("count(*) > {$times}");
+        $totalReturningVisitors = DB::table("sessions")->select("visitor")->groupBy("visitor")->havingRaw("count(*) > {$times}");
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
             $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("to"));
 
-            $totalReturningUsers->whereBetween("created_at", [$start_time, $end_time]);
+            $totalReturningVisitors->whereBetween("created_at", [$start_time, $end_time]);
         }
 
-        $totalReturningUsers = $totalReturningUsers->get()->count();
+        $totalReturningVisitors = $totalReturningVisitors->get()->count();
 
-        $percentage = $totalReturningUsers / $totalUsers * 100;
+        $percentage = $totalReturningVisitors / $totalVisitors * 100;
 
         return response()->json(["percentage" => $percentage], 200);
     }
@@ -65,9 +65,9 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sessions(Request $request, $user)
+    public function sessions(Request $request, $visitor)
     {
-        $sessions = Session::whereUser($user);
+        $sessions = Session::whereVisitor($visitor);
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));

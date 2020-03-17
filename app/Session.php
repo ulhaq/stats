@@ -14,7 +14,7 @@ class Session extends Model
      *
      * @var array
      */
-    protected $fillable = ['user', 'client', 'platform'];
+    protected $fillable = ['visitor', 'client', 'platform'];
 
     /**
      * Get the actions for the session.

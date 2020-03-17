@@ -16,7 +16,7 @@ class SessionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => $this->user,
+            'visitor' => $this->visitor,
             'client' => $this->client,
             'platform' => $this->platform,
             'created_at' => $this->created_at->toDateTimeString(),

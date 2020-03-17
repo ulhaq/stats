@@ -18,7 +18,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Session::class, function (Faker $faker) {
     return [
-        'user' => $faker->randomNumber(),
+        'visitor' => $faker->randomNumber(),
         'client' => $faker->randomElement(["Browser", "Unity"]),
         'platform' => $faker->randomElement(["OSX", "Windows", "Android", "iPhone"]),
     ];

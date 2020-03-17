@@ -14,7 +14,7 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">User</th>
+            <th scope="col">Visitor</th>
             <th scope="col">Client</th>
             <th scope="col">Platform</th>
             <th scope="col">Started</th>
@@ -24,7 +24,7 @@
         <tbody>
           <tr v-for="session in sessions" :key="session.id">
             <td><span class="badge badge-secondary">{{session.id}}</span></td>
-            <td>{{session.user}}</td>
+            <td>{{session.visitor}}</td>
             <td>{{session.client}}</td>
             <td>{{session.platform}}</td>
             <td>{{utcToLocal(session.created_at).fromNow()}}</td>
