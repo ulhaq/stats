@@ -74,8 +74,8 @@ export default {
         this.axios.get(`${this.BaseUrl}/stats/visitors/${this.$route.params.visitor}`).then((response) => {
             this.entry = response.data;
 
-            this.start_time = this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm")
-            this.end_time = this.utcToLocal(response.data[response.data.length-1].created_at).format("YYYY-MM-DD\THH:mm")
+            this.start_time = this.utcToLocal(response.data[response.data.length-1].created_at).format("YYYY-MM-DD\THH:mm");
+            this.end_time = this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
             this.sessionsBetween = response.data.length;
             
             this.ready = true;
