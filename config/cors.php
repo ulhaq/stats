@@ -15,7 +15,12 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => [
+        'api/*',
+        'login',
+        'logout',
+        'airlock/crsf-cookie',
+    ],
 
     'allowed_methods' => ['*'],
 

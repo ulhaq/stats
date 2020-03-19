@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/{any}', function () {
     return view("layout");
 })->where('any', '.*');
+
+Route::post('login', 'Auth\LoginController@login');
+Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+Route::post('register', 'Auth\RegisterController@register');
