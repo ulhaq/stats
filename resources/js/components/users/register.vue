@@ -16,16 +16,16 @@
               <div class="col-md-6 offset-md-3">
                 <form @submit.prevent="register">
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Full Name" v-model="user.name" />
+                    <input type="text" class="form-control" placeholder="Full Name" v-model="user.name" required />
                   </div>
                   <div class="form-group">
-                    <input type="email" class="form-control" placeholder="Email address" v-model="user.email" />
+                    <input type="email" class="form-control" placeholder="Email address" v-model="user.email" required />
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" v-model="user.password" />
+                    <input type="password" class="form-control" placeholder="Password" v-model="user.password" required />
                   </div>
                   <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password Confirmation" v-model="user.password_confirmation" />
+                    <input type="password" class="form-control" placeholder="Password Confirmation" v-model="user.password_confirmation" required />
                   </div>
                   <button type="submit" class="btn btn-primary form-control">Create User</button>
                 </form>

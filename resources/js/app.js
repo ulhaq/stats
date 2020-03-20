@@ -37,9 +37,11 @@ Vue.mixin({
         utcToLocal: function (time) {
             return this.moment.utc(time).local();
         },
+        deleteEntry: function (entry, id) {
+            this.axios.delete(`${this.BaseUrl}/${entry}/${id}`).then(response => this.loadData()).catch(error => this.$router.push({name: entry}));
+        }
     }
 })
-
 
 Vue.component('loading', require('./components/loading.vue').default);
 

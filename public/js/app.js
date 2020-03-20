@@ -2405,6 +2405,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2415,12 +2419,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this = this;
+    this.ready = false;
+    this.loadData();
+  },
+  methods: {
+    loadData: function loadData() {
+      var _this = this;
 
-    this.axios.get("".concat(this.BaseUrl, "/sessions/").concat(this.$route.params.id, "?include=actions.variables")).then(function (response) {
-      _this.entry = response.data;
-      _this.ready = true;
-    });
+      this.axios.get("".concat(this.BaseUrl, "/sessions/").concat(this.$route.params.id, "?include=actions.variables")).then(function (response) {
+        _this.entry = response.data;
+        _this.ready = true;
+      })["catch"](function (error) {
+        return _this.$router.push({
+          name: 'sessions'
+        });
+      });
+    }
   }
 });
 
@@ -2487,13 +2501,13 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
+    this.ready = false;
     this.loadData();
   },
   methods: {
     loadData: function loadData() {
       var _this = this;
 
-      this.ready = false;
       this.axios.get("".concat(this.BaseUrl, "/users")).then(function (response) {
         _this.users = response.data.data;
         _this.totalPages = response.data.meta.last_page;
@@ -2508,13 +2522,6 @@ __webpack_require__.r(__webpack_exports__);
         _this2.users = _this2.users.concat(response.data.data);
         _this2.currentPage = response.data.meta.current_page;
         _this2.nextPageUrl = response.data.links.next;
-      });
-    },
-    deleteUser: function deleteUser(id) {
-      var _this3 = this;
-
-      this.axios["delete"]("".concat(this.BaseUrl, "/users/").concat(id)).then(function (response) {
-        _this3.loadData();
       });
     }
   }
@@ -2833,7 +2840,12 @@ __webpack_require__.r(__webpack_exports__);
       _this.end_time = _this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
       _this.sessionsBetween = response.data.length;
       _this.ready = true;
+    })["catch"](function (error) {
+      return _this.$router.push({
+        name: 'visitors'
+      });
     });
+    ;
   },
   methods: {
     getSessionsBetween: function getSessionsBetween() {
@@ -56803,21 +56815,17 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(session.platform))]),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "span",
-                          {
-                            attrs: { title: _vm.utcToLocal(session.created_at) }
-                          },
-                          [
-                            _vm._v(
-                              _vm._s(
-                                _vm.utcToLocal(session.created_at).fromNow()
-                              )
-                            )
-                          ]
-                        )
-                      ]),
+                      _c(
+                        "td",
+                        {
+                          attrs: { title: _vm.utcToLocal(session.created_at) }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.utcToLocal(session.created_at).fromNow())
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -56825,7 +56833,7 @@ var render = function() {
                           _c(
                             "router-link",
                             {
-                              staticClass: "nav-link control-action",
+                              staticClass: "control-action",
                               attrs: {
                                 to: {
                                   name: "session-preview",
@@ -56951,7 +56959,53 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Session Details")]),
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("Session Details "),
+      _c(
+        "a",
+        {
+          staticClass: "control-action float-right",
+          attrs: { href: "" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.deleteEntry("sessions", _vm.entry.id)
+            }
+          }
+        },
+        [
+          _c(
+            "svg",
+            {
+              staticClass: "bi bi-trash",
+              attrs: {
+                width: "1.2em",
+                height: "1.2em",
+                viewBox: "0 0 16 16",
+                fill: "currentColor",
+                xmlns: "http://www.w3.org/2000/svg"
+              }
+            },
+            [
+              _c("path", {
+                attrs: {
+                  d:
+                    "M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"
+                }
+              }),
+              _c("path", {
+                attrs: {
+                  "fill-rule": "evenodd",
+                  d:
+                    "M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z",
+                  "clip-rule": "evenodd"
+                }
+              })
+            ]
+          )
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -56965,19 +57019,15 @@ var render = function() {
                 _c("tr", [
                   _c("th", [_vm._v("Started")]),
                   _vm._v(" "),
-                  _c("td", [
-                    _c(
-                      "span",
-                      {
-                        attrs: { title: _vm.utcToLocal(_vm.entry.created_at) }
-                      },
-                      [
-                        _vm._v(
-                          _vm._s(_vm.utcToLocal(_vm.entry.created_at).fromNow())
-                        )
-                      ]
-                    )
-                  ])
+                  _c(
+                    "td",
+                    { attrs: { title: _vm.utcToLocal(_vm.entry.created_at) } },
+                    [
+                      _vm._v(
+                        _vm._s(_vm.utcToLocal(_vm.entry.created_at).fromNow())
+                      )
+                    ]
+                  )
                 ]),
                 _vm._v(" "),
                 _c("tr", [
@@ -57061,19 +57111,62 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(action.variables.length))]),
                         _vm._v(" "),
+                        _c(
+                          "td",
+                          {
+                            attrs: { title: _vm.utcToLocal(action.created_at) }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm.utcToLocal(action.created_at).fromNow()
+                              )
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
                         _c("td", [
                           _c(
-                            "span",
+                            "a",
                             {
-                              attrs: {
-                                title: _vm.utcToLocal(action.created_at)
+                              staticClass: "control-action float-right",
+                              attrs: { href: "" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.deleteEntry("actions", action.id)
+                                }
                               }
                             },
                             [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.utcToLocal(action.created_at).fromNow()
-                                )
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "bi bi-trash",
+                                  attrs: {
+                                    width: "1.2em",
+                                    height: "1.2em",
+                                    viewBox: "0 0 16 16",
+                                    fill: "currentColor",
+                                    xmlns: "http://www.w3.org/2000/svg"
+                                  }
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      d:
+                                        "M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"
+                                    }
+                                  }),
+                                  _c("path", {
+                                    attrs: {
+                                      "fill-rule": "evenodd",
+                                      d:
+                                        "M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z",
+                                      "clip-rule": "evenodd"
+                                    }
+                                  })
+                                ]
                               )
                             ]
                           )
@@ -57088,7 +57181,7 @@ var render = function() {
                         attrs: { id: "variableDetails" + action.id }
                       },
                       [
-                        _c("td", { attrs: { colspan: "6" } }, [
+                        _c("td", { attrs: { colspan: "7" } }, [
                           _c("div", { staticClass: "card card-body" }, [
                             _c(
                               "table",
@@ -57113,7 +57206,61 @@ var render = function() {
                                         _vm._v(_vm._s(variable.variable))
                                       ]),
                                       _vm._v(" "),
-                                      _c("td", [_vm._v(_vm._s(variable.value))])
+                                      _c("td", [
+                                        _vm._v(_vm._s(variable.value))
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass:
+                                              "control-action float-right",
+                                            attrs: { href: "" },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                return _vm.deleteEntry(
+                                                  "variables",
+                                                  variable.id
+                                                )
+                                              }
+                                            }
+                                          },
+                                          [
+                                            _c(
+                                              "svg",
+                                              {
+                                                staticClass: "bi bi-trash",
+                                                attrs: {
+                                                  width: "1.2em",
+                                                  height: "1.2em",
+                                                  viewBox: "0 0 16 16",
+                                                  fill: "currentColor",
+                                                  xmlns:
+                                                    "http://www.w3.org/2000/svg"
+                                                }
+                                              },
+                                              [
+                                                _c("path", {
+                                                  attrs: {
+                                                    d:
+                                                      "M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"
+                                                  }
+                                                }),
+                                                _c("path", {
+                                                  attrs: {
+                                                    "fill-rule": "evenodd",
+                                                    d:
+                                                      "M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z",
+                                                    "clip-rule": "evenodd"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
                                     ])
                                   ])
                                 })
@@ -57153,7 +57300,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Total Variables")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Happend")])
+        _c("th", [_vm._v("Happend")]),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   },
@@ -57167,7 +57316,9 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("Variable")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Value")])
+        _c("th", [_vm._v("Value")]),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   }
@@ -57205,7 +57356,39 @@ var render = function() {
             staticClass: "float-right btn btn-primary",
             attrs: { to: { name: "user-register" } }
           },
-          [_vm._v("Register a new User")]
+          [
+            _c(
+              "svg",
+              {
+                staticClass: "bi bi-person-plus-fill",
+                attrs: {
+                  width: "1.2em",
+                  height: "1.2em",
+                  viewBox: "0 0 16 16",
+                  fill: "currentColor",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 100-6 3 3 0 000 6zm7.5-3a.5.5 0 01.5.5v2a.5.5 0 01-.5.5h-2a.5.5 0 010-1H13V5.5a.5.5 0 01.5-.5z",
+                    "clip-rule": "evenodd"
+                  }
+                }),
+                _c("path", {
+                  attrs: {
+                    "fill-rule": "evenodd",
+                    d:
+                      "M13 7.5a.5.5 0 01.5-.5h2a.5.5 0 010 1H14v1.5a.5.5 0 01-1 0v-2z",
+                    "clip-rule": "evenodd"
+                  }
+                })
+              ]
+            )
+          ]
         )
       ],
       1
@@ -57242,39 +57425,36 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(user.email))]),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "span",
-                          { attrs: { title: _vm.utcToLocal(user.created_at) } },
-                          [
-                            _vm._v(
-                              _vm._s(_vm.utcToLocal(user.created_at).fromNow())
-                            )
-                          ]
-                        )
-                      ]),
+                      _c(
+                        "td",
+                        { attrs: { title: _vm.utcToLocal(user.created_at) } },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.utcToLocal(user.created_at).fromNow())
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "span",
-                          { attrs: { title: _vm.utcToLocal(user.updated_at) } },
-                          [
-                            _vm._v(
-                              _vm._s(_vm.utcToLocal(user.updated_at).fromNow())
-                            )
-                          ]
-                        )
-                      ]),
+                      _c(
+                        "td",
+                        { attrs: { title: _vm.utcToLocal(user.updated_at) } },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.utcToLocal(user.updated_at).fromNow())
+                          )
+                        ]
+                      ),
                       _vm._v(" "),
                       _c("td", [
                         _c(
                           "a",
                           {
+                            staticClass: "control-action",
                             attrs: { href: "" },
                             on: {
                               click: function($event) {
                                 $event.preventDefault()
-                                return _vm.deleteUser(user.id)
+                                return _vm.deleteEntry("users", user.id)
                               }
                             }
                           },
@@ -57286,7 +57466,7 @@ var render = function() {
                                 attrs: {
                                   width: "1.2em",
                                   height: "1.2em",
-                                  viewBox: "0 0 20 20",
+                                  viewBox: "0 0 16 16",
                                   fill: "currentColor",
                                   xmlns: "http://www.w3.org/2000/svg"
                                 }
@@ -57295,15 +57475,14 @@ var render = function() {
                                 _c("path", {
                                   attrs: {
                                     d:
-                                      "M7.5 7.5A.5.5 0 018 8v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V8a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V8z"
+                                      "M5.5 5.5A.5.5 0 016 6v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm2.5 0a.5.5 0 01.5.5v6a.5.5 0 01-1 0V6a.5.5 0 01.5-.5zm3 .5a.5.5 0 00-1 0v6a.5.5 0 001 0V6z"
                                   }
                                 }),
-                                _vm._v(" "),
                                 _c("path", {
                                   attrs: {
                                     "fill-rule": "evenodd",
                                     d:
-                                      "M16.5 5a1 1 0 01-1 1H15v9a2 2 0 01-2 2H7a2 2 0 01-2-2V6h-.5a1 1 0 01-1-1V4a1 1 0 011-1H8a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM6.118 6L6 6.059V15a1 1 0 001 1h6a1 1 0 001-1V6.059L13.882 6H6.118zM4.5 5V4h11v1h-11z",
+                                      "M14.5 3a1 1 0 01-1 1H13v9a2 2 0 01-2 2H5a2 2 0 01-2-2V4h-.5a1 1 0 01-1-1V2a1 1 0 011-1H6a1 1 0 011-1h2a1 1 0 011 1h3.5a1 1 0 011 1v1zM4.118 4L4 4.059V13a1 1 0 001 1h6a1 1 0 001-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z",
                                     "clip-rule": "evenodd"
                                   }
                                 })
@@ -57457,7 +57636,11 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Full Name" },
+                        attrs: {
+                          type: "text",
+                          placeholder: "Full Name",
+                          required: ""
+                        },
                         domProps: { value: _vm.user.name },
                         on: {
                           input: function($event) {
@@ -57481,7 +57664,11 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { type: "email", placeholder: "Email address" },
+                        attrs: {
+                          type: "email",
+                          placeholder: "Email address",
+                          required: ""
+                        },
                         domProps: { value: _vm.user.email },
                         on: {
                           input: function($event) {
@@ -57505,7 +57692,11 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
-                        attrs: { type: "password", placeholder: "Password" },
+                        attrs: {
+                          type: "password",
+                          placeholder: "Password",
+                          required: ""
+                        },
                         domProps: { value: _vm.user.password },
                         on: {
                           input: function($event) {
@@ -57531,7 +57722,8 @@ var render = function() {
                         staticClass: "form-control",
                         attrs: {
                           type: "password",
-                          placeholder: "Password Confirmation"
+                          placeholder: "Password Confirmation",
+                          required: ""
                         },
                         domProps: { value: _vm.user.password_confirmation },
                         on: {
@@ -57823,7 +58015,7 @@ var render = function() {
                           _c(
                             "router-link",
                             {
-                              staticClass: "nav-link control-action",
+                              staticClass: "control-action",
                               attrs: {
                                 to: {
                                   name: "visitor-preview",
@@ -58065,23 +58257,19 @@ var render = function() {
                         _vm._v(" "),
                         _c("td", [_vm._v(_vm._s(session.platform))]),
                         _vm._v(" "),
-                        _c("td", [
-                          _c(
-                            "span",
-                            {
-                              attrs: {
-                                title: _vm.utcToLocal(session.created_at)
-                              }
-                            },
-                            [
-                              _vm._v(
-                                _vm._s(
-                                  _vm.utcToLocal(session.created_at).fromNow()
-                                )
+                        _c(
+                          "td",
+                          {
+                            attrs: { title: _vm.utcToLocal(session.created_at) }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                _vm.utcToLocal(session.created_at).fromNow()
                               )
-                            ]
-                          )
-                        ]),
+                            )
+                          ]
+                        ),
                         _vm._v(" "),
                         _c(
                           "td",
@@ -58089,7 +58277,7 @@ var render = function() {
                             _c(
                               "router-link",
                               {
-                                staticClass: "nav-link control-action",
+                                staticClass: "control-action",
                                 attrs: {
                                   to: {
                                     name: "session-preview",
@@ -73372,6 +73560,17 @@ Vue.mixin({
   methods: {
     utcToLocal: function utcToLocal(time) {
       return this.moment.utc(time).local();
+    },
+    deleteEntry: function deleteEntry(entry, id) {
+      var _this = this;
+
+      this.axios["delete"]("".concat(this.BaseUrl, "/").concat(entry, "/").concat(id)).then(function (response) {
+        return _this.loadData();
+      })["catch"](function (error) {
+        return _this.$router.push({
+          name: entry
+        });
+      });
     }
   }
 });
