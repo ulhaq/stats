@@ -106,9 +106,9 @@ class UserTest extends TestCase
         Airlock::actingAs(factory(User::class)->make());
 
         $data = [
-            "name" => $this->faker->name(),
-            "email" => $this->faker->email,
-            "password" => $this->faker->password(),
+            "name" => $this->faker->name,
+            "email" => $this->faker->safeEmail,
+            "password" => $this->faker->password,
         ];
 
         $response = $this->json("POST", "api/users", $data);
