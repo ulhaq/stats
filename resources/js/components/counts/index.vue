@@ -1,30 +1,29 @@
 <template>
   <div class="card">
-    <div class="card-header">Counts
-        <form @submit.prevent="getCalculations">
-            <div class="row">
-                <div class="col">
-                    <select class="form-control" v-model="content.location" required @change="getActions">
-                        <option value="" disabled selected>Select a location</option>
-                        <option :value="optLoc" v-for="optLoc in options.locations" :key="optLoc">{{optLoc}}</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <select class="form-control" v-model="content.action" required :disabled="!options.actions.length" @change="getVariables">
-                        <option value="" selected>Select an action</option>
-                        <option :value="optAct" v-for="optAct in options.actions" :key="optAct">{{optAct}}</option>
-                    </select>
-                </div>
-                <div class="col" v-if="options.variables.length && content.action != ''">
-                    <button type="button" class="btn btn-primary form-control" data-toggle="collapse" data-target="#collapseFilter" aria-expanded="false" aria-controls="collapseFilter">Filter</button>
-                </div>
-            </div>
-        </form>
-    </div>
+    <div class="card-header">Counts</div>
     <div class="card-body text-center table-responsive" >
-        <table class="table collapse" id="collapseFilter" v-if="options.variables.length && content.action != ''">
-            <tr>
-                <td>
+
+        <table class="table light-bg">
+            <tbody>
+                <tr v-if="options.locations.length">
+                    <th>Location</th>
+                    <td>
+                        <select class="form-control" v-model="content.location" required @change="getActions" size="5">
+                            <option :value="optLoc" v-for="optLoc in options.locations" :key="optLoc">{{optLoc}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr v-if="options.actions.length">
+                    <th>Action</th>
+                    <td>
+                        <select class="form-control" v-model="content.action" required @change="getVariables" size="5">
+                            <option value="" selected>Select an action</option>
+                            <option :value="optAct" v-for="optAct in options.actions" :key="optAct">{{optAct}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr v-if="options.variables.length && content.action != ''">
+                    <td colspan="2">
                     <div class="row">
                         <div class="col" v-for="variable in options.variables" :key="variable">
                             <div class="input-group">
@@ -36,28 +35,20 @@
                         </div>
                     </div>
                 </td>
-            </tr>
+                </tr>
+            </tbody>
         </table>
         
-        <loading v-if="!ready" />
-        
-        <table class="table light-bg" v-if="counts === null && ready">
-            <tr>
-                <td>Please select some information</td>
-            </tr>
-        </table>
-
-        <table class="table light-bg" v-if="counts !== null && content.action == '' && ready">
-            <tr>
+        <table class="table" v-if="counts !== null && ready">
+            <tr v-if="content.action == ''">
                 <td><strong>{{counts}}</strong> {{counts > 1 || counts == 0 ? "interactions" : "interaction"}} with <strong>{{content.location}}</strong></td>
             </tr>
-        </table>
-
-        <table class="table light-bg" v-if="counts !== null && content.action != '' && ready">
-            <tr>
+            <tr v-if="content.action != ''">
                 <td><strong>{{counts}}</strong> {{counts > 1 || counts == 0 ? "times" : "time"}} <strong>{{content.location}}</strong> has been <strong>{{content.action}}</strong></td>
             </tr>
         </table>
+
+        <loading v-if="!ready" />
     </div>
   </div>
 </template>
