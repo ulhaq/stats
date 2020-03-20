@@ -2,13 +2,15 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use App\Action;
 use App\Session;
 use App\Variable;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Arr;
 use Tests\TestCase;
+use Illuminate\Support\Arr;
+use Laravel\Airlock\Airlock;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class ActionTest extends TestCase
 {
@@ -18,6 +20,8 @@ class ActionTest extends TestCase
     public function a_user_can_view_all_actions()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 2)->create();
 
@@ -50,19 +54,10 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $tmp = [
-            [
-                "location" => "journey",
-                "target" => "save",
-            ],
-            [
-                "location" => "start-learning",
-                "target" => "click",
-            ],
-        ];
+        Airlock::actingAs(factory(User::class)->make());
 
-        $actions[] = factory(Action::class)->create($tmp[0]);
-        $actions[] = factory(Action::class)->create($tmp[1]);
+        $actions[] = factory(Action::class)->create(["location" => "journey", "target" => "save"]);
+        $actions[] = factory(Action::class)->create(["location" => "start-learning", "target" => "click"]);
 
         $response = $this->json("GET", "api/actions?filter[target]={$actions[0]->target}");
 
@@ -85,6 +80,8 @@ class ActionTest extends TestCase
     public function a_user_can_view_all_sessions_with_relations()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 2)->create();
 
@@ -121,6 +118,8 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $action = factory(Action::class)->create();
 
         $response = $this->json("GET", "api/actions/$action->id");
@@ -140,6 +139,8 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $action = factory(Action::class)->create();
 
         $response = $this->json("GET", "api/actions/{$action->id}?include=session,variables");
@@ -157,7 +158,7 @@ class ActionTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_a_new_action()
+    public function anyone_can_create_a_new_action()
     {
         $this->withoutExceptionHandling();
 
@@ -182,7 +183,7 @@ class ActionTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_a_new_action_with_variables()
+    public function anyone_can_create_a_new_action_with_variables()
     {
         $this->withoutExceptionHandling();
 
@@ -221,6 +222,8 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $action = factory(Action::class)->create();
 
         $response = $this->json("DELETE", "api/actions/$action->id");
@@ -246,6 +249,8 @@ class ActionTest extends TestCase
     public function a_user_can_view_a_specific_actions_variables()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
         $variables = factory(Variable::class, 2)->create(["action_id" => $action->id]);
@@ -275,23 +280,12 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $action = factory(Action::class)->create();
 
-        $tmp = [
-            [
-                "variable" => "journey_id",
-                "value" => 2,
-                "action_id" => $action->id,
-            ],
-            [
-                "variable" => "start-learning_id",
-                "value" => 498,
-                "action_id" => $action->id,
-            ],
-        ];
-
-        $variables[] = factory(Variable::class)->create($tmp[0]);
-        $variables[] = factory(Variable::class)->create($tmp[1]);
+        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
+        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
 
         $response = $this->json("GET", "api/actions/$action->id/variables?filter[value]={$variables[0]->value}");
 

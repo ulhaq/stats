@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Action;
 use App\Session;
+use App\User;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Airlock\Airlock;
 use Tests\TestCase;
 
 class SessionTest extends TestCase
@@ -17,6 +19,8 @@ class SessionTest extends TestCase
     public function a_user_can_view_all_sessions()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 2)->create();
 
@@ -49,21 +53,10 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $tmp = [
-            [
-                "visitor" => "965",
-                "client" => "OSX",
-                "platform" => "Unity",
-            ],
-            [
-                "visitor" => "377",
-                "client" => "Windows",
-                "platform" => "Browser",
-            ],
-        ];
+        Airlock::actingAs(factory(User::class)->make());
 
-        $sessions[] = factory(Session::class)->create($tmp[0]);
-        $sessions[] = factory(Session::class)->create($tmp[1]);
+        $sessions[] = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity"]);
+        $sessions[] = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser"]);
 
         $response = $this->json("GET", "api/sessions?filter[visitor]={$sessions[0]->visitor}");
 
@@ -87,6 +80,8 @@ class SessionTest extends TestCase
     public function a_user_can_view_all_sessions_with_relations()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 2)->create();
 
@@ -123,6 +118,8 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create();
 
         $response = $this->json("GET", "api/sessions/$session->id");
@@ -142,6 +139,8 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create();
 
         $response = $this->json("GET", "api/sessions/{$session->id}?include=actions,variables");
@@ -159,7 +158,7 @@ class SessionTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_a_new_session()
+    public function anyone_can_create_a_new_session()
     {
         $this->withoutExceptionHandling();
 
@@ -182,6 +181,8 @@ class SessionTest extends TestCase
     public function a_user_can_delete_a_session()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
 
@@ -208,6 +209,8 @@ class SessionTest extends TestCase
     public function a_user_can_view_a_specific_sessions_actions()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
         $actions = factory(Action::class, 2)->create(["session_id" => $session->id]);
@@ -239,6 +242,8 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create();
         $action = factory(Action::class)->create(["session_id" => $session->id]);
         $variables = factory(Variable::class, 2)->create(["action_id" => $action->id]);
@@ -268,23 +273,12 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create();
 
-        $tmp = [
-            [
-                "location" => "journey",
-                "target" => "save",
-                "session_id" => $session->id,
-            ],
-            [
-                "location" => "start-learning",
-                "target" => "click",
-                "session_id" => $session->id,
-            ],
-        ];
-
-        $actions[] = factory(Action::class)->create($tmp[0]);
-        $actions[] = factory(Action::class)->create($tmp[1]);
+        $actions[] = factory(Action::class)->create(["location" => "journey", "target" => "save", "session_id" => $session->id]);
+        $actions[] = factory(Action::class)->create(["location" => "start-learning", "target" => "click", "session_id" => $session->id]);
 
         $response = $this->json("GET", "api/sessions/$session->id/actions?filter[target]={$actions[0]->target}");
 
@@ -308,24 +302,13 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create();
         $action = factory(Action::class)->create(["session_id" => $session->id]);
 
-        $tmp = [
-            [
-                "variable" => "journey_id",
-                "value" => 2,
-                "action_id" => $action->id,
-            ],
-            [
-                "variable" => "start-learning_id",
-                "value" => 498,
-                "action_id" => $action->id,
-            ],
-        ];
-
-        $variables[] = factory(Variable::class)->create($tmp[0]);
-        $variables[] = factory(Variable::class)->create($tmp[1]);
+        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
+        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
 
         $response = $this->json("GET", "api/sessions/$session->id/variables?filter[value]={$variables[0]->value}");
 

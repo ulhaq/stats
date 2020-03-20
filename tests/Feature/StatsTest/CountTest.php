@@ -3,9 +3,11 @@
 namespace Tests\Feature\StatsTest;
 
 use App\Action;
+use App\User;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Airlock\Airlock;
 use Tests\TestCase;
 
 class CountTest extends TestCase
@@ -16,6 +18,8 @@ class CountTest extends TestCase
     public function a_user_can_get_a_list_of_locations()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 10)->create();
 
@@ -31,6 +35,8 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $actions = factory(Action::class, 10)->create();
 
         $response = $this->json("GET", "api/stats/counts?location={$actions[0]->location}");
@@ -44,6 +50,8 @@ class CountTest extends TestCase
     public function a_user_can_get_a_list_of_variables_of_an_action_with_specific_location_and_action()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -60,6 +68,8 @@ class CountTest extends TestCase
     public function a_user_can_get_counts_filtered_by_location()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -78,6 +88,8 @@ class CountTest extends TestCase
     public function a_user_can_get_counts_filtered_by_location_and_action()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -98,29 +110,18 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $action = factory(Action::class)->create();
 
-        $tmp = [
-            [
-                "variable" => "journey_id",
-                "value" => 2,
-                "action_id" => $action->id
-            ],
-            [
-                "variable" => "start-learning_id",
-                "value" => 498,
-                "action_id" => $action->id
-            ],
-        ];
-
-        $variables[] = factory(Variable::class)->create($tmp[0]);
-        $variables[] = factory(Variable::class)->create($tmp[1]);
+        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
+        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
 
         $response = $this->json("POST", "api/stats/counts", [
             "location" => $action->location,
             "action" => $action->action,
             "variables" => [
-                $tmp[0]["variable"] => $tmp[0]["value"],
+                $variables[0]["variable"] => $variables[0]["value"],
             ],
         ]);
 

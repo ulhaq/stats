@@ -3,8 +3,10 @@
 namespace Tests\Feature\StatsTest;
 
 use App\Session;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Airlock\Airlock;
 use Tests\TestCase;
 
 class VisitorTest extends TestCase
@@ -15,6 +17,8 @@ class VisitorTest extends TestCase
     public function a_user_can_get_a_list_of_the_amount_of_sessions_of_visitors()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 10)->create(["visitor" => 15]);
 
@@ -37,6 +41,8 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $sessions = [
             factory(Session::class, 2)->create(["visitor" => 1, "created_at" => "2020-03-07 11:00:00"]),
             factory(Session::class, 5)->create(["visitor" => 2, "created_at" => "2020-03-09 11:00:00"]),
@@ -45,7 +51,7 @@ class VisitorTest extends TestCase
             factory(Session::class, 10)->create(["visitor" => 5, "created_at" => "2020-03-11 11:00:00"]),
             factory(Session::class, 7)->create(["visitor" => 6, "created_at" => "2020-03-11 12:00:00"]),
         ];
-        
+
         $response = $this->json("GET", "api/stats/visitors/visits?times=3&from=2020-03-08T08:00&to=2020-03-11T11:59");
 
         $response
@@ -73,6 +79,8 @@ class VisitorTest extends TestCase
     public function a_user_can_get_the_percentage_of_visitors_who_returned_at_least_x_times_between_dates()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $sessions = [
             factory(Session::class, 2)->create(["visitor" => 1, "created_at" => "2020-03-07 11:00:00"]),
@@ -102,6 +110,8 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $sessions = factory(Session::class, 2)->create(["visitor" => 15]);
 
         $response = $this->json("GET", "api/stats/visitors/15");
@@ -122,11 +132,13 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $session = factory(Session::class)->create(["visitor" => 15, "created_at" => "2020-03-08 12:00:00"]);
         unset($session->visitor);
         unset($session->updated_at);
         factory(Session::class)->create(["visitor" => 15, "created_at" => "2020-03-12 12:00:00"]);
-        
+
 
         $response = $this->json("GET", "api/stats/visitors/15?from=2020-03-08T11:00&to=2020-03-12T11:59");
 

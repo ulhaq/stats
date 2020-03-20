@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Variable;
 use App\Action;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
+use Laravel\Airlock\Airlock;
 use Tests\TestCase;
 
 class VariableTest extends TestCase
@@ -16,6 +18,8 @@ class VariableTest extends TestCase
     public function a_user_can_view_all_variables()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $variables = factory(Variable::class, 2)->create();
 
@@ -45,20 +49,11 @@ class VariableTest extends TestCase
     public function a_user_can_view_all_filtered_variables()
     {
         $this->withoutExceptionHandling();
-        
-        $tmp = [
-            [
-                "variable" => "journey_id",
-                "value" => 2,
-            ],
-            [
-                "variable" => "start-learning_id",
-                "value" => 498,
-            ],
-        ];
 
-        $variables[] = factory(Variable::class)->create($tmp[0]);
-        $variables[] = factory(Variable::class)->create($tmp[1]);
+        Airlock::actingAs(factory(User::class)->make());
+
+        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2]);
+        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498]);
 
         $response = $this->json("GET", "api/variables?filter[value]={$variables[0]->value}");
 
@@ -80,6 +75,8 @@ class VariableTest extends TestCase
     public function a_user_can_view_all_variables_with_relation()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $variables = factory(Variable::class, 2)->create();
 
@@ -112,6 +109,8 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $variable = factory(Variable::class)->create();
 
         $response = $this->json("GET", "api/variables/$variable->id");
@@ -129,6 +128,8 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
+        Airlock::actingAs(factory(User::class)->make());
+
         $variable = factory(variable::class)->create();
 
         $response = $this->json("GET", "api/variables/{$variable->id}?include=action");
@@ -144,7 +145,7 @@ class VariableTest extends TestCase
     }
 
     /** @test */
-    public function a_user_can_create_a_new_variable()
+    public function anyone_can_create_a_new_variable()
     {
         $this->withoutExceptionHandling();
 
@@ -171,6 +172,8 @@ class VariableTest extends TestCase
     public function a_user_can_delete_a_variable()
     {
         $this->withoutExceptionHandling();
+
+        Airlock::actingAs(factory(User::class)->make());
 
         $variable = factory(Variable::class)->create();
 
