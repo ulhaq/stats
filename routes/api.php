@@ -22,7 +22,7 @@ Route::post('actions', 'ActionController@store')->name('actions.store');
 Route::post('variables', 'VariableController@store')->name('variables.store');
 
 Route::middleware('auth:airlock')->group(function () {
-    Route::resource('users', 'UserController')->except(['show', 'update']);
+    Route::resource('users', 'UserController')->except(['update']);
     Route::resource('sessions', 'SessionController')->except(['store', 'update']);
     Route::resource('actions', 'ActionController')->except(['store', 'update']);
     Route::resource('variables', 'VariableController')->except(['store', 'update']);

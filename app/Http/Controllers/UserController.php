@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -37,10 +37,10 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    // public function show(User $user)
-    // {
-    //     return response(new UserResource(withRelations($user)), 200);
-    // }
+    public function show(User $user)
+    {
+        return response(new UserResource($user), 200);
+    }
 
     /**
      * Update the specified resource in storage.
