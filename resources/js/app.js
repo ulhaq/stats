@@ -2,12 +2,16 @@ import App from './App.vue';
 import VueRouter from 'vue-router';
 import VueAxios from 'vue-axios';
 import moment from 'moment';
+import Chartkick from 'vue-chartkick'
+import Chart from 'chart.js'
 
 require('./bootstrap');
 
 window.Vue = require('vue');
 
 axios.defaults.withCredentials = true;
+
+Vue.use(Chartkick.use(Chart))
 
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
@@ -58,12 +62,14 @@ const routes = [
 
     { name: 'sessions', path: '/sessions', component: require('./components/sessions/index').default, meta: { requiresAuth: true }, },
     { name: 'session-preview', path: '/sessions/:id', component: require('./components/sessions/preview').default, meta: { requiresAuth: true }, },
-
-    { name: 'counts', path: '/counts', component: require('./components/counts/index').default, meta: { requiresAuth: true }, },
-
+    
     { name: 'visitors', path: '/visitors', component: require('./components/visitors/index').default, meta: { requiresAuth: true }, },
     { name: 'visitor-preview', path: '/visitors/:visitor', component: require('./components/visitors/preview').default, meta: { requiresAuth: true }, },
 
+    { name: 'counts', path: '/counts', component: require('./components/counts/index').default, meta: { requiresAuth: true }, },
+
+    { name: 'graphs', path: '/graphs', component: require('./components/graphs/index').default, meta: { requiresAuth: true }, },    
+    
     { name: '404', path: '*', component: require('./components/404').default, },
 ]
 

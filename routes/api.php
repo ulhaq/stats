@@ -31,12 +31,15 @@ Route::middleware('auth:airlock')->group(function () {
     Route::get('sessions/{session}/variables', 'SessionController@variables')->name('sessions.variables');
     Route::get('actions/{action}/variables', 'ActionController@variables')->name('actions.variables');
 
-    Route::prefix('stats')->namespace('Stats')->group(function () {
-        Route::get('counts', 'CountController@index')->name('stats.count');
-        Route::post('counts', 'CountController@counts')->name('stats.count.counts');
-
+    Route::prefix('stats')->namespace('Stats')->group(function () {        
         Route::get('visitors/visits', 'VisitorController@visits')->name('stats.visitor.visits');
         Route::get('visitors/returning', 'VisitorController@returning')->name('stats.visitor.returning');
         Route::get('visitors/{visitor}', 'VisitorController@sessions')->name('stats.visitor.sessions');
+
+        Route::get('counts', 'CountController@index')->name('stats.count');
+        Route::post('counts', 'CountController@counts')->name('stats.count.counts');
+        
+        Route::get('graphs', 'GraphController@index')->name('stats.graph');
+        Route::get('graphs/actions/{location}/{action}', 'GraphController@actions')->name('stats.graph.actions');
     });
 });
