@@ -48,6 +48,12 @@
             </tr>
         </table>
 
+        <table class="table light-bg text-center" v-if="ready && !options.locations.length">
+            <tr>
+                <td>We didn't find anything - just empty space.</td>
+            </tr>
+        </table>
+
         <loading v-if="!ready" />
     </div>
   </div>

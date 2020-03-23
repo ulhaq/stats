@@ -2122,6 +2122,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -56596,13 +56602,28 @@ var render = function() {
             ])
           : _vm._e(),
         _vm._v(" "),
+        _vm.ready && !_vm.options.locations.length
+          ? _c("table", { staticClass: "table light-bg text-center" }, [
+              _vm._m(0)
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         !_vm.ready ? _c("loading") : _vm._e()
       ],
       1
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [_vm._v("We didn't find anything - just empty space.")])
+    ])
+  }
+]
 render._withStripped = true
 
 
