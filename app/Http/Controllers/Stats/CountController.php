@@ -32,7 +32,7 @@ class CountController extends Controller
     }
 
     /**
-     * Display view counts of $location.
+     * Display view counts of location.
      *
      * @return \Illuminate\Http\Response
      */
