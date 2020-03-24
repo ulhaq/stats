@@ -33,7 +33,7 @@ class GraphController extends Controller
             $end_time = Carbon::now();
         }
 
-        $class = 'App\\' . $target;
+        $class = 'App\\' . ucfirst($target);
 
         $content = $class::select(DB::raw("DATE_FORMAT(created_at, '{$occurrence}') as occurrence, count(*) as total"))->whereBetween("created_at", [$start_time, $end_time])->groupByRaw("DATE_FORMAT(created_at, '{$occurrence}')")->get();
 
