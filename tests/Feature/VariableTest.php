@@ -7,7 +7,7 @@ use App\Action;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class VariableTest extends TestCase
@@ -19,7 +19,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variables = factory(Variable::class, 2)->create();
 
@@ -50,7 +50,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2]);
         $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498]);
@@ -76,7 +76,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variables = factory(Variable::class, 2)->create();
 
@@ -109,7 +109,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variable = factory(Variable::class)->create();
 
@@ -128,7 +128,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variable = factory(variable::class)->create();
 
@@ -173,7 +173,7 @@ class VariableTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $variable = factory(Variable::class)->create();
 

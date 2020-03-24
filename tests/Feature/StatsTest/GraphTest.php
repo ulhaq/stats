@@ -7,7 +7,7 @@ use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class GraphTest extends TestCase
@@ -19,7 +19,7 @@ class GraphTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         factory(Session::class)->create(["created_at" => "2020-03-09 15:00:00"]);
         factory(Session::class)->create(["created_at" => "2020-03-25 15:00:00"]);
@@ -44,7 +44,7 @@ class GraphTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         factory(Session::class)->create(["created_at" => "2017-03-09 15:00:00"]);
         factory(Session::class)->create(["created_at" => "2017-03-25 15:00:00"]);
@@ -69,7 +69,7 @@ class GraphTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         factory(Action::class)->create(["created_at" => "2020-03-09 15:00:00"]);
         factory(Action::class)->create(["created_at" => "2020-03-25 15:00:00"]);
@@ -94,7 +94,7 @@ class GraphTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         factory(Action::class)->create(["created_at" => "2017-03-09 15:00:00"]);
         factory(Action::class)->create(["created_at" => "2017-03-25 15:00:00"]);

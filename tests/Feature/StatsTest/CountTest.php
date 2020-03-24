@@ -7,7 +7,7 @@ use App\User;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CountTest extends TestCase
@@ -19,7 +19,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 10)->create();
 
@@ -35,7 +35,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 10)->create();
 
@@ -51,7 +51,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -69,7 +69,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -89,7 +89,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -110,7 +110,7 @@ class CountTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 

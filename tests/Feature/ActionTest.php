@@ -8,7 +8,7 @@ use App\Session;
 use App\Variable;
 use Tests\TestCase;
 use Illuminate\Support\Arr;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -21,7 +21,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 2)->create();
 
@@ -54,7 +54,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $actions[] = factory(Action::class)->create(["location" => "journey", "target" => "save"]);
         $actions[] = factory(Action::class)->create(["location" => "start-learning", "target" => "click"]);
@@ -81,7 +81,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $actions = factory(Action::class, 2)->create();
 
@@ -118,7 +118,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -139,7 +139,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -222,7 +222,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 
@@ -250,7 +250,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
         $variables = factory(Variable::class, 2)->create(["action_id" => $action->id]);
@@ -280,7 +280,7 @@ class ActionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $action = factory(Action::class)->create();
 

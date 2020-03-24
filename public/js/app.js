@@ -2043,7 +2043,7 @@ __webpack_require__.r(__webpack_exports__);
     login: function login() {
       var _this = this;
 
-      this.axios.get('/airlock/csrf-cookie');
+      this.axios.get('/sanctum/csrf-cookie');
       this.axios.post('/login', this.credentials).then(function (response) {
         document.cookie = 'active=true; expires=' + _this.moment().utc().add(2, 'hours').format('MMM DD YYYY HH:mm:ss');
 

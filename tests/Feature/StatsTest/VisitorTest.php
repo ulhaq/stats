@@ -6,7 +6,7 @@ use App\Session;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class VisitorTest extends TestCase
@@ -18,7 +18,7 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 10)->create(["visitor" => 15]);
 
@@ -41,7 +41,7 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = [
             factory(Session::class, 2)->create(["visitor" => 1, "created_at" => "2020-03-07 11:00:00"]),
@@ -80,7 +80,7 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = [
             factory(Session::class, 2)->create(["visitor" => 1, "created_at" => "2020-03-07 11:00:00"]),
@@ -110,7 +110,7 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 2)->create(["visitor" => 15]);
 
@@ -132,7 +132,7 @@ class VisitorTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create(["visitor" => 15, "created_at" => "2020-03-08 12:00:00"]);
         unset($session->visitor);

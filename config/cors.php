@@ -19,7 +19,7 @@ return [
         'api/*',
         'login',
         'logout',
-        'airlock/crsf-cookie',
+        'sanctum/csrf-cookie',
     ],
 
     'allowed_methods' => ['*'],

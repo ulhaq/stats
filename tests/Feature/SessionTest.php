@@ -8,7 +8,7 @@ use App\User;
 use App\Variable;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class SessionTest extends TestCase
@@ -20,7 +20,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 2)->create();
 
@@ -53,7 +53,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions[] = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity"]);
         $sessions[] = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser"]);
@@ -81,7 +81,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $sessions = factory(Session::class, 2)->create();
 
@@ -118,7 +118,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
 
@@ -139,7 +139,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
 
@@ -182,7 +182,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
 
@@ -210,7 +210,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
         $actions = factory(Action::class, 2)->create(["session_id" => $session->id]);
@@ -242,7 +242,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
         $action = factory(Action::class)->create(["session_id" => $session->id]);
@@ -273,7 +273,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
 
@@ -302,7 +302,7 @@ class SessionTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $session = factory(Session::class)->create();
         $action = factory(Action::class)->create(["session_id" => $session->id]);

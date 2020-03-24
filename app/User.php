@@ -4,7 +4,7 @@ namespace App;
 
 use App\Traits\Filterable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Airlock\HasApiTokens;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable

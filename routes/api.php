@@ -21,7 +21,7 @@ Route::post('sessions', 'SessionController@store')->name('sessions.store');
 Route::post('actions', 'ActionController@store')->name('actions.store');
 Route::post('variables', 'VariableController@store')->name('variables.store');
 
-Route::middleware('auth:airlock')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::resource('users', 'UserController')->except(['update']);
     Route::resource('sessions', 'SessionController')->except(['store', 'update']);
     Route::resource('actions', 'ActionController')->except(['store', 'update']);

@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     login() {
-      this.axios.get('/airlock/csrf-cookie');
+      this.axios.get('/sanctum/csrf-cookie');
 
       this.axios.post('/login', this.credentials).then(response => {
         document.cookie = 'active=true; expires=' + this.moment().utc().add(2, 'hours').format('MMM DD YYYY HH:mm:ss');

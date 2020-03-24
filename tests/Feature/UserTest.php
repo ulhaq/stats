@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Airlock\Airlock;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -17,7 +17,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $users = factory(User::class, 2)->create();
 
@@ -52,7 +52,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $users[] = factory(User::class)->create(["name" => "Muhammad", "email" => "muhammad@example.com"]);
         $users[] = factory(User::class)->create(["name" => "Umar", "email" => "umar@example.com"]);
@@ -81,7 +81,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $user = factory(User::class)->create();
 
@@ -103,7 +103,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $data = [
             "name" => $this->faker->name,
@@ -127,7 +127,7 @@ class UserTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        Airlock::actingAs(factory(User::class)->make());
+        Sanctum::actingAs(factory(User::class)->make());
 
         $user = factory(User::class)->create();
 
