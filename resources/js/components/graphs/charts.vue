@@ -1,6 +1,8 @@
 <template>
   <div>
     <area-chart :data="data" :download="true" v-if="type=='area'"></area-chart>
+    
+    <line-chart :data="data" :download="true" v-if="type=='line'"></line-chart>
 
     <bar-chart :data="data" :download="true" v-if="type=='bar'"></bar-chart>
 

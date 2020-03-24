@@ -3,10 +3,11 @@
     <div class="card-header"> 
       <select class="inline-select" v-model="graphType">
         <option value="area" selected>Area Graph</option>
+        <option value="line" selected>Line Graph</option>
         <option value="bar">Bar Graph</option>
         <option value="column">Column Graph</option>
         <option value="pie">Pie Graph</option>
-        <option value="geo">Geo Graph</option>
+        <option value="geo" :disabled="section != 'allUserOrigins'">Geo Graph</option>
       </select>
       <div class="float-right">
         <button type="button" class="btn btn-primary" @click="changeSection('allData')">ِAll Data</button>

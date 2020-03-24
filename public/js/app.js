@@ -2242,6 +2242,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ["type", "data"]
 });
@@ -2257,6 +2259,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -76987,6 +76990,10 @@ var render = function() {
         ? _c("area-chart", { attrs: { data: _vm.data, download: true } })
         : _vm._e(),
       _vm._v(" "),
+      _vm.type == "line"
+        ? _c("line-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e(),
+      _vm._v(" "),
       _vm.type == "bar"
         ? _c("bar-chart", { attrs: { data: _vm.data, download: true } })
         : _vm._e(),
@@ -77063,6 +77070,10 @@ var render = function() {
             _vm._v("Area Graph")
           ]),
           _vm._v(" "),
+          _c("option", { attrs: { value: "line", selected: "" } }, [
+            _vm._v("Line Graph")
+          ]),
+          _vm._v(" "),
           _c("option", { attrs: { value: "bar" } }, [_vm._v("Bar Graph")]),
           _vm._v(" "),
           _c("option", { attrs: { value: "column" } }, [
@@ -77071,7 +77082,13 @@ var render = function() {
           _vm._v(" "),
           _c("option", { attrs: { value: "pie" } }, [_vm._v("Pie Graph")]),
           _vm._v(" "),
-          _c("option", { attrs: { value: "geo" } }, [_vm._v("Geo Graph")])
+          _c(
+            "option",
+            {
+              attrs: { value: "geo", disabled: _vm.section != "allUserOrigins" }
+            },
+            [_vm._v("Geo Graph")]
+          )
         ]
       ),
       _vm._v(" "),
