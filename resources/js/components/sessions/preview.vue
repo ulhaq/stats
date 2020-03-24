@@ -26,6 +26,10 @@
             <th>Platform</th>
             <td>{{entry.platform}}</td>
           </tr>
+          <tr>
+            <th>Origin</th>
+            <td>{{entry.origin}}</td>
+          </tr>
           <tr class="pointer" data-toggle="collapse" data-target="#actionDetails" aria-expanded="false" aria-controls="actionDetails">
             <th>Total Actions</th>
             <td>{{entry.actions.length}}</td>
