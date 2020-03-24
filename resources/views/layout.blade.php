@@ -12,6 +12,7 @@
         <div id="app" class="flex-center position-ref full-height">
         </div>
 
-        <script src="{{ asset('js/app.js')}}"></script> 
+        <script src="{{ asset('js/app.js')}}"></script>
+        <script src="https://www.gstatic.com/charts/loader.js"></script>
     </body>
 </html>

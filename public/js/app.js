@@ -2219,6 +2219,35 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/charts.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/graphs/charts.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ["type", "data"]
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/index.vue?vue&type=script&lang=js&":
 /*!***********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/graphs/index.vue?vue&type=script&lang=js& ***!
@@ -2319,13 +2348,65 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       data: {},
       target: "session",
-      occurrence: "M",
-      year: null,
+      occurrence: "%D %M %Y",
+      start_time: null,
+      end_time: null,
       options: {
         locations: [],
         actions: []
@@ -2334,11 +2415,14 @@ __webpack_require__.r(__webpack_exports__);
         location: "",
         action: ""
       },
+      section: 'allData',
+      graphType: 'area',
       ready: false
     };
   },
   created: function created() {
-    this.year = this.moment().year();
+    this.start_time = this.moment().subtract(1, "year").format("YYYY-MM-DD\THH:mm");
+    this.end_time = this.moment().format("YYYY-MM-DD\THH:mm");
     this.getAllData();
     this.getLocations();
   },
@@ -2346,33 +2430,53 @@ __webpack_require__.r(__webpack_exports__);
     getAllData: function getAllData() {
       var _this = this;
 
-      this.axios.get("".concat(this.BaseUrl, "/stats/graphs?target=").concat(this.target, "&occurrence=").concat(this.occurrence, "&year=").concat(this.year)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/graphs?target=").concat(this.target, "&occurrence=").concat(this.occurrence, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
         _this.data = response.data;
         _this.ready = true;
       });
     },
-    getActivity: function getActivity() {
+    getAllActivities: function getAllActivities() {
       var _this2 = this;
 
-      this.axios.get("".concat(this.BaseUrl, "/stats/graphs/actions/").concat(this.content.location, "/").concat(this.content.action, "?occurrence=").concat(this.occurrence, "&year=").concat(this.year)).then(function (response) {
+      this.axios.get("".concat(this.BaseUrl, "/stats/graphs/actions/").concat(this.content.location, "/").concat(this.content.action, "?occurrence=").concat(this.occurrence, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
         _this2.data = response.data;
         _this2.ready = true;
       });
     },
-    getLocations: function getLocations() {
+    getAllUsers: function getAllUsers() {
       var _this3 = this;
 
+      this.axios.get("".concat(this.BaseUrl, "/stats/graphs/users?from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
+        _this3.data = response.data;
+        _this3.ready = true;
+      });
+    },
+    getAllUserOrigins: function getAllUserOrigins() {
+      var _this4 = this;
+
+      this.axios.get("".concat(this.BaseUrl, "/stats/graphs/users/origins?from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
+        _this4.data = response.data;
+        _this4.ready = true;
+      });
+    },
+    getLocations: function getLocations() {
+      var _this5 = this;
+
       this.axios.get("".concat(this.BaseUrl, "/stats/counts")).then(function (response) {
-        _this3.options.locations = response.data;
+        _this5.options.locations = response.data;
       });
     },
     getActions: function getActions() {
-      var _this4 = this;
+      var _this6 = this;
 
       this.content.action = '';
-      this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location)).then(function (response) {
-        _this4.options.actions = response.data;
+      this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location, "&from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
+        _this6.options.actions = response.data;
       });
+    },
+    changeSection: function changeSection(section) {
+      this.data = {};
+      this.section = section;
     }
   }
 });
@@ -76857,6 +76961,54 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8&":
+/*!****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8& ***!
+  \****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.type == "area"
+        ? _c("area-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type == "bar"
+        ? _c("bar-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type == "column"
+        ? _c("column-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type == "pie"
+        ? _c("pie-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.type == "geo"
+        ? _c("geo-chart", { attrs: { data: _vm.data, download: true } })
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/index.vue?vue&type=template&id=05ea9a1a&":
 /*!***************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/graphs/index.vue?vue&type=template&id=05ea9a1a& ***!
@@ -76873,7 +77025,115 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card" }, [
-    _vm._m(0),
+    _c("div", { staticClass: "card-header" }, [
+      _c(
+        "select",
+        {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.graphType,
+              expression: "graphType"
+            }
+          ],
+          staticClass: "inline-select",
+          on: {
+            change: function($event) {
+              var $$selectedVal = Array.prototype.filter
+                .call($event.target.options, function(o) {
+                  return o.selected
+                })
+                .map(function(o) {
+                  var val = "_value" in o ? o._value : o.value
+                  return val
+                })
+              _vm.graphType = $event.target.multiple
+                ? $$selectedVal
+                : $$selectedVal[0]
+            }
+          }
+        },
+        [
+          _c("option", { attrs: { value: "area", selected: "" } }, [
+            _vm._v("Area Graph")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "bar" } }, [_vm._v("Bar Graph")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "column" } }, [
+            _vm._v("Column Graph")
+          ]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "pie" } }, [_vm._v("Pie Graph")]),
+          _vm._v(" "),
+          _c("option", { attrs: { value: "geo" } }, [_vm._v("Geo Graph")])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "float-right" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.changeSection("allData")
+              }
+            }
+          },
+          [_vm._v("ِAll Data")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.changeSection("allActivities")
+              }
+            }
+          },
+          [_vm._v("All Activities")]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "btn-group" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.changeSection("allUsers")
+                }
+              }
+            },
+            [_vm._v("All Users")]
+          ),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+            _c(
+              "button",
+              {
+                staticClass: "dropdown-item",
+                on: {
+                  click: function($event) {
+                    return _vm.changeSection("allUserOrigins")
+                  }
+                }
+              },
+              [_vm._v("User Origins")]
+            )
+          ])
+        ])
+      ])
+    ]),
     _vm._v(" "),
     _c(
       "div",
@@ -76881,24 +77141,70 @@ var render = function() {
       [
         !_vm.ready ? _c("loading") : _vm._e(),
         _vm._v(" "),
-        _vm.ready ? _c("nav") : _vm._e(),
-        _vm._v(" "),
         _vm.ready
-          ? _c(
-              "div",
-              { staticClass: "tab-content", attrs: { id: "nav-tabContent" } },
-              [
-                _c(
-                  "div",
-                  {
-                    staticClass: "tab-pane fade show active",
-                    attrs: {
-                      id: "nav-data",
-                      role: "tabpanel",
-                      "aria-labelledby": "nav-data-tab"
-                    }
-                  },
-                  [
+          ? _c("div", [
+              _vm.section == "allData"
+                ? _c("div", [
+                    _c("table", { staticClass: "table light-bg text-center" }, [
+                      _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.start_time,
+                                expression: "start_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "Start Time"
+                            },
+                            domProps: { value: _vm.start_time },
+                            on: {
+                              change: _vm.getAllData,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.start_time = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.end_time,
+                                expression: "end_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "End Time"
+                            },
+                            domProps: { value: _vm.end_time },
+                            on: {
+                              change: _vm.getAllData,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.end_time = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ]),
+                    _vm._v(" "),
                     _c("table", { staticClass: "table light-bg text-center" }, [
                       _c("tr", [
                         _c("td", [
@@ -76986,75 +77292,93 @@ var render = function() {
                               }
                             },
                             [
-                              _c("option", { attrs: { value: "M" } }, [
+                              _c("option", { attrs: { value: "%D %M %Y" } }, [
+                                _vm._v("Daily")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "option",
+                                { attrs: { value: "Week %v of %Y" } },
+                                [_vm._v("Weekly")]
+                              ),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "%M of %Y" } }, [
                                 _vm._v("Monthly")
                               ]),
                               _vm._v(" "),
-                              _c("option", { attrs: { value: "Y" } }, [
+                              _c("option", { attrs: { value: "%Y" } }, [
                                 _vm._v("Annually")
                               ])
                             ]
                           )
+                        ])
+                      ])
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.section == "allActivities"
+                ? _c("div", [
+                    _c("table", { staticClass: "table light-bg text-center" }, [
+                      _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.start_time,
+                                expression: "start_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "Start Time"
+                            },
+                            domProps: { value: _vm.start_time },
+                            on: {
+                              change: _vm.getAllActivities,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.start_time = $event.target.value
+                              }
+                            }
+                          })
                         ]),
                         _vm._v(" "),
-                        _vm.occurrence == "M"
-                          ? _c("td", [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.year,
-                                    expression: "year"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "2000",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.year },
-                                on: {
-                                  change: _vm.getAllData,
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.year = $event.target.value
-                                  }
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.end_time,
+                                expression: "end_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "End Time"
+                            },
+                            domProps: { value: _vm.end_time },
+                            on: {
+                              change: _vm.getAllActivities,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
                                 }
-                              })
-                            ])
-                          : _vm._e()
+                                _vm.end_time = $event.target.value
+                              }
+                            }
+                          })
+                        ])
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm.ready && Object.keys(_vm.data).length !== 0
-                      ? _c("table", { staticClass: "table" }, [
-                          _c("tr", [
-                            _c(
-                              "td",
-                              [_c("area-chart", { attrs: { data: _vm.data } })],
-                              1
-                            )
-                          ])
-                        ])
-                      : _vm._e()
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "tab-pane fade",
-                    attrs: {
-                      id: "nav-activity",
-                      role: "tabpanel",
-                      "aria-labelledby": "nav-activity-tab"
-                    }
-                  },
-                  [
                     _c("table", { staticClass: "table light-bg text-center" }, [
                       _c("tr", [
                         _c("td", [
@@ -77151,7 +77475,7 @@ var render = function() {
                                         : $$selectedVal[0]
                                     )
                                   },
-                                  _vm.getActivity
+                                  _vm.getAllActivities
                                 ]
                               }
                             },
@@ -77207,71 +77531,185 @@ var render = function() {
                                           ? $$selectedVal
                                           : $$selectedVal[0]
                                       },
-                                      _vm.getActivity
+                                      _vm.getAllActivities
                                     ]
                                   }
                                 },
                                 [
-                                  _c("option", { attrs: { value: "M" } }, [
-                                    _vm._v("Monthly")
-                                  ]),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "%D %M %Y" } },
+                                    [_vm._v("Daily")]
+                                  ),
                                   _vm._v(" "),
-                                  _c("option", { attrs: { value: "Y" } }, [
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "Week %v of %Y" } },
+                                    [_vm._v("Weekly")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "%M of %Y" } },
+                                    [_vm._v("Monthly")]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("option", { attrs: { value: "%Y" } }, [
                                     _vm._v("Annually")
                                   ])
                                 ]
                               )
                             ])
-                          : _vm._e(),
-                        _vm._v(" "),
-                        _vm.content.action != "" && _vm.occurrence == "M"
-                          ? _c("td", [
-                              _c("input", {
-                                directives: [
-                                  {
-                                    name: "model",
-                                    rawName: "v-model",
-                                    value: _vm.year,
-                                    expression: "year"
-                                  }
-                                ],
-                                staticClass: "form-control",
-                                attrs: {
-                                  type: "number",
-                                  min: "2000",
-                                  required: ""
-                                },
-                                domProps: { value: _vm.year },
-                                on: {
-                                  change: _vm.getActivity,
-                                  input: function($event) {
-                                    if ($event.target.composing) {
-                                      return
-                                    }
-                                    _vm.year = $event.target.value
-                                  }
-                                }
-                              })
-                            ])
                           : _vm._e()
                       ])
-                    ]),
-                    _vm._v(" "),
-                    _vm.ready && Object.keys(_vm.data).length !== 0
-                      ? _c("table", { staticClass: "table" }, [
-                          _c("tr", [
-                            _c(
-                              "td",
-                              [_c("area-chart", { attrs: { data: _vm.data } })],
-                              1
-                            )
-                          ])
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.section == "allUsers"
+                ? _c("div", [
+                    _c("table", { staticClass: "table light-bg text-center" }, [
+                      _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.start_time,
+                                expression: "start_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "Start Time"
+                            },
+                            domProps: { value: _vm.start_time },
+                            on: {
+                              change: _vm.getAllUsers,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.start_time = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.end_time,
+                                expression: "end_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "End Time"
+                            },
+                            domProps: { value: _vm.end_time },
+                            on: {
+                              change: _vm.getAllUsers,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.end_time = $event.target.value
+                              }
+                            }
+                          })
                         ])
-                      : _vm._e()
-                  ]
-                )
-              ]
-            )
+                      ])
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.section == "allUserOrigins"
+                ? _c("div", [
+                    _c("table", { staticClass: "table light-bg text-center" }, [
+                      _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.start_time,
+                                expression: "start_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "Start Time"
+                            },
+                            domProps: { value: _vm.start_time },
+                            on: {
+                              change: _vm.getAllUserOrigins,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.start_time = $event.target.value
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.end_time,
+                                expression: "end_time"
+                              }
+                            ],
+                            staticClass: "form-control inline-block",
+                            attrs: {
+                              type: "datetime-local",
+                              title: "End Time"
+                            },
+                            domProps: { value: _vm.end_time },
+                            on: {
+                              change: _vm.getAllUserOrigins,
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.end_time = $event.target.value
+                              }
+                            }
+                          })
+                        ])
+                      ])
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.ready && Object.keys(_vm.data).length !== 0
+                ? _c("table", { staticClass: "table" }, [
+                    _c("tr", [
+                      _c(
+                        "td",
+                        [
+                          _c("charts", {
+                            attrs: { type: _vm.graphType, data: _vm.data }
+                          })
+                        ],
+                        1
+                      )
+                    ])
+                  ])
+                : _vm._e()
+            ])
           : _vm._e(),
         _vm._v(" "),
         _vm.ready && Object.keys(_vm.data).length === 0
@@ -77287,49 +77725,19 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _vm._v("Graphs\n    "),
-      _c(
-        "div",
-        {
-          staticClass: "float-right nav",
-          attrs: { id: "nav-tab", role: "tablist" }
-        },
-        [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: {
-                id: "nav-data-tab",
-                "data-toggle": "tab",
-                href: "#nav-data",
-                role: "tab",
-                "aria-controls": "nav-data",
-                "aria-selected": "true"
-              }
-            },
-            [_vm._v("ِAll Data")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: {
-                id: "nav-activity-tab",
-                "data-toggle": "tab",
-                href: "#nav-activity",
-                role: "tab",
-                "aria-controls": "nav-activity",
-                "aria-selected": "false"
-              }
-            },
-            [_vm._v("Activity")]
-          )
-        ]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "btn btn-primary dropdown-toggle dropdown-toggle-split",
+        attrs: {
+          type: "button",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [_c("span", { staticClass: "sr-only" }, [_vm._v("Toggle Dropdown")])]
+    )
   },
   function() {
     var _vm = this
@@ -94258,7 +94666,8 @@ Vue.mixin({
     }
   }
 });
-Vue.component('loading', __webpack_require__(/*! ./components/loading.vue */ "./resources/js/components/loading.vue")["default"]); // const files = require.context('./', true, /\.vue$/i)
+Vue.component('loading', __webpack_require__(/*! ./components/loading.vue */ "./resources/js/components/loading.vue")["default"]);
+Vue.component('charts', __webpack_require__(/*! ./components/graphs/charts.vue */ "./resources/js/components/graphs/charts.vue")["default"]); // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 var routes = [{
@@ -94618,6 +95027,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_e45b1edc___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_e45b1edc___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/graphs/charts.vue":
+/*!***************************************************!*\
+  !*** ./resources/js/components/graphs/charts.vue ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./charts.vue?vue&type=template&id=3443b5f8& */ "./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8&");
+/* harmony import */ var _charts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./charts.vue?vue&type=script&lang=js& */ "./resources/js/components/graphs/charts.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _charts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/graphs/charts.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/graphs/charts.vue?vue&type=script&lang=js&":
+/*!****************************************************************************!*\
+  !*** ./resources/js/components/graphs/charts.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_charts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./charts.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/charts.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_charts_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8& ***!
+  \**********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./charts.vue?vue&type=template&id=3443b5f8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/graphs/charts.vue?vue&type=template&id=3443b5f8&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_charts_vue_vue_type_template_id_3443b5f8___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

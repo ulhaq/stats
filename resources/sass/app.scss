@@ -61,7 +61,8 @@ a {
       display: block;
       padding: 10px 0;
     }
-    .router-link-active, .router-link-exact-active {
+    .router-link-active,
+    .router-link-exact-active {
       color: $indigo;
       svg {
         fill: $indigo;
@@ -119,4 +120,18 @@ a {
   * {
     cursor: pointer;
   }
+}
+
+.inline-select {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }

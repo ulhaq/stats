@@ -1,19 +1,42 @@
 <template>
   <div class="card">
-    <div class="card-header">Graphs
-      <div class="float-right nav" id="nav-tab" role="tablist">
-        <a class="btn btn-primary" id="nav-data-tab" data-toggle="tab" href="#nav-data" role="tab" aria-controls="nav-data" aria-selected="true">ِAll Data</a>
-        <a class="btn btn-primary" id="nav-activity-tab" data-toggle="tab" href="#nav-activity" role="tab" aria-controls="nav-activity" aria-selected="false">Activity</a>
+    <div class="card-header"> 
+      <select class="inline-select" v-model="graphType">
+        <option value="area" selected>Area Graph</option>
+        <option value="bar">Bar Graph</option>
+        <option value="column">Column Graph</option>
+        <option value="pie">Pie Graph</option>
+        <option value="geo">Geo Graph</option>
+      </select>
+      <div class="float-right">
+        <button type="button" class="btn btn-primary" @click="changeSection('allData')">ِAll Data</button>
+        <button type="button" class="btn btn-primary" @click="changeSection('allActivities')">All Activities</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary" @click="changeSection('allUsers')">All Users</button>
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <button class="dropdown-item" @click="changeSection('allUserOrigins')">User Origins</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="card-body text-center table-responsive">
       <loading v-if="!ready" />
 
-      <nav v-if="ready">
-
-      </nav>
-      <div class="tab-content" id="nav-tabContent" v-if="ready">
-        <div class="tab-pane fade show active" id="nav-data" role="tabpanel" aria-labelledby="nav-data-tab">
+      <div v-if="ready">
+        <div v-if="section=='allData'">
+          <table class="table light-bg text-center">
+            <tr>
+              <td>
+                <input type="datetime-local" title="Start Time" class="form-control inline-block" v-model="start_time" @change="getAllData">
+              </td>
+              <td>
+                <input type="datetime-local" title="End Time" class="form-control inline-block" v-model="end_time" @change="getAllData">
+              </td>
+            </tr>
+          </table>
           <table class="table light-bg text-center">
             <tr>
               <td>
@@ -25,25 +48,28 @@
               </td>
               <td>
                 <select class="form-control" v-model="occurrence" required @change="getAllData">
-                  <option value="M">Monthly</option>
-                  <option value="Y">Annually</option>
+                  <option value="%D %M %Y">Daily</option>
+                  <option value="Week %v of %Y">Weekly</option>
+                  <option value="%M of %Y">Monthly</option>
+                  <option value="%Y">Annually</option>
                 </select>
-              </td>
-              <td v-if="occurrence=='M'">
-                <input type="number" min="2000" class="form-control" v-model="year" required @change="getAllData" />
-              </td>
-            </tr>
-          </table>
-
-          <table class="table" v-if="ready && Object.keys(data).length !== 0">
-            <tr>
-              <td>
-                <area-chart :data="data"></area-chart>
               </td>
             </tr>
           </table>
         </div>
-        <div class="tab-pane fade" id="nav-activity" role="tabpanel" aria-labelledby="nav-activity-tab">
+
+        <div v-if="section=='allActivities'">
+          <table class="table light-bg text-center">
+            <tr>
+              <td>
+                <input type="datetime-local" title="Start Time" class="form-control inline-block" v-model="start_time" @change="getAllActivities">
+              </td>
+              <td>
+                <input type="datetime-local" title="End Time" class="form-control inline-block" v-model="end_time" @change="getAllActivities">
+              </td>
+            </tr>
+          </table>
+
           <table class="table light-bg text-center">
             <tr>
               <td>
@@ -53,31 +79,56 @@
                 </select>
               </td>
               <td>
-                <select class="form-control" v-model="content.action" required @change="getActivity" :disabled="content.location==''">
+                <select class="form-control" v-model="content.action" required @change="getAllActivities" :disabled="content.location==''">
                   <option value="" selected>Select an action</option>
                   <option :value="optAct" v-for="optAct in options.actions" :key="optAct">{{optAct}}</option>
                 </select>
               </td>
               <td v-if="content.action != ''">
-                <select class="form-control" v-model="occurrence" required @change="getActivity">
-                  <option value="M">Monthly</option>
-                  <option value="Y">Annually</option>
+                <select class="form-control" v-model="occurrence" required @change="getAllActivities">
+                  <option value="%D %M %Y">Daily</option>
+                  <option value="Week %v of %Y">Weekly</option>
+                  <option value="%M of %Y">Monthly</option>
+                  <option value="%Y">Annually</option>
                 </select>
-              </td>
-              <td v-if="content.action != '' && occurrence=='M'">
-                <input type="number" min="2000" class="form-control" v-model="year" required @change="getActivity" />
-              </td>
-            </tr>
-          </table>
-
-          <table class="table" v-if="ready && Object.keys(data).length !== 0">
-            <tr>
-              <td>
-                <area-chart :data="data"></area-chart>
               </td>
             </tr>
           </table>
         </div>
+
+        <div v-if="section=='allUsers'">
+          <table class="table light-bg text-center">
+            <tr>
+              <td>
+                <input type="datetime-local" title="Start Time" class="form-control inline-block" v-model="start_time" @change="getAllUsers">
+              </td>
+              <td>
+                <input type="datetime-local" title="End Time" class="form-control inline-block" v-model="end_time" @change="getAllUsers">
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div v-if="section=='allUserOrigins'">
+          <table class="table light-bg text-center">
+            <tr>
+              <td>
+                <input type="datetime-local" title="Start Time" class="form-control inline-block" v-model="start_time" @change="getAllUserOrigins">
+              </td>
+              <td>
+                <input type="datetime-local" title="End Time" class="form-control inline-block" v-model="end_time" @change="getAllUserOrigins">
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <table class="table" v-if="ready && Object.keys(data).length !== 0">
+          <tr>
+            <td>
+              <charts :type="graphType" :data="data" />
+            </td>
+          </tr>
+        </table>
       </div>
 
       <table class="table text-center" v-if="ready && Object.keys(data).length === 0">
@@ -95,8 +146,9 @@ export default {
     return {
       data: {},
       target: "session",
-      occurrence: "M",
-      year: null,
+      occurrence: "%D %M %Y",
+      start_time: null,
+      end_time: null,
       options: {
         locations: [],
         actions: [],
@@ -105,23 +157,39 @@ export default {
         location: "",
         action: "",
       },
+      section: 'allData',
+      graphType: 'area',
       ready: false
     };
   },
   created() {
-      this.year = this.moment().year();
+      this.start_time = this.moment().subtract(1, "year").format("YYYY-MM-DD\THH:mm");
+      this.end_time = this.moment().format("YYYY-MM-DD\THH:mm");
+
       this.getAllData();
       this.getLocations();
   },
   methods: {
     getAllData() {
-      this.axios.get(`${this.BaseUrl}/stats/graphs?target=${this.target}&occurrence=${this.occurrence}&year=${this.year}`).then(response => {
+      this.axios.get(`${this.BaseUrl}/stats/graphs?target=${this.target}&occurrence=${this.occurrence}&from=${this.start_time}&to=${this.end_time}`).then(response => {
           this.data = response.data;
           this.ready = true;
         });
     },
-    getActivity() {
-      this.axios.get(`${this.BaseUrl}/stats/graphs/actions/${this.content.location}/${this.content.action}?occurrence=${this.occurrence}&year=${this.year}`).then(response => {
+    getAllActivities() {
+      this.axios.get(`${this.BaseUrl}/stats/graphs/actions/${this.content.location}/${this.content.action}?occurrence=${this.occurrence}&from=${this.start_time}&to=${this.end_time}`).then(response => {
+          this.data = response.data;
+          this.ready = true;
+        });
+    },
+    getAllUsers() {
+      this.axios.get(`${this.BaseUrl}/stats/graphs/users?from=${this.start_time}&to=${this.end_time}`).then(response => {
+          this.data = response.data;
+          this.ready = true;
+        });
+    },
+    getAllUserOrigins() {
+      this.axios.get(`${this.BaseUrl}/stats/graphs/users/origins?from=${this.start_time}&to=${this.end_time}`).then(response => {
           this.data = response.data;
           this.ready = true;
         });
@@ -134,11 +202,15 @@ export default {
     getActions() {
       this.content.action = '';
 
-      this.axios.get(`${this.BaseUrl}/stats/counts?location=${this.content.location}`)
+      this.axios.get(`${this.BaseUrl}/stats/counts?location=${this.content.location}&from=${this.start_time}&to=${this.end_time}`)
       .then(response => {
           this.options.actions = response.data;
       });
     },
+    changeSection(section) {
+      this.data = {};
+      this.section = section;
+    }
   }
 };
 </script>
