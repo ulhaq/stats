@@ -19,18 +19,18 @@ class VisitorController extends Controller
     {
         $times = $request->get("times") ?? 1;
 
-        $session = DB::table("sessions")->select("visitor", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("visitor");
+        $sessions = Session::select("visitor", DB::raw("count(*) as total"))->orderBy("total", "desc")->groupBy("visitor");
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
             $end_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("to"));
 
-            $session->havingRaw("count(*) > {$times}")->whereBetween("created_at", [$start_time, $end_time]);
+            $sessions->havingRaw("count(*) > {$times}")->whereBetween("created_at", [$start_time, $end_time]);
         }
 
-        $session = $session->paginate(10)->appends($request->except("page"));
+        $sessions = $sessions->paginate(10)->appends($request->except("page"));
 
-        return response()->json($session, 200);
+        return response()->json($sessions, 200);
     }
 
     /**
@@ -44,7 +44,7 @@ class VisitorController extends Controller
 
         $totalVisitors = Session::distinct("visitor")->count() > 0 ? Session::distinct("visitor")->count() : 1;
 
-        $totalReturningVisitors = DB::table("sessions")->select("visitor")->groupBy("visitor")->havingRaw("count(*) > {$times}");
+        $totalReturningVisitors = Session::select("visitor")->groupBy("visitor")->havingRaw("count(*) > {$times}");
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
@@ -76,7 +76,7 @@ class VisitorController extends Controller
             $sessions->whereBetween("created_at", [$start_time, $end_time]);
         }
 
-        $sessions = $sessions->orderBy("created_at", "desc")->get(["id", "client", "platform", "created_at"]);
+        $sessions = $sessions->orderBy("created_at", "desc")->get(["id", "client", "platform", "origin", "created_at"]);
 
         return response()->json($sessions, 200);
     }

@@ -19,6 +19,7 @@ class SessionResource extends JsonResource
             'visitor' => $this->visitor,
             'client' => $this->client,
             'platform' => $this->platform,
+            'origin' => $this->origin,
             'created_at' => $this->created_at->toDateTimeString(),
             'actions' => ActionResource::collection($this->whenLoaded('actions')),
             'variables' => VariableResource::collection($this->whenLoaded('variables')),

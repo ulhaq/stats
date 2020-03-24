@@ -21,5 +21,6 @@ $factory->define(Session::class, function (Faker $faker) {
         'visitor' => $faker->randomNumber(),
         'client' => $faker->randomElement(["Browser", "Unity"]),
         'platform' => $faker->randomElement(["OSX", "Windows", "Android", "iPhone"]),
+        'origin' => $faker->country,
     ];
 });

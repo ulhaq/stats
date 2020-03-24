@@ -18,6 +18,7 @@ class CreateSessionsTable extends Migration
             $table->string('visitor');
             $table->string('client');
             $table->string('platform');
+            $table->string('origin')->nullable();
             $table->timestamps();
         });
     }

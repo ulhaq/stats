@@ -22,7 +22,7 @@ class SessionTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $sessions = factory(Session::class, 2)->create();
+        $sessions = factory(Session::class, 2)->create(["origin" => $this->faker->country]);
 
         $response = $this->json("GET", "api/sessions");
 
@@ -34,12 +34,13 @@ class SessionTest extends TestCase
                         "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
+                        "origin" => $sessions[0]->origin,
                         "created_at" => $sessions[0]->created_at,
                     ],
                     [
                         "visitor" => $sessions[1]->visitor,
                         "client" => $sessions[1]->client,
-                        "platform" => $sessions[1]->platform,
+                        "origin" => $sessions[0]->origin,
                         "created_at" => $sessions[1]->created_at,
                     ],
                 ],
@@ -55,8 +56,8 @@ class SessionTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $sessions[] = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity"]);
-        $sessions[] = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser"]);
+        $sessions[] = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity", "origin" => "Denmark"]);
+        $sessions[] = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser", "origin" => "Sweden"]);
 
         $response = $this->json("GET", "api/sessions?filter[visitor]={$sessions[0]->visitor}");
 
@@ -68,6 +69,7 @@ class SessionTest extends TestCase
                         "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
+                        "origin" => $sessions[0]->origin,
                         "created_at" => $sessions[0]->created_at,
                     ]
                 ],
@@ -95,6 +97,7 @@ class SessionTest extends TestCase
                         "visitor" => $sessions[0]->visitor,
                         "client" => $sessions[0]->client,
                         "platform" => $sessions[0]->platform,
+                        "origin" => $sessions[0]->origin,
                         "created_at" => $sessions[0]->created_at,
                         "actions" => [],
                         "variables" => [],
@@ -103,6 +106,7 @@ class SessionTest extends TestCase
                         "visitor" => $sessions[1]->visitor,
                         "client" => $sessions[1]->client,
                         "platform" => $sessions[1]->platform,
+                        "origin" => $sessions[1]->origin,
                         "created_at" => $sessions[1]->created_at,
                         "actions" => [],
                         "variables" => [],
@@ -130,6 +134,7 @@ class SessionTest extends TestCase
                 "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
+                "origin" => $session->origin,
                 "created_at" => $session->created_at,
             ]);
     }
@@ -151,6 +156,7 @@ class SessionTest extends TestCase
                 "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
+                "origin" => $session->origin,
                 "created_at" => $session->created_at,
                 "actions" => [],
                 "variables" => [],
@@ -166,6 +172,7 @@ class SessionTest extends TestCase
             "visitor" => $this->faker->randomNumber(),
             "client" => $this->faker->randomElement(["Browser", "Unity"]),
             "platform" => $this->faker->randomElement(["OSX", "Windows", "Android", "iPhone"]),
+            "origin" => $this->faker->country,
         ];
 
         $response = $this->json("POST", "api/sessions", $data);
@@ -192,6 +199,7 @@ class SessionTest extends TestCase
             "visitor" => $session->visitor,
             "client" => $session->client,
             "platform" => $session->platform,
+            "origin" => $session->origin,
             "created_at" => $session->created_at,
         ]);
 
@@ -201,6 +209,7 @@ class SessionTest extends TestCase
                 "visitor" => $session->visitor,
                 "client" => $session->client,
                 "platform" => $session->platform,
+                "origin" => $session->origin,
                 "created_at" => $session->created_at,
             ]);
     }
