@@ -77082,13 +77082,9 @@ var render = function() {
           _vm._v(" "),
           _c("option", { attrs: { value: "pie" } }, [_vm._v("Pie Graph")]),
           _vm._v(" "),
-          _c(
-            "option",
-            {
-              attrs: { value: "geo", disabled: _vm.section != "allUserOrigins" }
-            },
-            [_vm._v("Geo Graph")]
-          )
+          _vm.section == "allUserOrigins"
+            ? _c("option", { attrs: { value: "geo" } }, [_vm._v("Geo Graph")])
+            : _vm._e()
         ]
       ),
       _vm._v(" "),

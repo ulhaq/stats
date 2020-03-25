@@ -7,7 +7,7 @@
         <option value="bar">Bar Graph</option>
         <option value="column">Column Graph</option>
         <option value="pie">Pie Graph</option>
-        <option value="geo" :disabled="section != 'allUserOrigins'">Geo Graph</option>
+        <option value="geo" v-if="section == 'allUserOrigins'">Geo Graph</option>
       </select>
       <div class="float-right">
         <button type="button" class="btn btn-primary" @click="changeSection('allData')">ِAll Data</button>
