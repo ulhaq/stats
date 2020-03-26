@@ -3090,10 +3090,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      entry: {},
+      sessions: [],
+      totalResults: 0,
+      currentPage: 1,
+      nextPageUrl: null,
+      totalPages: 0,
       start_time: null,
       end_time: null,
       sessionsBetween: 0,
@@ -3101,27 +3115,45 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   created: function created() {
-    var _this = this;
-
-    this.axios.get("".concat(this.BaseUrl, "/stats/visitors/").concat(this.$route.params.visitor)).then(function (response) {
-      _this.entry = response.data;
-      _this.start_time = _this.utcToLocal(response.data[response.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
-      _this.end_time = _this.utcToLocal(response.data[0].created_at).format("YYYY-MM-DD\THH:mm");
-      _this.sessionsBetween = response.data.length;
-      _this.ready = true;
-    })["catch"](function (error) {
-      return _this.$router.push({
-        name: 'visitors'
-      });
-    });
-    ;
+    this.ready = false;
+    this.loadData();
   },
   methods: {
+    loadData: function loadData() {
+      var _this = this;
+
+      this.axios.get("".concat(this.BaseUrl, "/stats/visitors/").concat(this.$route.params.visitor)).then(function (response) {
+        _this.sessions = response.data.data;
+        _this.start_time = _this.utcToLocal(response.data.data[response.data.data.length - 1].created_at).format("YYYY-MM-DD\THH:mm");
+        _this.end_time = _this.utcToLocal(response.data.data[0].created_at).format("YYYY-MM-DD\THH:mm");
+        _this.sessionsBetween = response.data.data.length;
+        _this.totalResults = response.data.total;
+        _this.totalPages = response.data.last_page;
+        _this.nextPageUrl = response.data.next_page_url;
+        _this.ready = true;
+      })["catch"](function (error) {
+        return _this.$router.push({
+          name: 'visitors'
+        });
+      });
+    },
     getSessionsBetween: function getSessionsBetween() {
       var _this2 = this;
 
       this.axios.get("".concat(this.BaseUrl, "/stats/visitors/").concat(this.$route.params.visitor, "?from=").concat(this.start_time, "&to=").concat(this.end_time)).then(function (response) {
-        _this2.sessionsBetween = response.data.length;
+        _this2.sessionsBetween = response.data.total;
+        _this2.sessions = response.data.data;
+        _this2.totalPages = response.data.last_page;
+        _this2.nextPageUrl = response.data.next_page_url;
+      });
+    },
+    loadMore: function loadMore() {
+      var _this3 = this;
+
+      this.axios.get(this.nextPageUrl).then(function (response) {
+        _this3.sessions = _this3.sessions.concat(response.data.data);
+        _this3.currentPage = response.data.current_page;
+        _this3.nextPageUrl = response.data.next_page_url;
       });
     }
   }
@@ -79335,7 +79367,7 @@ var render = function() {
                   [
                     _c("th", [_vm._v("Total Sessions")]),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(_vm.entry.length))])
+                    _c("td", [_vm._v(_vm._s(_vm.totalResults))])
                   ]
                 )
               ])
@@ -79347,84 +79379,121 @@ var render = function() {
           { staticClass: "collapse", attrs: { id: "sessionDetails" } },
           [
             _c("div", { staticClass: "card card-body table-responsive" }, [
-              _c(
-                "table",
-                { staticClass: "table table-hover" },
-                [
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _vm._l(_vm.entry, function(session) {
-                    return _c("tbody", { key: session.id }, [
-                      _c("tr", [
-                        _c("td", [
-                          _c("span", { staticClass: "badge badge-secondary" }, [
-                            _vm._v(_vm._s(session.id))
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(session.client))]),
-                        _vm._v(" "),
-                        _c("td", [_vm._v(_vm._s(session.platform))]),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          {
-                            attrs: { title: _vm.utcToLocal(session.created_at) }
-                          },
-                          [
-                            _vm._v(
-                              _vm._s(
-                                _vm.utcToLocal(session.created_at).fromNow()
+              _vm.sessionsBetween == 0
+                ? _c("table", { staticClass: "table text-center" }, [_vm._m(0)])
+                : _c(
+                    "table",
+                    { staticClass: "table table-hover" },
+                    [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _vm._l(_vm.sessions, function(session) {
+                        return _c("tbody", { key: session.id }, [
+                          _c("tr", [
+                            _c("td", [
+                              _c(
+                                "span",
+                                { staticClass: "badge badge-secondary" },
+                                [_vm._v(_vm._s(session.id))]
                               )
-                            )
-                          ]
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "td",
-                          [
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(session.client))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(session.platform))]),
+                            _vm._v(" "),
                             _c(
-                              "router-link",
+                              "td",
                               {
-                                staticClass: "control-action",
                                 attrs: {
-                                  to: {
-                                    name: "session-preview",
-                                    params: { id: session.id }
-                                  }
+                                  title: _vm.utcToLocal(session.created_at)
                                 }
                               },
                               [
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.utcToLocal(session.created_at).fromNow()
+                                  )
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "td",
+                              [
                                 _c(
-                                  "svg",
+                                  "router-link",
                                   {
+                                    staticClass: "control-action",
                                     attrs: {
-                                      xmlns: "http://www.w3.org/2000/svg",
-                                      width: "1.2em",
-                                      height: "1.2em",
-                                      viewBox: "0 0 22 16"
+                                      to: {
+                                        name: "session-preview",
+                                        params: { id: session.id }
+                                      }
                                     }
                                   },
                                   [
-                                    _c("path", {
-                                      attrs: {
-                                        d:
-                                          "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-                                      }
-                                    })
+                                    _c(
+                                      "svg",
+                                      {
+                                        attrs: {
+                                          xmlns: "http://www.w3.org/2000/svg",
+                                          width: "1.2em",
+                                          height: "1.2em",
+                                          viewBox: "0 0 22 16"
+                                        }
+                                      },
+                                      [
+                                        _c("path", {
+                                          attrs: {
+                                            d:
+                                              "M16.56 13.66a8 8 0 0 1-11.32 0L.3 8.7a1 1 0 0 1 0-1.42l4.95-4.95a8 8 0 0 1 11.32 0l4.95 4.95a1 1 0 0 1 0 1.42l-4.95 4.95-.01.01zm-9.9-1.42a6 6 0 0 0 8.48 0L19.38 8l-4.24-4.24a6 6 0 0 0-8.48 0L2.4 8l4.25 4.24h.01zM10.9 12a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
+                                          }
+                                        })
+                                      ]
+                                    )
                                   ]
                                 )
-                              ]
+                              ],
+                              1
                             )
-                          ],
-                          1
-                        )
+                          ])
+                        ])
+                      }),
+                      _vm._v(" "),
+                      _c("tfoot", [
+                        _c("tr", { staticClass: "dontanimate" }, [
+                          _c(
+                            "td",
+                            {
+                              staticClass: "text-center card-bg-secondary py-1",
+                              attrs: { colspan: "100" }
+                            },
+                            [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-link",
+                                  attrs: {
+                                    type: "button",
+                                    disabled: _vm.currentPage >= _vm.totalPages
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.loadMore()
+                                    }
+                                  }
+                                },
+                                [_vm._v("Load Older Entries")]
+                              )
+                            ]
+                          )
+                        ])
                       ])
-                    ])
-                  })
-                ],
-                2
-              )
+                    ],
+                    2
+                  )
             ])
           ]
         )
@@ -79434,6 +79503,14 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", [_vm._v("We didn't find anything - just empty space.")])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

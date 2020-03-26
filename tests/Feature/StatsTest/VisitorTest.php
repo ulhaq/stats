@@ -124,7 +124,10 @@ class VisitorTest extends TestCase
 
         $response
             ->assertStatus(200)
-            ->assertJson($sessions);
+            ->assertJson([
+                "current_page" => 1,
+                "data" => $sessions,
+            ]);
     }
 
     /** @test */
@@ -134,16 +137,21 @@ class VisitorTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $session = factory(Session::class)->create(["visitor" => 15, "created_at" => "2020-03-08 12:00:00"]);
+        $session = factory(Session::class)->create(["visitor" => 15, "client" => "Unity", "platform" => "Windows", "created_at" => "2020-03-08 12:00:00"]);
         unset($session->visitor);
         unset($session->updated_at);
-        factory(Session::class)->create(["visitor" => 15, "created_at" => "2020-03-12 12:00:00"]);
+        $missing = factory(Session::class)->create(["visitor" => 15, "client" => "Browser", "platform" => "Android", "created_at" => "2020-03-12 12:00:00"]);
 
 
         $response = $this->json("GET", "api/stats/visitors/15?from=2020-03-08T11:00&to=2020-03-12T11:59");
 
         $response
             ->assertStatus(200)
-            ->assertJson([$session->toArray()])->assertDontSee("2020-03-12");
+            ->assertJson([
+                "current_page" => 1,
+                "data" => [
+                    $session->toArray(),
+                ],
+            ])->assertJsonMissing($missing->toArray());
     }
 }

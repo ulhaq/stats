@@ -67,7 +67,7 @@ class VisitorController extends Controller
      */
     public function sessions(Request $request, $visitor)
     {
-        $sessions = Session::whereVisitor($visitor);
+        $sessions = Session::select(["id", "client", "platform", "origin", "created_at"])->whereVisitor($visitor);
 
         if ($request->get("from") && $request->get("to")) {
             $start_time = Carbon::createFromFormat('Y-m-d\TH:i', $request->get("from"));
@@ -76,7 +76,7 @@ class VisitorController extends Controller
             $sessions->whereBetween("created_at", [$start_time, $end_time]);
         }
 
-        $sessions = $sessions->orderBy("created_at", "desc")->get(["id", "client", "platform", "origin", "created_at"]);
+        $sessions = $sessions->orderBy("created_at", "desc")->paginate(10)->appends($request->except("page"));
 
         return response()->json($sessions, 200);
     }
