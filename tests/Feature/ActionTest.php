@@ -56,24 +56,24 @@ class ActionTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $actions[] = factory(Action::class)->create(["location" => "journey", "target" => "save"]);
-        $actions[] = factory(Action::class)->create(["location" => "start-learning", "target" => "click"]);
+        $action = factory(Action::class)->create(["location" => "journey", "action" => "save",  "target" => "saved"]);
+        $missing = factory(Action::class)->create(["location" => "start-learning", "action" => "view",  "target" => "viwed"]);
 
-        $response = $this->json("GET", "api/actions?filter[target]={$actions[0]->target}");
+        $response = $this->json("GET", "api/actions?filter[target]={$action->target}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "location" => $actions[0]->location,
-                        "target" => $actions[0]->target,
-                        "created_at" => $actions[0]->created_at,
+                        "location" => $action->location,
+                        "target" => $action->target,
+                        "created_at" => $action->created_at,
                     ]
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($actions[1]->target);
+            ])->assertJsonMissing($missing->toArray());
     }
 
     /** @test */
@@ -284,22 +284,22 @@ class ActionTest extends TestCase
 
         $action = factory(Action::class)->create();
 
-        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
-        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
+        $variable = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
+        $missing = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
 
-        $response = $this->json("GET", "api/actions/$action->id/variables?filter[value]={$variables[0]->value}");
+        $response = $this->json("GET", "api/actions/$action->id/variables?filter[value]={$variable->value}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "variable" => $variables[0]->variable,
-                        "value" => $variables[0]->value,
+                        "variable" => $variable->variable,
+                        "value" => $variable->value,
                     ],
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($variables[1]->value);
+            ])->assertJsonMissing($missing->toArray());
     }
 }

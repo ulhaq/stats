@@ -56,26 +56,26 @@ class SessionTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $sessions[] = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity", "origin" => "Denmark"]);
-        $sessions[] = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser", "origin" => "Sweden"]);
+        $session = factory(Session::class)->create(["visitor" => "965", "client" => "OSX", "platform" => "Unity", "origin" => "Denmark"]);
+        $missing = factory(Session::class)->create(["visitor" => "377", "client" => "Windows", "platform" => "Browser", "origin" => "Sweden"]);
 
-        $response = $this->json("GET", "api/sessions?filter[visitor]={$sessions[0]->visitor}");
+        $response = $this->json("GET", "api/sessions?filter[visitor]={$session->visitor}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "visitor" => $sessions[0]->visitor,
-                        "client" => $sessions[0]->client,
-                        "platform" => $sessions[0]->platform,
-                        "origin" => $sessions[0]->origin,
-                        "created_at" => $sessions[0]->created_at,
+                        "visitor" => $session->visitor,
+                        "client" => $session->client,
+                        "platform" => $session->platform,
+                        "origin" => $session->origin,
+                        "created_at" => $session->created_at,
                     ]
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($sessions[1]->visitor);
+            ])->assertJsonMissing($missing->toArray());
     }
 
     /** @test */
@@ -286,24 +286,24 @@ class SessionTest extends TestCase
 
         $session = factory(Session::class)->create();
 
-        $actions[] = factory(Action::class)->create(["location" => "journey", "target" => "save", "session_id" => $session->id]);
-        $actions[] = factory(Action::class)->create(["location" => "start-learning", "target" => "click", "session_id" => $session->id]);
+        $action = factory(Action::class)->create(["location" => "journey", "action" => "save",  "target" => "saved", "session_id" => $session->id]);
+        $missing = factory(Action::class)->create(["location" => "start-learning", "action" => "view",  "target" => "viwed", "session_id" => $session->id]);
 
-        $response = $this->json("GET", "api/sessions/$session->id/actions?filter[target]={$actions[0]->target}");
+        $response = $this->json("GET", "api/sessions/$session->id/actions?filter[target]={$action->target}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "location" => $actions[0]->location,
-                        "target" => $actions[0]->target,
-                        "created_at" => $actions[0]->created_at,
+                        "location" => $action->location,
+                        "target" => $action->target,
+                        "created_at" => $action->created_at,
                     ]
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($actions[1]->target);
+            ])->assertJsonMissing($missing->toArray());
     }
 
     /** @test */
@@ -316,22 +316,22 @@ class SessionTest extends TestCase
         $session = factory(Session::class)->create();
         $action = factory(Action::class)->create(["session_id" => $session->id]);
 
-        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
-        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
+        $variable = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2, "action_id" => $action->id]);
+        $missing = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498, "action_id" => $action->id]);
 
-        $response = $this->json("GET", "api/sessions/$session->id/variables?filter[value]={$variables[0]->value}");
+        $response = $this->json("GET", "api/sessions/$session->id/variables?filter[value]={$variable->value}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "variable" => $variables[0]->variable,
-                        "value" => $variables[0]->value,
+                        "variable" => $variable->variable,
+                        "value" => $variable->value,
                     ],
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($variables[1]->value);
+            ])->assertJsonMissing($missing->toArray());
     }
 }

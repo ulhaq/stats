@@ -52,23 +52,23 @@ class VariableTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $variables[] = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2]);
-        $variables[] = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498]);
+        $variable = factory(Variable::class)->create(["variable" => "journey_id", "value" => 2]);
+        $missing = factory(Variable::class)->create(["variable" => "start-learning_id", "value" => 498]);
 
-        $response = $this->json("GET", "api/variables?filter[value]={$variables[0]->value}");
+        $response = $this->json("GET", "api/variables?filter[value]={$variable->value}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "variable" => $variables[0]->variable,
-                        "value" => $variables[0]->value,
+                        "variable" => $variable->variable,
+                        "value" => $variable->value,
                     ],
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($variables[1]->value);
+            ])->assertJsonMissing($missing->toArray());
     }
 
     /** @test */

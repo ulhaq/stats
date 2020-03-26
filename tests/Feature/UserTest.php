@@ -54,26 +54,26 @@ class UserTest extends TestCase
 
         Sanctum::actingAs(factory(User::class)->make());
 
-        $users[] = factory(User::class)->create(["name" => "Muhammad", "email" => "muhammad@example.com"]);
-        $users[] = factory(User::class)->create(["name" => "Umar", "email" => "umar@example.com"]);
+        $user = factory(User::class)->create(["name" => "Muhammad", "email" => "muhammad@example.com"]);
+        $missing = factory(User::class)->create(["name" => "Umar", "email" => "umar@example.com"]);
 
-        $response = $this->json("GET", "api/users?filter[name]={$users[0]->name}");
+        $response = $this->json("GET", "api/users?filter[name]={$user->name}");
 
         $response
             ->assertStatus(200)
             ->assertJson([
                 "data" => [
                     [
-                        "id" => $users[0]->id,
-                        "name" => $users[0]->name,
-                        "email" => $users[0]->email,
-                        "created_at" => $users[0]->created_at,
-                        "updated_at" => $users[0]->updated_at,
+                        "id" => $user->id,
+                        "name" => $user->name,
+                        "email" => $user->email,
+                        "created_at" => $user->created_at,
+                        "updated_at" => $user->updated_at,
                     ]
                 ],
                 "links" => [],
                 "meta" => [],
-            ])->assertDontSee($users[1]->name);
+            ])->assertJsonMissing($missing->toArray());
     }
 
     /** @test */
