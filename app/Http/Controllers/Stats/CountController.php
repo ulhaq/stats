@@ -22,9 +22,13 @@ class CountController extends Controller
             $content = Action::select("action")->distinct()->whereLocation($request->get("location"))->get()->pluck("action");
         }
 
-        if ($request->get("location") && $request->get("action")) {
+        if ($request->get("location") && $request->get("action") && !$request->get("target")) {
+            $content = Action::select("target")->distinct()->whereLocation($request->get("location"))->whereAction($request->get("action"))->get()->pluck("target");
+        }
+
+        if ($request->get("location") && $request->get("action") && $request->get("target")) {
             $content = Variable::select("variable")->distinct()->whereHas("action", function ($q) use ($request) {
-                $q->whereLocation($request->get("location"))->whereAction($request->get("action"));
+                $q->whereLocation($request->get("location"))->whereAction($request->get("action"))->whereTarget($request->get("target"));
             })->get()->pluck("variable");
         }
 
@@ -46,6 +50,10 @@ class CountController extends Controller
 
         if ($request->get("action")) {
             $counts = $counts->whereAction($request->get("action"));
+        }
+
+        if ($request->get("target")) {
+            $counts = $counts->whereTarget($request->get("target"));
         }
 
         if ($request->get("variables")) {

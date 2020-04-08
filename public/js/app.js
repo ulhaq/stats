@@ -2129,17 +2129,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       options: {
         locations: [],
         actions: [],
+        targets: [],
         variables: []
       },
       content: {
         location: "",
         action: "",
+        target: "",
         variables: {}
       },
       counts: null,
@@ -2168,6 +2179,7 @@ __webpack_require__.r(__webpack_exports__);
       this.ready = false;
       this.options.variables = [];
       this.content.action = '';
+      this.content.target = '';
       this.content.variables = {};
       this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location)).then(function (response) {
         _this2.options.actions = response.data;
@@ -2177,22 +2189,37 @@ __webpack_require__.r(__webpack_exports__);
         _this2.ready = true;
       });
     },
-    getVariables: function getVariables() {
+    getTargets: function getTargets() {
       var _this3 = this;
 
       this.ready = false;
+      this.content.target = '';
 
       if (this.content.action != '') {
         this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location, "&action=").concat(this.content.action)).then(function (response) {
-          _this3.options.variables = response.data;
+          _this3.options.targets = response.data;
           _this3.ready = true;
         });
       }
 
       this.getCalculations();
     },
-    getCalculations: function getCalculations() {
+    getVariables: function getVariables() {
       var _this4 = this;
+
+      this.ready = false;
+
+      if (this.content.target != '') {
+        this.axios.get("".concat(this.BaseUrl, "/stats/counts?location=").concat(this.content.location, "&action=").concat(this.content.action, "&target=").concat(this.content.target)).then(function (response) {
+          _this4.options.variables = response.data;
+          _this4.ready = true;
+        });
+      }
+
+      this.getCalculations();
+    },
+    getCalculations: function getCalculations() {
+      var _this5 = this;
 
       this.ready = false;
       var data = {
@@ -2203,6 +2230,10 @@ __webpack_require__.r(__webpack_exports__);
         data.action = this.content.action;
       }
 
+      if (this.content.target != '') {
+        data.target = this.content.target;
+      }
+
       this.clean(this.content.variables);
 
       if (Object.entries(this.content.variables).length !== 0) {
@@ -2210,8 +2241,8 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       this.axios.post("".concat(this.BaseUrl, "/stats/counts"), data).then(function (response) {
-        _this4.counts = response.data.counts;
-        _this4.ready = true;
+        _this5.counts = response.data.counts;
+        _this5.ready = true;
       });
     }
   }
@@ -76838,7 +76869,7 @@ var render = function() {
                                   : $$selectedVal[0]
                               )
                             },
-                            _vm.getVariables
+                            _vm.getTargets
                           ]
                         }
                       },
@@ -76861,7 +76892,67 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm.options.variables.length && _vm.content.action != ""
+            _vm.options.targets.length
+              ? _c("tr", [
+                  _c("th", [_vm._v("Target")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.content.target,
+                            expression: "content.target"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { required: "", size: "5" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.$set(
+                                _vm.content,
+                                "target",
+                                $event.target.multiple
+                                  ? $$selectedVal
+                                  : $$selectedVal[0]
+                              )
+                            },
+                            _vm.getVariables
+                          ]
+                        }
+                      },
+                      [
+                        _c("option", { attrs: { value: "", selected: "" } }, [
+                          _vm._v("Select a target")
+                        ]),
+                        _vm._v(" "),
+                        _vm._l(_vm.options.targets, function(optTar) {
+                          return _c(
+                            "option",
+                            { key: optTar, domProps: { value: optTar } },
+                            [_vm._v(_vm._s(optTar))]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.options.variables.length && _vm.content.target != ""
               ? _c("tr", [
                   _c("td", { attrs: { colspan: "2" } }, [
                     _c(

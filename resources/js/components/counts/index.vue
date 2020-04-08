@@ -16,13 +16,22 @@
                 <tr v-if="options.actions.length">
                     <th>Action</th>
                     <td>
-                        <select class="form-control" v-model="content.action" required @change="getVariables" size="5">
+                        <select class="form-control" v-model="content.action" required @change="getTargets" size="5">
                             <option value="" selected>Select an action</option>
                             <option :value="optAct" v-for="optAct in options.actions" :key="optAct">{{optAct}}</option>
                         </select>
                     </td>
                 </tr>
-                <tr v-if="options.variables.length && content.action != ''">
+                <tr v-if="options.targets.length">
+                    <th>Target</th>
+                    <td>
+                        <select class="form-control" v-model="content.target" required @change="getVariables" size="5">
+                            <option value="" selected>Select a target</option>
+                            <option :value="optTar" v-for="optTar in options.targets" :key="optTar">{{optTar}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr v-if="options.variables.length && content.target != ''">
                     <td colspan="2">
                     <div class="row">
                         <div class="col" v-for="variable in options.variables" :key="variable">
@@ -66,11 +75,13 @@ export default {
             options: {
                 locations: [],
                 actions: [],
+                targets: [],
                 variables: [],
             },
             content: {
                 location: "",
                 action: "",
+                target: "",
                 variables: {},
             },
             counts: null,
@@ -98,6 +109,7 @@ export default {
 
             this.options.variables = [];
             this.content.action = '';
+            this.content.target = '';
             this.content.variables = {};
 
             this.axios.get(`${this.BaseUrl}/stats/counts?location=${this.content.location}`)
@@ -109,11 +121,27 @@ export default {
                 this.ready = true;
             });
         },
-        getVariables() {
+        getTargets() {
             this.ready = false;
+            
+            this.content.target = '';
 
             if (this.content.action != '') {
                 this.axios.get(`${this.BaseUrl}/stats/counts?location=${this.content.location}&action=${this.content.action}`)
+                    .then(response => {
+                        this.options.targets = response.data;
+                    
+                        this.ready = true;
+                    });
+            }
+
+            this.getCalculations();
+        },
+        getVariables() {
+            this.ready = false;
+
+            if (this.content.target != '') {
+                this.axios.get(`${this.BaseUrl}/stats/counts?location=${this.content.location}&action=${this.content.action}&target=${this.content.target}`)
                     .then(response => {
                         this.options.variables = response.data;
                     
@@ -132,6 +160,10 @@ export default {
 
             if (this.content.action != '') {
                 data.action = this.content.action
+            }
+
+            if (this.content.target != '') {
+                data.target = this.content.target
             }
 
             this.clean(this.content.variables)
