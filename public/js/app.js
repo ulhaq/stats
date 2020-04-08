@@ -2138,6 +2138,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2177,6 +2180,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.ready = false;
+      this.options.targets = [];
       this.options.variables = [];
       this.content.action = '';
       this.content.target = '';
@@ -77025,7 +77029,7 @@ var render = function() {
         _vm._v(" "),
         _vm.counts !== null && _vm.ready
           ? _c("table", { staticClass: "table" }, [
-              _vm.content.action == ""
+              _vm.content.action == "" && _vm.content.target == ""
                 ? _c("tr", [
                     _c("td", [
                       _c("strong", [_vm._v(_vm._s(_vm.counts))]),
@@ -77043,7 +77047,7 @@ var render = function() {
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.content.action != ""
+              _vm.content.action != "" && _vm.content.target == ""
                 ? _c("tr", [
                     _c("td", [
                       _c("strong", [_vm._v(_vm._s(_vm.counts))]),
@@ -77057,6 +77061,26 @@ var render = function() {
                       _c("strong", [_vm._v(_vm._s(_vm.content.location))]),
                       _vm._v(" has been "),
                       _c("strong", [_vm._v(_vm._s(_vm.content.action))])
+                    ])
+                  ])
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.content.target != ""
+                ? _c("tr", [
+                    _c("td", [
+                      _c("strong", [_vm._v(_vm._s(_vm.counts))]),
+                      _vm._v(
+                        " " +
+                          _vm._s(
+                            _vm.counts > 1 || _vm.counts == 0 ? "times" : "time"
+                          ) +
+                          " "
+                      ),
+                      _c("strong", [_vm._v(_vm._s(_vm.content.location))]),
+                      _vm._v(" has been "),
+                      _c("strong", [_vm._v(_vm._s(_vm.content.action))]),
+                      _vm._v(" with target "),
+                      _c("strong", [_vm._v(_vm._s(_vm.content.target))])
                     ])
                   ])
                 : _vm._e()

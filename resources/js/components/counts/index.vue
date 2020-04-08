@@ -49,11 +49,14 @@
         </table>
         
         <table class="table" v-if="counts !== null && ready">
-            <tr v-if="content.action == ''">
+            <tr v-if="content.action == '' && content.target == ''">
                 <td><strong>{{counts}}</strong> {{counts > 1 || counts == 0 ? "interactions" : "interaction"}} with <strong>{{content.location}}</strong></td>
             </tr>
-            <tr v-if="content.action != ''">
+            <tr v-if="content.action != '' && content.target == ''">
                 <td><strong>{{counts}}</strong> {{counts > 1 || counts == 0 ? "times" : "time"}} <strong>{{content.location}}</strong> has been <strong>{{content.action}}</strong></td>
+            </tr>
+            <tr v-if="content.target != ''">
+                <td><strong>{{counts}}</strong> {{counts > 1 || counts == 0 ? "times" : "time"}} <strong>{{content.location}}</strong> has been <strong>{{content.action}}</strong> with target <strong>{{content.target}}</strong></td>
             </tr>
         </table>
 
@@ -107,6 +110,7 @@ export default {
         getActions() {
             this.ready = false;
 
+            this.options.targets = [];
             this.options.variables = [];
             this.content.action = '';
             this.content.target = '';
